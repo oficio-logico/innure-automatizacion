@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { ContactForm, MobileNavigation } from './interactive';
+import { ContactForm, CurrentYear, MobileNavigation } from './interactive';
 import { siteContent, withBasePath } from './site-content';
 
 export const dynamic = 'force-static';
@@ -361,7 +361,7 @@ export default function Home() {
             en Unsplash.
           </p>
           <div>
-            <span>© {new Date().getFullYear()} · Nombre de trabajo · datos legales pendientes</span>
+            <span>© <CurrentYear fallback={2026} /> · Nombre de trabajo · datos legales pendientes</span>
             <a href={withBasePath('/aviso-legal/')}>Aviso legal</a>
             <a href={withBasePath('/privacidad/')}>Privacidad</a>
           </div>
