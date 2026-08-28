@@ -27,6 +27,7 @@ export default function Home() {
     example,
     method,
     principles,
+    founders,
     faqs,
     contact,
   } = siteContent;
@@ -265,8 +266,26 @@ export default function Home() {
               <h2 id="team-title">{sections.team.title}</h2>
             </div>
             <p>{sections.team.description}</p>
-            <small>{sections.team.status}</small>
+            {founders.some((f) => f.listo) ? null : <small>{sections.team.status}</small>}
           </aside>
+
+          {founders.some((f) => f.listo) ? (
+            <div className="shell founders">
+              {founders
+                .filter((f) => f.listo)
+                .map((f) => (
+                  <article key={f.number}>
+                    {f.photo ? (
+                      <img className="founder-photo" src={f.photo} alt={f.name} loading="lazy" />
+                    ) : null}
+                    <p className="founder-number">{f.number}</p>
+                    <h3>{f.name}</h3>
+                    <p className="founder-role">{f.role}</p>
+                    <p className="founder-career">{f.career}</p>
+                  </article>
+                ))}
+            </div>
+          ) : null}
         </section>
 
         <section className="faq-section section-space" aria-labelledby="faq-title">
