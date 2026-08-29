@@ -1,22 +1,14 @@
-name: Publicar vista de revisión
+name: Validar cambios
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
 
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - name: Descargar el repositorio
@@ -31,28 +23,12 @@ jobs:
       - name: Instalar dependencias
         run: npm ci
 
+      - name: Revisar el código
+        run: npm run lint
+
       - name: Construir la vista estática
         env:
           GITHUB_PAGES: 'true'
           NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
           NEXT_PUBLIC_SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
         run: npm run build:pages
-
-      - name: Preparar GitHub Pages
-        uses: actions/configure-pages@v5
-
-      - name: Subir el artefacto
-        uses: actions/upload-pages-artifact@v4
-        with:
-          path: dist/client
-
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Publicar en GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4

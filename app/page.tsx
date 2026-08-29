@@ -31,6 +31,7 @@ export default function Home() {
     faqs,
     contact,
   } = siteContent;
+  const foundersReady = founders.length === 2 && founders.every((founder) => founder.listo);
 
   return (
     <>
@@ -266,24 +267,27 @@ export default function Home() {
               <h2 id="team-title">{sections.team.title}</h2>
             </div>
             <p>{sections.team.description}</p>
-            {founders.some((f) => f.listo) ? null : <small>{sections.team.status}</small>}
+            {foundersReady ? null : <small>{sections.team.status}</small>}
           </aside>
 
-          {founders.some((f) => f.listo) ? (
+          {foundersReady ? (
             <div className="shell founders">
-              {founders
-                .filter((f) => f.listo)
-                .map((f) => (
-                  <article key={f.number}>
-                    {f.photo ? (
-                      <img className="founder-photo" src={f.photo} alt={f.name} loading="lazy" />
-                    ) : null}
-                    <p className="founder-number">{f.number}</p>
-                    <h3>{f.name}</h3>
-                    <p className="founder-role">{f.role}</p>
-                    <p className="founder-career">{f.career}</p>
-                  </article>
-                ))}
+              {founders.map((f) => (
+                <article key={f.number}>
+                  {f.photo ? (
+                    <img
+                      className="founder-photo"
+                      src={withBasePath(f.photo)}
+                      alt={f.name}
+                      loading="lazy"
+                    />
+                  ) : null}
+                  <p className="founder-number">{f.number}</p>
+                  <h3>{f.name}</h3>
+                  <p className="founder-role">{f.role}</p>
+                  <p className="founder-career">{f.career}</p>
+                </article>
+              ))}
             </div>
           ) : null}
         </section>
@@ -380,7 +384,7 @@ export default function Home() {
             en Unsplash.
           </p>
           <div>
-            <span>© <CurrentYear fallback={2026} /> · Nombre de trabajo · datos legales pendientes</span>
+            <span>© <CurrentYear fallback={new Date().getFullYear()} /> · Nombre de trabajo · datos legales pendientes</span>
             <a href={withBasePath('/aviso-legal/')}>Aviso legal</a>
             <a href={withBasePath('/privacidad/')}>Privacidad</a>
           </div>

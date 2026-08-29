@@ -2,9 +2,9 @@
 
 Landing local en castellano para una marca de trabajo especializada en mejora de procesos, automatización, software a medida e implantación práctica de IA.
 
-**Vista compartida:** https://sh3rencr.github.io/oficio-logico/
+**Vista compartida:** https://oficio-logico.github.io/oficio-logico/
 
-**Repositorio:** https://github.com/sh3rencr/oficio-logico
+**Repositorio:** https://github.com/oficio-logico/oficio-logico
 
 **Nombre de trabajo:** Oficio Lógico
 
@@ -36,12 +36,12 @@ Todos los textos, enlaces y datos pendientes están centralizados en:
 
 `app/site-content.ts`
 
-Mientras falten datos, deben mantenerse estas dos salvaguardas:
+Mientras falten datos, deben mantenerse estas salvaguardas:
 
-- `publishing.ready: false`, que activa `noindex` y bloquea el rastreo en `robots.txt`.
-- `contact.formEndpoint: null`, que impide cualquier envío y muestra un aviso honesto en el formulario.
+- `PUBLICAR: false` y `LEGAL_REVISADO: false`, que mantienen `noindex` y bloquean el rastreo en `robots.txt`.
+- `contact.formEndpoint: null`, que impide enviar datos a un backend. Si se configura `CORREO`, el formulario solo prepara un borrador en el programa de correo de la persona.
 
-La versión de GitHub Pages es una vista pública de revisión: conserva `noindex`, no envía formularios y no debe presentarse como una web comercial definitiva.
+La versión de GitHub Pages es una vista pública de revisión: conserva `noindex`, no recibe datos mediante un backend y no debe presentarse como una web comercial definitiva.
 
 Cuando se disponga de un servicio real de recepción, asignar su URL HTTPS a `contact.formEndpoint` y revisar la política de privacidad según el proveedor y la ubicación del tratamiento.
 
@@ -52,16 +52,16 @@ No publicar hasta completar y comprobar:
 1. Validar y registrar «Oficio Lógico» como marca definitiva.
 2. Registrar el dominio definitivo y configurar la URL canónica.
 3. Nombre, función, biografía, empresas, periodos y logros verificables de cada fundador.
-4. Fotografías reales de ambos fundadores y sus textos alternativos.
+4. Fotografías reales de ambos fundadores y sus textos alternativos, si se van a mostrar.
 5. Correo operativo de contacto.
 6. Enlace de reserva, si se va a ofrecer.
 7. Razón social, NIF, domicilio y datos registrales, si corresponden.
 8. Email operativo para derechos de protección de datos.
 9. Servicio de recepción del formulario, plazo de conservación, encargados de tratamiento y posibles transferencias.
 10. Revisión jurídica final del aviso legal, la privacidad y el texto de consentimiento.
-11. Prueba real de recepción del formulario de extremo a extremo.
+11. Prueba real del canal de contacto elegido de extremo a extremo.
 
-Después de completar esos puntos, cambiar `publishing.ready` a `true`, confirmar que `brand.domain` contiene la URL HTTPS completa y volver a ejecutar la validación.
+Después de completar esos puntos, cambiar `PUBLICAR` y `LEGAL_REVISADO` a `true`, confirmar que `DOMINIO` contiene la URL HTTPS completa y volver a ejecutar la validación.
 
 ## Decisiones técnicas
 

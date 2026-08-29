@@ -12,13 +12,9 @@ export function withBasePath(path: string) {
   return `${siteBasePath}${path}`;
 }
 
-
 /* ══════════════════════════════════════════════════════════════════════════
-   RELLENAR AQUÍ · lo único que falta para que la web salga de "revisión"
+   RELLENAR AQUÍ · datos de negocio pendientes
    ══════════════════════════════════════════════════════════════════════════
-   Son tres huecos. Con estos tres rellenos no hay que tocar NADA más de
-   este fichero ni de ningún otro.
-
    1) CORREO      En cuanto pongas un correo, el formulario deja de ser un
                   callejón sin salida: prepara la solicitud y la abre en el
                   programa de correo de quien escribe (la envía esa persona,
@@ -30,11 +26,12 @@ export function withBasePath(path: string) {
                   "pendiente de validar". En cuanto haya nombres, se pinta
                   sola. Las fotos son opcionales.
 
-   3) PUBLICAR    Ponlo a true SOLO cuando 1 y 2 estén hechos y el dominio
-                  esté registrado. Eso quita el `noindex` y deja que Google
-                  os encuentre. Si PUBLICAR es true pero DOMINIO sigue a
-                  null, la web se queda en revisión a propósito: es una red
-                  de seguridad para que nadie publique sin dominio.
+   3) PUBLICAR    Es la intención de hacer la web indexable. No basta por sí
+                  solo: el correo, el dominio, los dos perfiles y la revisión
+                  legal también deben estar completos.
+
+   Los textos legales siguen teniendo datos pendientes. `LEGAL_REVISADO` solo
+   puede pasar a true después de completarlos y validarlos expresamente.
    ══════════════════════════════════════════════════════════════════════════ */
 
 /** Correo de contacto. Ej.: 'hola@oficiologico.com' */
@@ -45,6 +42,9 @@ const DOMINIO = null as string | null;
 
 /** true = web publicada e indexable. false = vista de revisión con noindex. */
 const PUBLICAR = false;
+
+/** true solo después de completar y validar aviso legal y privacidad. */
+const LEGAL_REVISADO = false;
 
 /** Los dos fundadores. Trayectoria: empresas, periodos y logros comprobables. */
 const FUNDADORES: Array<{
@@ -57,8 +57,18 @@ const FUNDADORES: Array<{
   { nombre: null, funcion: null, trayectoria: null, foto: null },
 ];
 
-/** No se publica sin dominio, aunque PUBLICAR esté a true. */
-const LISTA_PARA_PUBLICAR = PUBLICAR && Boolean(DOMINIO);
+const FUNDADORES_LISTOS =
+  FUNDADORES.length === 2 &&
+  FUNDADORES.every((fundador) =>
+    Boolean(fundador.nombre && fundador.funcion && fundador.trayectoria),
+  );
+
+/** Ningún interruptor aislado puede retirar las salvaguardas de revisión. */
+const LISTA_PARA_PUBLICAR =
+  PUBLICAR &&
+  LEGAL_REVISADO &&
+  Boolean(CORREO && DOMINIO) &&
+  FUNDADORES_LISTOS;
 
 export const siteContent = {
   publishing: {
