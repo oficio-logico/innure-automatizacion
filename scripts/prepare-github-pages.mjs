@@ -33,7 +33,7 @@ for (const route of routes) {
 
 await writeFile(
   path.join(outputDir, 'robots.txt'),
-  'User-agent: *\nDisallow: /oficio-logico/\n',
+  `User-agent: *\nDisallow: ${basePath ? `${basePath}/` : '/'}\n`,
   'utf8',
 );
 

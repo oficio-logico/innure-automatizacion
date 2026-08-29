@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useState } from 'react';
+import { FormEvent, useState, useSyncExternalStore } from 'react';
 import { siteContent, withBasePath } from './site-content';
 
 export function MobileNavigation() {
@@ -68,6 +68,36 @@ export function ContactForm() {
     if (!form.reportValidity()) return;
 
     if (!siteContent.contact.formEndpoint) {
+      // Sin servicio de recepción todavía. Si hay un correo publicado, no
+      // perdemos la solicitud: preparamos el mensaje y lo abrimos en el
+      // programa de correo de la persona. Nada sale del navegador por su
+      // cuenta: quien envía es siempre ella.
+      if (siteContent.contact.emailHref) {
+        const data = new FormData(form);
+        const value = (field: string) => String(data.get(field) ?? '').trim();
+        const subject = `Primera conversación — ${value('company') || value('name')}`;
+        const body = [
+          `Nombre: ${value('name')}`,
+          `Empresa: ${value('company')}`,
+          `Correo: ${value('email')}`,
+          `Teléfono: ${value('phone') || '—'}`,
+          '',
+          'Qué se repite:',
+          value('process'),
+        ].join('\n');
+
+        window.location.href = `mailto:${siteContent.contact.emailHref}?subject=${encodeURIComponent(
+          subject,
+        )}&body=${encodeURIComponent(body)}`;
+
+        setStatus({
+          kind: 'local',
+          message:
+            'Hemos preparado el mensaje en tu programa de correo. Revísalo y envíalo para que nos llegue.',
+        });
+        return;
+      }
+
       setStatus({
         kind: 'local',
         message:
@@ -150,12 +180,24 @@ export function ContactForm() {
         </label>
       </div>
 
-      <div className="local-notice" role="note">
-        <span aria-hidden="true" />
-        <p>
-          <strong>Vista de revisión:</strong> este formulario no transmite ni guarda datos hasta que se configure un servicio de recepción.
-        </p>
-      </div>
+      {!siteContent.contact.formEndpoint ? (
+        <div className="local-notice" role="note">
+          <span aria-hidden="true" />
+          <p>
+            {siteContent.contact.emailHref ? (
+              <>
+                <strong>Vista de revisión:</strong> todavía no hay servicio de recepción, así que
+                el formulario prepara la solicitud en tu programa de correo y la envías tú.
+              </>
+            ) : (
+              <>
+                <strong>Vista de revisión:</strong> este formulario no transmite ni guarda datos
+                hasta que se configure un servicio de recepción.
+              </>
+            )}
+          </p>
+        </div>
+      ) : null}
 
       <div className="form-footer">
         <button className="button submit-button" type="submit" disabled={status.kind === 'sending'}>
@@ -175,4 +217,24 @@ export function ContactForm() {
       </p>
     </form>
   );
+}
+
+/**
+ * El pie mostraba `new Date().getFullYear()` desde un componente de servidor.
+ * Con exportación estática eso se resuelve AL COMPILAR, así que el año se
+ * quedaba congelado en el de la última publicación. Calculado en el navegador
+ * vuelve a ser correcto sin necesidad de recompilar cada 1 de enero.
+ */
+const neverChanges = () => () => {};
+
+export function CurrentYear({ fallback }: { fallback: number }) {
+  // `useSyncExternalStore` da el valor del servidor al hidratar (sin desajuste)
+  // y el del navegador después, sin escribir estado dentro de un efecto.
+  const year = useSyncExternalStore(
+    neverChanges,
+    () => new Date().getFullYear(),
+    () => fallback,
+  );
+
+  return <>{year}</>;
 }

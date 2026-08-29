@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   const { brand, contact, legal } = siteContent;
+  const usesMailClient = !contact.formEndpoint && Boolean(contact.emailHref);
 
   return (
     <div className="legal-page">
@@ -30,16 +31,27 @@ export default function PrivacyPage() {
           <p className="legal-status">Borrador incompleto · no publicar</p>
           <div>
             <h1 id="privacy-title">Política de privacidad</h1>
-            <p>
-              El formulario está desactivado en esta vista de revisión y no transmite ni conserva datos. Esta estructura debe completarse y validarse cuando se elija el servicio de recepción real.
-            </p>
+            {usesMailClient ? (
+              <p>
+                El formulario no envía ni conserva datos en esta web. Prepara un borrador en el
+                programa de correo configurado por la persona usuaria, que decide si lo envía.
+                Esta política sigue pendiente de completar y validar.
+              </p>
+            ) : (
+              <p>
+                El formulario está desactivado en esta vista de revisión y no transmite ni
+                conserva datos. Esta estructura debe completarse y validarse cuando se elija el
+                servicio de recepción real.
+              </p>
+            )}
           </div>
         </section>
 
         <div className="legal-content shell">
           <aside className="legal-toc">
             <strong>Estado del documento</strong>
-            Sin tratamiento activo.<br />
+            {usesMailClient ? 'Sin almacenamiento en la web.' : 'Sin tratamiento activo.'}<br />
+            {usesMailClient ? <>Envío final desde el correo de la persona.<br /></> : null}
             Responsable pendiente.<br />
             Proveedores pendientes.<br />
             Revisión jurídica pendiente.
@@ -70,12 +82,32 @@ export default function PrivacyPage() {
 
             <section className="legal-section">
               <h2>2. Datos y finalidad prevista</h2>
-              <p>
-                Cuando el formulario se conecte a un servicio real, está previsto recoger nombre, empresa, correo profesional, teléfono opcional y la descripción del proceso facilitada por la persona interesada. La finalidad será responder a la consulta y valorar una primera conversación sobre ese proceso.
-              </p>
-              <p className="legal-note">
-                En la vista de revisión actual, pulsar el botón no envía información y muestra un aviso explícito dentro del propio formulario.
-              </p>
+              {usesMailClient ? (
+                <>
+                  <p>
+                    Los campos se usan únicamente para preparar un borrador dirigido al correo de
+                    contacto. Al pulsar el botón, el navegador entrega ese borrador al programa de
+                    correo configurado; esta web no lo envía ni lo almacena.
+                  </p>
+                  <p className="legal-note">
+                    Los datos solo llegarán a Oficio Lógico si la persona revisa y envía el mensaje
+                    desde su propio servicio de correo.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p>
+                    Cuando el formulario se conecte a un servicio real, está previsto recoger
+                    nombre, empresa, correo profesional, teléfono opcional y la descripción del
+                    proceso facilitada por la persona interesada. La finalidad será responder a la
+                    consulta y valorar una primera conversación sobre ese proceso.
+                  </p>
+                  <p className="legal-note">
+                    En la vista de revisión actual, pulsar el botón no envía información y muestra
+                    un aviso explícito dentro del propio formulario.
+                  </p>
+                </>
+              )}
             </section>
 
             <section className="legal-section">

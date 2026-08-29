@@ -12,9 +12,67 @@ export function withBasePath(path: string) {
   return `${siteBasePath}${path}`;
 }
 
+/* ══════════════════════════════════════════════════════════════════════════
+   RELLENAR AQUÍ · datos de negocio pendientes
+   ══════════════════════════════════════════════════════════════════════════
+   1) CORREO      En cuanto pongas un correo, el formulario deja de ser un
+                  callejón sin salida: prepara la solicitud y la abre en el
+                  programa de correo de quien escribe (la envía esa persona,
+                  no la web). Y el pie deja de decir "a través del
+                  formulario" y pone el correo.
+
+   2) FUNDADORES  Nombre, función y trayectoria de los dos. Mientras estén a
+                  null, la sección de Equipo sigue mostrando el aviso de
+                  "pendiente de validar". En cuanto haya nombres, se pinta
+                  sola. Las fotos son opcionales.
+
+   3) PUBLICAR    Es la intención de hacer la web indexable. No basta por sí
+                  solo: el correo, el dominio, los dos perfiles y la revisión
+                  legal también deben estar completos.
+
+   Los textos legales siguen teniendo datos pendientes. `LEGAL_REVISADO` solo
+   puede pasar a true después de completarlos y validarlos expresamente.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/** Correo de contacto. Ej.: 'hola@oficiologico.com' */
+const CORREO = null as string | null;
+
+/** URL completa del dominio ya registrado. Ej.: 'https://oficiologico.com' */
+const DOMINIO = null as string | null;
+
+/** true = web publicada e indexable. false = vista de revisión con noindex. */
+const PUBLICAR = false;
+
+/** true solo después de completar y validar aviso legal y privacidad. */
+const LEGAL_REVISADO = false;
+
+/** Los dos fundadores. Trayectoria: empresas, periodos y logros comprobables. */
+const FUNDADORES: Array<{
+  nombre: string | null;
+  funcion: string | null;
+  trayectoria: string | null;
+  foto: string | null;
+}> = [
+  { nombre: null, funcion: null, trayectoria: null, foto: null },
+  { nombre: null, funcion: null, trayectoria: null, foto: null },
+];
+
+const FUNDADORES_LISTOS =
+  FUNDADORES.length === 2 &&
+  FUNDADORES.every((fundador) =>
+    Boolean(fundador.nombre && fundador.funcion && fundador.trayectoria),
+  );
+
+/** Ningún interruptor aislado puede retirar las salvaguardas de revisión. */
+const LISTA_PARA_PUBLICAR =
+  PUBLICAR &&
+  LEGAL_REVISADO &&
+  Boolean(CORREO && DOMINIO) &&
+  FUNDADORES_LISTOS;
+
 export const siteContent = {
   publishing: {
-    ready: false,
+    ready: LISTA_PARA_PUBLICAR,
     pendingMarker: 'PENDING',
     localBaseUrl: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
   },
@@ -23,14 +81,14 @@ export const siteContent = {
     displayName: 'Oficio Lógico',
     statusLabel: 'automatización y software',
     finalName: 'PENDING: CONFIRMAR Y REGISTRAR «OFICIO LÓGICO»',
-    domain: 'PENDING: REGISTRAR DOMINIO DEFINITIVO',
+    domain: DOMINIO ?? 'PENDING: REGISTRAR DOMINIO DEFINITIVO',
     domainCandidate: 'oficiologico.com',
     tagline: 'Tecnología bien hecha para el trabajo que se repite.',
   },
 
   contact: {
-    email: 'PENDING: EMAIL DE CONTACTO',
-    emailHref: null as string | null,
+    email: CORREO ?? 'PENDING: EMAIL DE CONTACTO',
+    emailHref: CORREO,
     bookingUrl: null as string | null,
     formEndpoint: null as string | null,
   },
@@ -45,26 +103,16 @@ export const siteContent = {
     serviceProviders: 'PENDING: ENCARGADOS DE TRATAMIENTO, CUANDO SE ELIJAN',
   },
 
-  founders: [
-    {
-      number: '01',
-      name: 'PENDING: NOMBRE DEL FUNDADOR 1',
-      publicLabel: 'Fundador/a 01',
-      role: 'PENDING: FUNCIÓN EXACTA',
-      biography: 'PENDING: BIOGRAFÍA BREVE Y VERIFICADA',
-      career: 'PENDING: EMPRESAS, PERIODOS, FUNCIONES Y LOGROS COMPROBABLES',
-      photo: null as string | null,
-    },
-    {
-      number: '02',
-      name: 'PENDING: NOMBRE DEL FUNDADOR 2',
-      publicLabel: 'Fundador/a 02',
-      role: 'PENDING: FUNCIÓN EXACTA',
-      biography: 'PENDING: BIOGRAFÍA BREVE Y VERIFICADA',
-      career: 'PENDING: EMPRESAS, PERIODOS, FUNCIONES Y LOGROS COMPROBABLES',
-      photo: null as string | null,
-    },
-  ],
+  founders: FUNDADORES.map((f, i) => ({
+    number: i === 0 ? '01' : '02',
+    name: f.nombre ?? `PENDING: NOMBRE DEL FUNDADOR ${i + 1}`,
+    publicLabel: `Fundador/a 0${i + 1}`,
+    role: f.funcion ?? 'PENDING: FUNCIÓN EXACTA',
+    biography: f.trayectoria ?? 'PENDING: BIOGRAFÍA BREVE Y VERIFICADA',
+    career: f.trayectoria ?? 'PENDING: EMPRESAS, PERIODOS, FUNCIONES Y LOGROS COMPROBABLES',
+    photo: f.foto,
+    listo: Boolean(f.nombre && f.funcion && f.trayectoria),
+  })),
 
   navigation: [
     { label: 'Qué resolvemos', href: '#que-resolvemos' },
@@ -305,6 +353,6 @@ export const siteContent = {
         'Se detiene. El piloto se plantea precisamente para aprender con un alcance controlado. Si la comparación con la situación inicial no justifica continuar, no se amplía el proyecto.',
     },
   ],
-} as const;
+};
 
 export type SiteContent = typeof siteContent;
