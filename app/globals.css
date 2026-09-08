@@ -227,7 +227,8 @@ span.media-project-icon { display: grid; place-items: center; background: var(--
 .founder-role { color: var(--muted); font-size: .94rem; margin-block: .35rem 1rem; }
 .founder-biography { line-height: 1.7; max-width: 42rem; }
 .founders img { border-radius: .6rem; object-position: center; }
-.form-security { margin-block: 1.3rem; min-height: 65px; }
+.form-security { margin-block: 1.3rem; min-height: 65px; min-width: 0; }
+.form-security > div { width: 100%; }
 .form-security p { font-size: .875rem; color: #9b3429; }
 .measurement-settings { background: none; border: 0; padding: 0; color: inherit; font: inherit; text-decoration: underline; cursor: pointer; }
 .measurement-banner { position: fixed; z-index: 100; bottom: 1rem; left: 1rem; right: 1rem; max-width: 78rem; margin: auto; display: flex; align-items: center; gap: 2rem; background: #fff; color: var(--ink); border: 1px solid var(--line); border-radius: .6rem; box-shadow: 0 6px 40px #0d172030; padding: 1.5rem; }
@@ -257,7 +258,7 @@ span.media-project-icon { display: grid; place-items: center; background: var(--
 .contact-next svg { color: var(--cyan); margin-top: .2rem; width: 1.4rem; }
 .contact-next p { max-width: 23rem; color: #bfced7; font-size: .94rem; }
 .contact-email { display: inline-flex; gap: 2rem; align-items: center; font-size: 1.35rem; color: var(--cyan); text-decoration: underline; text-underline-offset: .3em; }
-.contact-form { padding: 2.1rem; background: #fff; color: var(--ink); border-radius: .45rem; }
+.contact-form { min-width: 0; padding: 2.1rem; background: #fff; color: var(--ink); border-radius: .45rem; }
 .form-heading { font-size: 1.45rem; margin-bottom: 1.5rem; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
 .field { display: flex; flex-direction: column; margin-bottom: 1.2rem; min-width: 0; }

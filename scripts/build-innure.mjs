@@ -1,4 +1,5 @@
 import { spawn } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { copyFile, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -12,6 +13,7 @@ const env = {
   NEXT_PUBLIC_CONTACT_ENDPOINT: '/automatizacion/contacto.php',
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: '0x4AAAAAAD646Hdkx1pPBB7A',
   NEXT_PUBLIC_PUBLISH: 'true',
+  NEXT_PUBLIC_MEASUREMENT_VERSION: createHash('sha256').update(await readFile(path.join(root,'public/lead-measurement.js'))).digest('hex').slice(0,12),
 };
 if (env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION && !/^AW-\d+\/[A-Za-z0-9_-]+$/.test(env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION)) throw new Error('Conversión de Ads no válida.');
 const build = spawn('npm', ['run', 'build:pages'], { cwd: root, env, stdio:'inherit' });

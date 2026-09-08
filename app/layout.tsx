@@ -6,7 +6,7 @@ const metadataBaseUrl = siteContent.publishing.ready
   ? siteContent.brand.domain
   : siteContent.publishing.localBaseUrl;
 const socialImageUrl = new URL(
-  'images/hero-wall-blue.webp',
+  'images/automatizacion-flujo.webp',
   `${metadataBaseUrl.replace(/\/$/, '')}/`,
 ).toString();
 
@@ -32,9 +32,9 @@ export const metadata: Metadata = {
     images: [
       {
         url: socialImageUrl,
-        width: siteContent.photography.hero.width,
-        height: siteContent.photography.hero.height,
-        alt: siteContent.photography.hero.alt,
+        width: 1536,
+        height: 1024,
+        alt: 'Correos y datos conectados con tareas organizadas para ahorrar tiempo.',
       },
     ],
   },
@@ -65,7 +65,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body>{children}
-        {siteContent.advertising.conversionDestination ? <script src={withBasePath('/lead-measurement.js')} data-conversion={siteContent.advertising.conversionDestination} defer /> : null}
+        {siteContent.advertising.conversionDestination ? <script src={withBasePath('/lead-measurement.js') + '?v=' + (process.env.NEXT_PUBLIC_MEASUREMENT_VERSION || '2')} data-conversion={siteContent.advertising.conversionDestination} defer /> : null}
       </body>
     </html>
   );

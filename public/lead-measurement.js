@@ -69,7 +69,7 @@
     }
   }
   function show() {
-    if (!banner) {
+    if (!banner || !banner.isConnected) {
       banner = document.createElement('section');
       banner.className = 'measurement-banner';
       banner.setAttribute('aria-label','Preferencias de medición publicitaria');
@@ -88,7 +88,12 @@
     window.gtag('event','conversion',{send_to:destination,transaction_id:id,value:0,currency:'EUR'});
   });
   function init() {
-    document.querySelectorAll('[data-automation-measurement]').forEach(function (button) { button.addEventListener('click',show); });
+    // La hidratación puede reemplazar el botón: escuchar en document mantiene
+    // disponible la retirada del consentimiento también después de ese cambio.
+    document.addEventListener('click',function (event) {
+      var target = event.target;
+      if (target && typeof target.closest === 'function' && target.closest('[data-automation-measurement]')) show();
+    });
     var saved = read('localStorage',key);
     if (saved && ['accepted','rejected'].includes(saved.value) && Number.isFinite(saved.at) && Date.now()-saved.at >= 0 && Date.now()-saved.at < maxAge) decision = saved.value;
     if (decision === 'accepted') loadTag();

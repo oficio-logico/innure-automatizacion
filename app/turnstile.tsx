@@ -37,18 +37,32 @@ export function Turnstile({ siteKey, onToken }: { siteKey: string; onToken: (tok
     let disposed = false;
     let widgetId: string | undefined;
     let api: TurnstileApi | undefined;
+    let size: 'compact' | 'flexible' | undefined;
+    let observer: ResizeObserver | undefined;
+    const render = () => {
+      if (disposed || !api || !element.current || element.current.clientWidth === 0) return;
+      // Flexible tiene un mínimo de 300 px; el modo compacto cabe en formularios estrechos.
+      const nextSize = element.current.clientWidth < 300 ? 'compact' : 'flexible';
+      if (widgetId && size === nextSize) return;
+      if (widgetId) api.remove(widgetId);
+      onTokenRef.current('');
+      size = nextSize;
+      widgetId = api.render(element.current, {
+        sitekey: siteKey, action: 'automatizacion', theme: 'light', language: 'es', size,
+        'response-field': false,
+        callback: (token: string) => { if (!disposed) { setFailed(false); onTokenRef.current(token); } },
+        'expired-callback': () => { if (!disposed) onTokenRef.current(''); },
+        'error-callback': () => { if (!disposed) { setFailed(true); onTokenRef.current(''); } },
+      });
+    };
     loadTurnstile().then((loadedApi) => {
       if (disposed || !element.current) return;
       api = loadedApi;
-      widgetId = api.render(element.current, {
-        sitekey: siteKey, action: 'automatizacion', theme: 'light', language: 'es', size: 'flexible',
-        'response-field': false,
-        callback: (token: string) => { setFailed(false); onTokenRef.current(token); },
-        'expired-callback': () => onTokenRef.current(''),
-        'error-callback': () => { setFailed(true); onTokenRef.current(''); },
-      });
+      observer = new ResizeObserver(render);
+      observer.observe(element.current);
+      render();
     }).catch(() => { if (!disposed) setFailed(true); });
-    return () => { disposed = true; if (api && widgetId) api.remove(widgetId); };
+    return () => { disposed = true; observer?.disconnect(); if (api && widgetId) api.remove(widgetId); };
   }, [siteKey]);
 
   return <div className="form-security">

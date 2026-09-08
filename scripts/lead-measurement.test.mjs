@@ -5,7 +5,7 @@ import vm from 'node:vm';
 
 const code = readFileSync(new URL('../public/lead-measurement.js',import.meta.url),'utf8');
 function setup({ consent, origin = 'https://www.innure.es', destination = 'AW-123456/AutomationOnly', search = '' } = {}) {
-  const local = new Map(); const session = new Map(); const events = new Map(); const tags = []; const buttons = new Map(); let banner; let reloads = 0;
+  const local = new Map(); const session = new Map(); const events = new Map(); const documentEvents = new Map(); const tags = []; const buttons = new Map(); let banner; let reloads = 0;
   if (consent) local.set('innure_automation_consent_v1', JSON.stringify({value:consent,at:Date.now()}));
   const storage = map => ({getItem:key=>map.get(key)??null,setItem:(key,value)=>map.set(key,value),removeItem:key=>map.delete(key)});
   const context = {
@@ -14,14 +14,17 @@ function setup({ consent, origin = 'https://www.innure.es', destination = 'AW-12
     document:{
       currentScript:{getAttribute:()=>destination},readyState:'complete',cookie:'',
       querySelectorAll:()=>[],
-      head:{appendChild:tag=>tags.push(tag)},body:{appendChild:element=>{banner=element;}},
+      addEventListener:(name,fn)=>documentEvents.set(name,fn),
+      head:{appendChild:tag=>tags.push(tag)},body:{appendChild:element=>{banner=element;element.isConnected=true;}},
       createElement:type=>type==='section'?{hidden:false,setAttribute:()=>{},querySelectorAll:()=>['accepted','rejected'].map(value=>({getAttribute:()=>value,addEventListener:(event,fn)=>buttons.set(value,fn)}))}:{},
     },
     addEventListener:(name,fn)=>events.set(name,fn),
   };
   context.window=context;
   vm.runInNewContext(code,context);
-  return {context,tags,session,buttons,banner:()=>banner,emit:detail=>events.get('innure:lead-received')?.({detail}),reloads:()=>reloads};
+  return {context,tags,session,buttons,banner:()=>banner,emit:detail=>events.get('innure:lead-received')?.({detail}),reloads:()=>reloads,
+    settingsClick:()=>documentEvents.get('click')?.({target:{closest:selector=>selector==='[data-automation-measurement]'?{}:null}}),
+    unrelatedClick:()=>documentEvents.get('click')?.({target:{closest:()=>null}})};
 }
 test('sin elección no se carga Google ni se almacena atribución',()=>{
   const result=setup({search:'?gclid=example'});
@@ -59,4 +62,17 @@ test('retirar consentimiento borra atribución y descarga la página de etiqueta
 test('desactivado fuera del dominio o con destino inválido',()=>{
   assert.equal(setup({origin:'http://localhost:3000',consent:'accepted'}).tags.length,0);
   assert.equal(setup({destination:'not-a-conversion',consent:'accepted'}).tags.length,0);
+});
+test('el botón nuevo tras hidratación vuelve a abrir las opciones de rechazo',()=>{
+  const result=setup({consent:'rejected'});
+  result.unrelatedClick(); assert.equal(result.banner(),undefined);
+  result.settingsClick(); assert.equal(result.banner().hidden,false);
+  result.buttons.get('rejected')(); assert.equal(result.banner().hidden,true);
+  result.settingsClick(); assert.equal(result.banner().hidden,false);
+  assert.equal(result.tags.length,0);
+});
+test('se recrea el aviso si el render de la aplicación retiró su nodo',()=>{
+  const result=setup(); const first=result.banner(); first.isConnected=false;
+  result.settingsClick(); assert.notEqual(result.banner(),first);
+  assert.equal(result.banner().isConnected,true); assert.equal(result.banner().hidden,false);
 });
