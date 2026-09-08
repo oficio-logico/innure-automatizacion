@@ -1,0 +1,97 @@
+name: Publicar Innure Automatización
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: innure-automatizacion-production
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Preparar publicación
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Validar sin servicios externos
+        run: |
+          npm run lint
+          npx tsc --noEmit
+          node --test scripts/*.test.mjs
+          php -l server/contacto.php
+          php scripts/contact.test.php
+      - name: Construir únicamente automatización
+        env:
+          INNURE_SOURCE_SHA: ${{ github.sha }}
+          NEXT_PUBLIC_GOOGLE_ADS_CONVERSION: AW-18410180479/mBarCPixx_EcEP-e1MpE
+        run: npm run build:innure
+      - uses: actions/upload-artifact@v4
+        with:
+          name: innure-automatizacion-${{ github.sha }}
+          path: dist/client/
+          if-no-files-found: error
+          retention-days: 14
+
+  publish:
+    name: Publicar subcarpeta
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: innure-production
+      url: https://www.innure.es/automatizacion/
+    # Entorno restringido a main. Las PR y la compilación no reciben estas claves.
+    # No se ejecuta código del repositorio en este job con acceso al alojamiento.
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: innure-automatizacion-${{ github.sha }}
+          path: site/
+      - name: Subir solo la carpeta aprobada
+        uses: SamKirkland/FTP-Deploy-Action@8e83cea8672e3fbcbb9fdafff34debf6ae4c5f65 # v4.3.5
+        with:
+          server: ftp.dondominio.com
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          timeout: 60000
+          local-dir: site/
+          server-dir: public/automatizacion/
+          state-name: .ftp-deploy-automatizacion-state.json
+          dangerous-clean-slate: false
+          exclude: |
+            **/config.php
+            **/mail-config.php
+            **/.env*
+
+  verify:
+    name: Verificar web pública
+    needs: publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Verificar versión, recursos y rechazo de envíos no válidos
+        env:
+          SOURCE_SHA: ${{ github.sha }}
+        run: node scripts/verify-innure-live.mjs

@@ -25,7 +25,7 @@ php scripts/contact.test.php
 
 Las pruebas del receptor usan funciones aisladas; no envían correos externos. La medición se comprueba con un navegador simulado, sin cargar Google.
 
-`app/site-content.ts` centraliza textos, equipo, identidad y opciones públicas. Solo se muestran perfiles con datos confirmados. El perfil de Sergio y su foto proceden de la web de Innure; el segundo perfil sigue pendiente. La web puede publicarse con el perfil confirmado sin mostrar marcadores ni inventar datos.
+`app/site-content.ts` centraliza textos, equipo, identidad y opciones públicas. El perfil de Sergio y su foto proceden de la web de Innure. Santi aparece con nombre y función confirmados; su biografía, foto y LinkedIn quedan a su cargo, sin mostrar marcadores ni inventar datos. Consulta [CONTRIBUTING.md](CONTRIBUTING.md) para completarlos mediante una PR revisada por Sergio.
 
 ## Compilación de producción
 
@@ -39,13 +39,21 @@ La configuración privada NO está en este repositorio. El receptor lee exclusiv
 
 ## Publicación
 
-La acción manual «Publicar automatización de Innure», en el repositorio privado de despliegue de Innure, recibe un SHA exacto de este repositorio y el destino público de conversión. Comprueba código y pruebas, construye, conserva un artefacto y publica exclusivamente en `public/automatizacion/`. Reutiliza las credenciales privadas existentes sin copiarlas al repositorio público. El estado de sincronización es independiente del de rendimiento.
+Al integrar una PR aprobada en `main`, «Publicar Innure Automatización» comprueba código y pruebas, construye, conserva un artefacto y publica exclusivamente en `public/automatizacion/`. Las claves FTP se guardan cifradas en el entorno `innure-production`, limitado a `main`; no se incluyen en el código ni están disponibles en las pruebas de PR. La compilación se ejecuta sin acceso a esas claves. La configuración privada del correo permanece en el alojamiento y el repositorio privado de Innure.
+
+`main` requiere una revisión de CODEOWNERS, el resultado correcto de `validate` y conversaciones resueltas. Los dos socios son revisores: una PR de Santi necesita aprobación de Sergio, y viceversa. La aprobación caduca al cambiar la propuesta y la protección se aplica a administradores. Solo Sergio puede fusionar; auto-merge queda disponible para cuando se cumplan los requisitos. No activar anuncios al publicar.
+
+La acción manual «Publicar automatización de Innure» del repositorio privado de despliegue se conserva como recuperación: recibe un SHA exacto y el destino de conversión. No ejecutarla en paralelo al despliegue automático. Ambas usan el mismo estado de sincronización de automatización, independiente del de rendimiento.
 
 El despliegue raíz excluye `automatizacion/`. Un cambio exclusivo en los dos ficheros de workflow no publica de nuevo rendimiento; si se quiere aplicar un cambio a su workflow, se ejecuta su acción manual.
 
 `scripts/verify-innure-live.mjs` comprueba versión, páginas, recursos, rechazo de métodos y origen externo. No genera un lead. La recepción real de un mensaje se valida por separado con una única consulta técnica identificada, sin consentimiento publicitario.
 
 ## Formulario
+
+La primera conversación se plantea como revisión de una tarea y orientación del siguiente paso, no como una auditoría gratuita completa. Los ejemplos permiten elegir esa tarea antes de llegar al formulario. La elección se puede quitar y nunca sobrescribe el texto del visitante; vive solo en la página, sin URL, cookies ni almacenamiento local.
+
+Al enviar, el contexto elegido se incorpora al campo `process` del contrato existente. No viaja en eventos de medición. El límite de texto reserva espacio para esa etiqueta y los errores conservan tanto la elección como el borrador. El recorrido del Gestor de Certificados muestra una captura de desarrollo con datos sintéticos, no una demo interactiva del producto ni un caso de ahorro medido.
 
 POST multipart/form-data a `/automatizacion/contacto.php` desde la misma web:
 

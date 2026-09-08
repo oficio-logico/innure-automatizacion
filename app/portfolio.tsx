@@ -20,18 +20,27 @@ export function Portfolio() {
           <div><p className="eyebrow">De la idea a una herramienta real</p><h2 id="portfolio-title">Lo que ya hemos<br />construido.</h2></div>
           <p>Proyectos propios y herramientas nacidas de necesidades reales. Aquí puedes ver qué hacen y en qué punto están.</p>
         </div>
-        <div className="portfolio-grid">
-          <article className="project-card">
-            <a className="project-picture" href={withBasePath(certificateProject.href)} aria-label="Ver el proyecto Gestor de Certificados">
+        <article className="project-spotlight" aria-labelledby="certificate-case-title">
+          <div className="project-spotlight-copy">
+            <p className="project-category">Un proyecto propio, por dentro · Windows</p>
+            <h3 id="certificate-case-title">{certificateProject.name}</h3>
+            <p className="project-card-description">De buscar entre una lista de certificados a tener búsqueda, fichas y caducidades en el mismo lugar.</p>
+            <ol className="project-walkthrough" role="list">
+              {certificateProject.walkthrough.map((step, index) => <li key={step.title}>
+                <span aria-hidden="true">0{index + 1}</span><div><h4>{step.title}</h4><p>{step.description}</p></div>
+              </li>)}
+            </ol>
+            <p className="project-card-status">{certificateProject.status} · Sin descarga pública</p>
+            <a className="text-link" href={withBasePath(certificateProject.href)}>Ver el proyecto y sus límites <Icon name="arrow" /></a>
+          </div>
+          <figure className="project-spotlight-figure">
+            <a href={withBasePath(certificateProject.image)} target="_blank" rel="noreferrer" aria-label="Ampliar la captura del Gestor de Certificados (se abre en otra pestaña)">
               <img src={withBasePath(certificateProject.image)} alt={certificateProject.imageAlt} width={certificateProject.imageWidth} height={certificateProject.imageHeight} loading="lazy" />
             </a>
-            <div className="project-card-copy">
-              <p className="project-category">{certificateProject.category}</p><h3>{certificateProject.name}</h3>
-              <p className="project-card-description">Busca el certificado de cada cliente, abre sus trámites y controla las caducidades desde una aplicación para Windows.</p>
-              <p className="project-card-status">{certificateProject.status}</p>
-              <a className="text-link" href={withBasePath(certificateProject.href)}>Ver la aplicación <Icon name="arrow" /></a>
-            </div>
-          </article>
+            <figcaption>Captura de desarrollo con datos sintéticos, no de clientes reales. <a href={withBasePath(certificateProject.image)} target="_blank" rel="noreferrer">Ampliar captura ↗</a></figcaption>
+          </figure>
+        </article>
+        <div className="portfolio-grid portfolio-grid-secondary">
           {featuredProjects.map((project) => <article className="project-card" key={project.id}>
             <div className={'project-picture project-picture-' + project.id}>
               <img src={withBasePath(project.image)} alt={project.imageAlt} width={project.imageWidth} height={project.imageHeight} loading="lazy" />

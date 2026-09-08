@@ -15,6 +15,11 @@ export const certificateProject = {
   href: '/proyectos/gestor-certificados/',
   // No existe una web o descarga pública verificada del producto.
   productUrl: null as string | null,
+  walkthrough: [
+    { title: 'Localizar', description: 'Un buscador y filtros para encontrar el certificado sin recorrer toda la lista.' },
+    { title: 'Reconocer', description: 'Una ficha con alias, etiquetas, responsable y notas para mantener el contexto.' },
+    { title: 'Anticiparse', description: 'Avisos de caducidad visibles para saber qué necesita atención.' },
+  ],
   features: [
     { title: 'Encuentra al cliente', description: 'Busca por nombre, NIF, alias o etiquetas para reconocer el certificado que necesitas.' },
     { title: 'Abre el trámite', description: 'Accede desde Chrome o Edge a los trámites que se acuerden y comprueben para cada despacho.' },

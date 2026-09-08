@@ -1,15 +1,31 @@
 'use client';
 
-import { FormEvent, useRef, useState, useSyncExternalStore } from 'react';
+import { createContext, FormEvent, ReactNode, useContext, useRef, useState, useSyncExternalStore } from 'react';
 import { siteContent, withBasePath } from './site-content';
 import { Icon } from './icons';
 import { Turnstile } from './turnstile';
+import { contactDetailLimit, prepareContactProcess, resolveContactNeed } from './contact-intent';
 
 declare global {
   interface Window { innureAutomationAttribution?: () => Record<string, string> }
 }
 
+const ContactIntentContext = createContext<{
+  needId: string | null;
+  selectNeed: (id: string | null) => void;
+}>({
+  needId: null,
+  selectNeed: () => {},
+});
+
+/** The example choice lives only on this page; the visitor's draft stays in the form. */
+export function ContactJourney({ children }: { children: ReactNode }) {
+  const [needId, selectNeed] = useState<string | null>(null);
+  return <ContactIntentContext.Provider value={{ needId, selectNeed }}>{children}</ContactIntentContext.Provider>;
+}
+
 export function ProcessExamples() {
+  const { selectNeed } = useContext(ContactIntentContext);
   const [activeIndex, setActiveIndex] = useState(0);
   const examples = siteContent.landing.examples;
   const active = examples[activeIndex];
@@ -49,6 +65,13 @@ export function ProcessExamples() {
           </li>)}
         </ol>
         </div>
+      </div>
+      <div className="example-bottom">
+        <p className="example-note">Ejemplo ilustrativo. Comprobamos qué es viable en tus herramientas.</p>
+        <a className="text-link" href="#contacto" onClick={() => {
+          selectNeed(active.id);
+          document.getElementById('contact-form-title')?.focus({ preventScroll: true });
+        }}>Quiero revisar esta tarea <Icon name="arrow" /></a>
       </div>
     </div>
   );
@@ -110,6 +133,9 @@ type FormStatus =
   | { kind: 'local'; message: string };
 
 export function ContactForm() {
+  const { needId, selectNeed } = useContext(ContactIntentContext);
+  const selectedNeed = resolveContactNeed(siteContent.landing.examples, needId);
+  const processInput = useRef<HTMLTextAreaElement>(null);
   const sending = useRef(false);
   const [turnstileToken, setTurnstileToken] = useState('');
   const [challengeKey, setChallengeKey] = useState(0);
@@ -124,6 +150,19 @@ export function ContactForm() {
     if (sending.current || !form.reportValidity()) return;
     const data = new FormData(form);
     if (String(data.get('website') || '').trim()) return;
+    const detail = String(data.get('process') || '').trim();
+    if (detail.length < 20) {
+      setStatus({ kind: 'error', message: 'Añade al menos 20 caracteres sobre cómo os ocurre. Elegir una tarea no sustituye tu explicación.' });
+      processInput.current?.focus();
+      return;
+    }
+    if (detail.length > contactDetailLimit(selectedNeed)) {
+      setStatus({ kind: 'error', message: `Acorta el detalle a ${contactDetailLimit(selectedNeed)} caracteres para incluir la tarea elegida. Tu texto se ha conservado.` });
+      processInput.current?.focus();
+      return;
+    }
+    // The optional context travels only with the consultation, never with analytics.
+    data.set('process', prepareContactProcess(detail, selectedNeed));
 
     if (!siteContent.contact.formEndpoint) {
       // Sin servicio de recepción todavía. Si hay un correo publicado, no
@@ -143,9 +182,9 @@ export function ContactForm() {
           value('process'),
         ].join('\n');
 
-        window.location.href = `mailto:${siteContent.contact.emailHref}?subject=${encodeURIComponent(
+        window.location.assign(`mailto:${siteContent.contact.emailHref}?subject=${encodeURIComponent(
           subject,
-        )}&body=${encodeURIComponent(body)}`;
+        )}&body=${encodeURIComponent(body)}`);
 
         setStatus({
           kind: 'local',
@@ -191,6 +230,7 @@ export function ContactForm() {
       }
 
       form.reset();
+      selectNeed(null);
       setStatus({
         kind: 'success',
         message: 'Solicitud enviada. Nos pondremos en contacto contigo.',
@@ -215,7 +255,14 @@ export function ContactForm() {
 
   return (
     <form className="contact-form" onSubmit={handleSubmit} noValidate={false} aria-labelledby="contact-form-title">
-      <h3 className="form-heading" id="contact-form-title">Vamos a conocer tu caso</h3>
+      <h3 className="form-heading" id="contact-form-title" tabIndex={-1}>Cuéntanos por dónde empezar</h3>
+      <div className="form-interest" hidden={!selectedNeed}>
+        <p role="status" aria-live="polite">{selectedNeed ? <><span>Tarea elegida</span><strong>{selectedNeed.label}</strong></> : null}</p>
+        <button type="button" onClick={() => {
+          selectNeed(null);
+          processInput.current?.focus();
+        }}>Quitar selección</button>
+      </div>
       <input type="hidden" name="service" value={siteContent.contact.serviceId} />
       <div className="honeypot" aria-hidden="true">
         <label htmlFor="website">Deja este campo vacío</label>
@@ -246,19 +293,20 @@ export function ContactForm() {
       </div>
 
       <div className="field field-wide">
-        <label htmlFor="process">¿Qué te gustaría resolver en tu empresa?</label>
+        <label htmlFor="process">{selectedNeed ? '¿Cómo os ocurre en vuestra empresa?' : '¿Qué tarea os quita tiempo?'}</label>
         <textarea
+          ref={processInput}
           id="process"
           name="process"
           rows={4}
           minLength={20}
-          maxLength={3000}
-          placeholder="Por ejemplo: copiamos cada pedido del correo a una hoja de cálculo y se nos van las mañanas."
+          maxLength={contactDetailLimit(selectedNeed)}
+          placeholder={selectedNeed?.contactPrompt || 'Cuéntanos qué hacéis a mano, qué programas usáis y con qué frecuencia se repite.'}
           required
           aria-describedby="process-help"
         />
         <small id="process-help">
-          Cuéntalo con tus palabras. No incluyas datos confidenciales.
+          Unas líneas bastan. No incluyas contraseñas, certificados ni datos de clientes.
         </small>
       </div>
 
@@ -295,7 +343,7 @@ export function ContactForm() {
 
       <div className="form-footer">
         <button className="button submit-button" type="submit" disabled={status.kind === 'sending'}>
-          {siteContent.contact.formEndpoint ? 'Enviar mi consulta' : 'Preparar mi consulta por correo'}
+          {siteContent.contact.formEndpoint ? 'Solicitar primera conversación' : 'Preparar mi consulta por correo'}
           <span aria-hidden="true">↗</span>
         </button>
         <p className="form-assurance">Primera conversación gratuita. Sin compromiso.</p>

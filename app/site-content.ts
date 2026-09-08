@@ -21,9 +21,9 @@ export function withBasePath(path: string) {
                   no la web). Y el pie deja de decir "a través del
                   formulario" y pone el correo.
 
-   2) FUNDADORES  Nombre, función y trayectoria de los dos. Mientras estén a
-                  null, los perfiles individuales no se muestran. La marca
-                  se presenta como una línea de Innure. Las fotos son opcionales.
+   2) FUNDADORES  Solo se muestran nombres y funciones confirmados. La biografía,
+                  foto y LinkedIn son opcionales hasta que su titular los aporte.
+                  No publicar textos de relleno ni atribuir experiencia pendiente.
 
    3) PUBLICAR    Solo la compilación de Innure habilita indexación. Requiere
                   dominio, contacto, información legal y un perfil confirmado.
@@ -45,20 +45,30 @@ const PUBLICAR = process.env.NEXT_PUBLIC_PUBLISH === 'true';
 /** true solo después de completar y validar aviso legal y privacidad. */
 const LEGAL_REVISADO = true;
 
-/** Los dos fundadores. Trayectoria: empresas, periodos y logros comprobables. */
+/** Equipo. Trayectoria: empresas, periodos y logros comprobables. */
 const FUNDADORES: Array<{
   nombre: string | null;
   funcion: string | null;
   trayectoria: string | null;
   foto: string | null;
+  linkedin: string | null;
 }> = [
   {
     nombre: 'Sergio Herencias Redondo',
     funcion: 'Fundador · Ingeniería y desarrollo',
     trayectoria: '8 años de experiencia probando el rendimiento de sistemas críticos. Desarrollo de herramientas propias y automatizaciones para resolver problemas concretos, con foco en la calidad y el uso real.',
     foto: '/images/sergio-herencias.jpg',
+    linkedin: null,
   },
-  { nombre: null, funcion: null, trayectoria: null, foto: null },
+  {
+    nombre: 'Santi Correas',
+    funcion: 'Socio · Innure',
+    // Santi: completa y propone estos datos en una PR para revisión de Sergio.
+    // Usa solo experiencia comprobable y una foto que autorices a publicar.
+    trayectoria: null,
+    foto: null,
+    linkedin: null,
+  },
 ];
 
 const FUNDADORES_LISTOS =
@@ -126,10 +136,12 @@ export const siteContent = {
     name: f.nombre ?? `PENDING: NOMBRE DEL FUNDADOR ${i + 1}`,
     publicLabel: `Fundador/a 0${i + 1}`,
     role: f.funcion ?? 'PENDING: FUNCIÓN EXACTA',
-    biography: f.trayectoria ?? 'PENDING: BIOGRAFÍA BREVE Y VERIFICADA',
+    biography: f.trayectoria,
     career: f.trayectoria ?? 'PENDING: EMPRESAS, PERIODOS, FUNCIONES Y LOGROS COMPROBABLES',
     photo: f.foto,
-    listo: Boolean(f.nombre && f.funcion && f.trayectoria),
+    initials: (f.nombre ?? '').split(/\s+/).map((part) => part[0]).slice(0, 2).join(''),
+    linkedin: f.linkedin,
+    listo: Boolean(f.nombre && f.funcion),
   })),
 
   navigation: [
@@ -151,13 +163,24 @@ export const siteContent = {
     titleAccent: 'Más tiempo para tu negocio.',
     description:
       'Automatizamos tareas, integramos IA y conectamos las aplicaciones que ya usas. También creamos herramientas a medida para que tu negocio funcione mejor.',
-    primaryCta: 'Cuéntanos tu caso',
+    primaryCta: 'Revisar mi caso',
     secondaryCta: 'Ver un ejemplo',
     support:
-      'Primera conversación gratuita. Sin compromiso.',
+      'Primera conversación gratuita. Una tarea y un siguiente paso claro.',
   },
 
   landing: {
+    review: {
+      eyebrow: 'Primera conversación gratuita · Sin compromiso',
+      title: 'Una tarea. Un primer paso claro.',
+      description: 'Revisamos contigo una tarea que os quite tiempo. No necesitas saber de IA ni tener una solución pensada.',
+      outcomes: [
+        'Qué se podría simplificar o automatizar.',
+        'Qué necesitamos comprobar en tus herramientas.',
+        'Cuál sería el siguiente paso, si tiene sentido seguir.',
+      ],
+      next: 'Nos ponemos en contacto para conocer el caso y acordar esa conversación. Cualquier desarrollo se presupuesta después; enviar la consulta no te compromete a contratar.',
+    },
     benefits: ['Menos copiar y pegar', 'Tus herramientas conectadas', 'Más tiempo para tus clientes'],
     services: [
       {
@@ -178,7 +201,8 @@ export const siteContent = {
     ],
     examples: [
       {
-        id: 'pedidos', label: 'Pedidos y facturas', icon: 'document',
+        id: 'pedidos', label: 'Copiar datos entre programas', icon: 'document',
+        contactPrompt: '¿Qué datos copiáis, entre qué programas y cuántas veces os ocurre?',
         title: 'Del correo a tu herramienta, sin volver a teclearlo.',
         before: 'Llega un pedido por correo. Alguien abre el adjunto, copia los datos y avisa al resto del equipo.',
         after: 'La solución recoge la información, prepara el registro y te pide revisar lo que necesita confirmación.',
@@ -190,7 +214,8 @@ export const siteContent = {
         ],
       },
       {
-        id: 'informes', label: 'Informes y documentos', icon: 'report',
+        id: 'informes', label: 'Preparar los mismos informes', icon: 'report',
+        contactPrompt: '¿Qué informe preparáis, de dónde salen los datos y con qué frecuencia?',
         title: 'El informe empieza con los datos reunidos.',
         before: 'Cada semana buscas cifras en varias hojas, las copias y vuelves a preparar el mismo documento.',
         after: 'La solución reúne los datos y prepara un borrador para que puedas dedicarte a revisarlo y sacar conclusiones.',
@@ -202,15 +227,16 @@ export const siteContent = {
         ],
       },
       {
-        id: 'gestion', label: 'Gestión del negocio', icon: 'tool',
-        title: 'Un lugar donde saber en qué punto está cada trabajo.',
-        before: 'Los encargos viven entre hojas de cálculo, mensajes y notas. Saber qué falta obliga a preguntar a todo el mundo.',
-        after: 'Una herramienta a medida reúne los encargos, sus responsables y sus próximos pasos. Cada persona ve lo que le toca.',
+        id: 'gestion', label: 'Dar seguimiento a presupuestos', icon: 'tool',
+        contactPrompt: '¿Cómo recibís las solicitudes, dónde preparáis los presupuestos y qué suele quedarse pendiente?',
+        title: 'Que ninguna solicitud se quede sin un siguiente paso.',
+        before: 'Las solicitudes llegan por correo y mensajes. El presupuesto se prepara en otro programa y el seguimiento depende de que alguien se acuerde.',
+        after: 'La solución reúne las solicitudes, prepara la información y avisa de lo pendiente. Tu equipo revisa cada presupuesto antes de enviarlo.',
         steps: [
-          { icon: 'document', title: 'Entra un encargo', detail: 'Con toda su información' },
-          { icon: 'tool', title: 'Se organiza el trabajo', detail: 'Responsables y tareas' },
-          { icon: 'check', title: 'El equipo actualiza', detail: 'En un único lugar' },
-          { icon: 'report', title: 'Ves cómo avanza', detail: 'Sin perseguir actualizaciones' },
+          { icon: 'mail', title: 'Llega una solicitud', detail: 'Se registra con su contexto' },
+          { icon: 'document', title: 'Se prepara el borrador', detail: 'Con las reglas acordadas' },
+          { icon: 'check', title: 'Tu equipo confirma', detail: 'Revisa antes de enviar' },
+          { icon: 'report', title: 'Se recuerda lo pendiente', detail: 'Con responsable y siguiente paso' },
         ],
       },
     ],
@@ -225,6 +251,8 @@ export const siteContent = {
       { question: '¿Tengo que saber de IA o tener la solución pensada?', answer: 'No. Cuéntanos qué te hace perder tiempo o qué te gustaría que funcionara mejor. Nosotros estudiamos cómo resolverlo y te explicamos la propuesta en un lenguaje claro.' },
       { question: '¿Hay que cambiar los programas que ya usamos?', answer: 'Primero estudiamos cómo conectar lo que ya utilizáis. Si alguna herramienta no permite integrarse o el cambio no compensa, te lo explicamos antes de presupuestar.' },
       { question: '¿Cuánto cuesta y cuánto tarda?', answer: 'Depende del problema y de las herramientas que haya que conectar o construir. Tras la primera conversación te proponemos un alcance, un presupuesto y un plazo antes de empezar.' },
+      { question: '¿Qué recibimos al terminar?', answer: 'La propuesta detalla la solución que se entrega, los accesos, la documentación y la formación de uso que incluye el proyecto. También dejamos por escrito la propiedad del desarrollo y qué depende de licencias o servicios de terceros.' },
+      { question: '¿Habrá costes mensuales?', answer: 'Puede haber costes de herramientas, alojamiento, consumo de IA o mantenimiento. Antes de empezar los separamos del coste de implantación y explicamos cuáles son necesarios y cuáles opcionales. No prometemos una solución sin cuotas si depende de servicios que las cobran.' },
       { question: '¿Qué pasa con los datos y las decisiones importantes?', answer: 'Antes de construir acordamos qué datos necesita la solución, dónde se tratarán y quién tendrá acceso. Dejamos revisión humana en las tareas que requieren criterio o autorización.' },
       { question: '¿Y después de ponerlo en marcha?', answer: 'Te enseñamos a usar la solución y dejamos acordadas la documentación, el mantenimiento y las posibles mejoras. Si la primera prueba no compensa, revisamos el enfoque antes de ampliar el proyecto.' },
     ],

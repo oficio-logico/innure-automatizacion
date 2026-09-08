@@ -1,0 +1,35 @@
+# Colaborar en Innure Automatización
+
+La web que empezó como Oficio Lógico es ahora la línea de automatización, IA y desarrollo a medida de Innure. La dirección comercial es https://www.innure.es/automatizacion/. Este repositorio no contiene la web de rendimiento ni la configuración privada del correo.
+
+## Completar el perfil de Santi
+
+En `app/site-content.ts`, busca `nombre: 'Santi Correas'` dentro de `FUNDADORES`.
+
+- Confirma el nombre que quieres mostrar y ajusta `funcion` a tu aportación real.
+- Completa `trayectoria` con 2–4 frases: experiencia comprobable, tu aportación al equipo y los problemas en los que puedes ayudar. No incluir métricas, clientes o credenciales no verificados.
+- Añade una foto autorizada en `public/images/` e indica su ruta en `foto`, por ejemplo `/images/santi-correas.jpg`. Preferible cuadrada, al menos 640 × 640 px, optimizada para web y sin metadatos personales innecesarios.
+- `linkedin` es opcional: usa la dirección HTTPS de tu perfil, o deja `null`.
+
+Por ahora solo aparecen el nombre y «Socio · Innure». La biografía y el enlace no se muestran hasta completarlos; las iniciales sustituyen a la foto sin inventar un retrato.
+
+## Proponer y autorizar los cambios
+
+1. Actualiza desde `main` y crea una rama para tu propuesta; no trabajes directamente sobre `main`.
+2. Cambia los datos, comprueba la vista local y ejecuta las comprobaciones del README.
+3. Sube la rama y abre una **Pull Request hacia `main`**. Explica lo cambiado y solicita revisión a **@sh3rencr (Sergio)**. Los dos socios figuran en CODEOWNERS; como el autor no puede aprobar su propia PR, la propuesta de Santi necesita revisión de Sergio.
+4. Espera a que pase `validate` y Sergio apruebe. Si añades cambios, la aprobación anterior deja de ser válida. Atiende los comentarios pendientes.
+5. Con aprobación y comprobaciones correctas, **Sergio fusiona la PR**. También puede habilitar **auto-merge** en esa PR para fusionarla cuando se cumplan ambos requisitos. Las propuestas escritas por Sergio requieren la revisión de Santi.
+
+Al integrarse en `main`, **Publicar Innure Automatización** construye y publica la web comercial automáticamente. No hace falta pedir un despliegue manual, compartir contraseñas ni activar Google Ads. Comprueba que los tres pasos de la acción terminan bien: preparación, publicación y verificación pública.
+
+## Límites de seguridad y publicación
+
+- `main` exige revisión del propietario de código, pruebas correctas y conversaciones resueltas. La protección se aplica también a administradores; solo Sergio puede fusionar en la rama principal.
+- El entorno `innure-production` admite únicamente la rama `main`. Contiene solo las claves FTP cifradas necesarias para subir la web. No están en los archivos ni disponibles en pruebas de PR.
+- La subida está limitada por el workflow a `public/automatizacion/`. No cambiar el destino, los secretos, CODEOWNERS o las reglas de protección sin acordarlo con Sergio.
+- La vista de GitHub Pages es de revisión: no indexable, sin envío directo ni medición publicitaria. La dirección comercial es la de Innure.
+- No incluir datos de contactos, credenciales, claves privadas, certificados ni documentos de clientes en este repositorio público.
+- Publicar la web no autoriza activar anuncios, cambiar la campaña ni gastar presupuesto.
+
+Los administradores de la organización conservan técnicamente la capacidad de cambiar la configuración del repositorio. La protección regula el flujo habitual; no cambia la propiedad compartida de la organización.

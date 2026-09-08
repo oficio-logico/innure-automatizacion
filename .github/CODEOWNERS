@@ -1,0 +1,4 @@
+# Revisión entre socios: un autor no puede aprobar su propia PR.
+# Para una PR de Santi, el revisor requerido es Sergio (y viceversa).
+# La protección de main reserva la fusión a Sergio.
+* @sh3rencr @Santicorreas

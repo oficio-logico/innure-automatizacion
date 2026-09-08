@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { ContactForm, CurrentYear, MobileNavigation, ProcessExamples } from './interactive';
+import { ContactForm, ContactJourney, CurrentYear, MobileNavigation, ProcessExamples } from './interactive';
 import { Icon } from './icons';
 import { Portfolio } from './portfolio';
 import { PageExperience } from './page-experience';
@@ -29,7 +29,7 @@ export default function Home() {
         </div>
       </header>
 
-      <main id="contenido">
+      <ContactJourney><main id="contenido">
         <section className="hero shell" id="inicio" aria-labelledby="hero-title">
           <div className="hero-copy">
             <p className="eyebrow"><span aria-hidden="true" />{hero.eyebrow}</p>
@@ -72,11 +72,10 @@ export default function Home() {
         <section className="examples-section section-space" id="ejemplos" aria-labelledby="examples-title">
           <div className="shell">
             <div className="section-heading">
-              <div><p className="eyebrow">Del problema al proceso</p><h2 id="examples-title">Así cambia el día a día.</h2></div>
-              <p>Elige una tarea y descubre qué podríamos simplificar. Con tu equipo al mando.</p>
+              <div><p className="eyebrow">¿Os pasa algo de esto?</p><h2 id="examples-title">Así cambia el día a día.</h2></div>
+              <p>Elige la tarea que reconoces en tu negocio. Mira cómo podríamos simplificarla, con tu equipo al mando.</p>
             </div>
             <ProcessExamples />
-            <div className="example-bottom"><p className="example-note">Ejemplos ilustrativos. Estudiamos la viabilidad en cada empresa.</p><a className="text-link" href="#contacto">Quiero algo así para mi negocio <Icon name="arrow" /></a></div>
           </div>
         </section>
 
@@ -104,8 +103,8 @@ export default function Home() {
             </div>
           </div>
           {publicFounders.length ? <div className="shell founders">{publicFounders.map((founder) => <article key={founder.number}>
-            {founder.photo ? <img src={withBasePath(founder.photo)} alt={founder.name} width="320" height="320" loading="lazy" /> : null}
-            <div><h3>{founder.name}</h3><p className="founder-role">{founder.role}</p><p className="founder-biography">{founder.biography}</p></div>
+            {founder.photo ? <img src={withBasePath(founder.photo)} alt={founder.name} width="320" height="320" loading="lazy" /> : <span className="founder-initials" aria-hidden="true">{founder.initials}</span>}
+            <div><h3>{founder.name}</h3><p className="founder-role">{founder.role}</p>{founder.biography ? <p className="founder-biography">{founder.biography}</p> : null}{founder.linkedin ? <a className="text-link founder-link" href={founder.linkedin} target="_blank" rel="noreferrer">Perfil en LinkedIn <span aria-hidden="true">↗</span></a> : null}</div>
           </article>)}</div> : null}
         </section>
 
@@ -121,16 +120,19 @@ export default function Home() {
         <section className="contact-section section-space" id="contacto" aria-labelledby="contact-title">
           <div className="shell contact-layout">
             <div className="contact-copy">
-              <p className="eyebrow">Empezamos por escucharte</p>
-              <h2 id="contact-title">Cuéntanos qué te<br /> hace perder tiempo.</h2>
-              <p>No necesitas un documento técnico. Explica qué ocurre en tu empresa y vemos cómo podemos ayudarte.</p>
-              <div className="contact-next"><Icon name="mail" /><p>Leemos tu consulta y nos ponemos en contacto para entender el caso. Primera conversación gratuita, sin compromiso.</p></div>
+              <p className="eyebrow">{landing.review.eyebrow}</p>
+              <h2 id="contact-title">{landing.review.title}</h2>
+              <p>{landing.review.description}</p>
+              <ul className="review-outcomes" aria-label="Qué aclararemos en la conversación">
+                {landing.review.outcomes.map((outcome) => <li key={outcome}><Icon name="check" /><span>{outcome}</span></li>)}
+              </ul>
+              <div className="contact-next"><Icon name="mail" /><p>{landing.review.next}</p></div>
               {contact.emailHref ? <a className="contact-email" href={'mailto:' + contact.emailHref}>{contact.email}<span aria-hidden="true">↗</span></a> : null}
             </div>
             <ContactForm />
           </div>
         </section>
-      </main>
+      </main></ContactJourney>
 
       <footer className="site-footer">
         <div className="shell footer-main">
