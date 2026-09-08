@@ -4,7 +4,7 @@ import path from 'node:path';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outputDir = path.join(projectRoot, 'dist', 'client');
-const routes = ['aviso-legal', 'privacidad'];
+const routes = ['aviso-legal', 'privacidad', 'proyectos/gestor-certificados'];
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 await access(path.join(outputDir, 'index.html'));
@@ -33,7 +33,7 @@ for (const route of routes) {
 
 await writeFile(
   path.join(outputDir, 'robots.txt'),
-  `User-agent: *\nDisallow: ${basePath ? `${basePath}/` : '/'}\n`,
+  process.env.NEXT_PUBLIC_PUBLISH === 'true' ? `User-agent: *\nAllow: ${basePath}/\n` : `User-agent: *\nDisallow: ${basePath ? `${basePath}/` : '/'}\n`,
   'utf8',
 );
 

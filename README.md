@@ -1,74 +1,83 @@
-# Oficio Lógico
+# Innure · Automatización e IA
 
-Landing local en castellano para una marca de trabajo especializada en mejora de procesos, automatización, software a medida e implantación práctica de IA.
+Landing para pequeñas empresas: automatizar tareas, conectar herramientas e integrar IA o desarrollar aplicaciones a medida.
 
-**Vista compartida:** https://oficio-logico.github.io/oficio-logico/
+## Direcciones y repositorios
 
-**Repositorio:** https://github.com/oficio-logico/oficio-logico
+- URL comercial: https://www.innure.es/automatizacion/
+- Rendimiento permanece en https://www.innure.es/.
+- Este repositorio contiene solo automatización. El alojamiento es compartido; el código y la publicación son independientes.
+- GitHub Pages conserva una vista de revisión con `noindex`, sin receptor ni etiquetas publicitarias.
 
-**Nombre de trabajo:** Oficio Lógico
+## Desarrollo y comprobaciones
 
-**Dominio candidato:** `oficiologico.com`
-
-El nombre y el dominio deben someterse a una búsqueda marcaria formal y registrarse antes de publicar. La comprobación inicial realizada para esta propuesta no sustituye una validación jurídica ni reserva el dominio.
-
-## Ver en local
-
-Requisitos: Node.js 22.13 o superior.
+Node.js 22.13 o superior; dependencias y lockfile existentes.
 
 ```bash
-npm install
+npm ci
 npm run dev
+npm run lint
+npx tsc --noEmit
+node --test scripts/*.test.mjs
+php -l server/contacto.php
+php scripts/contact.test.php
 ```
 
-La dirección local se muestra en la terminal, normalmente `http://localhost:3000`.
+Las pruebas del receptor usan funciones aisladas; no envían correos externos. La medición se comprueba con un navegador simulado, sin cargar Google.
 
-## Validar la construcción
+`app/site-content.ts` centraliza textos, equipo, identidad y opciones públicas. Solo se muestran perfiles con datos confirmados. El perfil de Sergio y su foto proceden de la web de Innure; el segundo perfil sigue pendiente. La web puede publicarse con el perfil confirmado sin mostrar marcadores ni inventar datos.
+
+## Compilación de producción
 
 ```bash
-npm run build
-npm run lint
+NEXT_PUBLIC_GOOGLE_ADS_CONVERSION=AW-18410180479/mBarCPixx_EcEP-e1MpE npm run build:innure
 ```
 
-## Editar contenido y datos
+La salida pública es `dist/client/`. El script fija `/automatizacion/`, habilita el formulario con la clave pública de Turnstile de Innure y copia `server/contacto.php` exactamente a `dist/client/contacto.php`. Nunca debe subirse este paquete a la raíz del alojamiento.
 
-Todos los textos, enlaces y datos pendientes están centralizados en:
+La configuración privada NO está en este repositorio. El receptor lee exclusivamente `../config.php` y `../mail-config.php` del alojamiento existente. No ejecuta ni modifica el formulario de rendimiento.
 
-`app/site-content.ts`
+## Publicación
 
-Mientras falten datos, deben mantenerse estas salvaguardas:
+La acción manual «Publicar automatización de Innure», en el repositorio privado de despliegue de Innure, recibe un SHA exacto de este repositorio y el destino público de conversión. Comprueba código y pruebas, construye, conserva un artefacto y publica exclusivamente en `public/automatizacion/`. Reutiliza las credenciales privadas existentes sin copiarlas al repositorio público. El estado de sincronización es independiente del de rendimiento.
 
-- `PUBLICAR: false` y `LEGAL_REVISADO: false`, que mantienen `noindex` y bloquean el rastreo en `robots.txt`.
-- `contact.formEndpoint: null`, que impide enviar datos a un backend. Si se configura `CORREO`, el formulario solo prepara un borrador en el programa de correo de la persona.
+El despliegue raíz excluye `automatizacion/`. Un cambio exclusivo en los dos ficheros de workflow no publica de nuevo rendimiento; si se quiere aplicar un cambio a su workflow, se ejecuta su acción manual.
 
-La versión de GitHub Pages es una vista pública de revisión: conserva `noindex`, no recibe datos mediante un backend y no debe presentarse como una web comercial definitiva.
+`scripts/verify-innure-live.mjs` comprueba versión, páginas, recursos, rechazo de métodos y origen externo. No genera un lead. La recepción real de un mensaje se valida por separado con una única consulta técnica identificada, sin consentimiento publicitario.
 
-Cuando se disponga de un servicio real de recepción, asignar su URL HTTPS a `contact.formEndpoint` y revisar la política de privacidad según el proveedor y la ubicación del tratamiento.
+## Formulario
 
-## Bloqueadores de publicación
+POST multipart/form-data a `/automatizacion/contacto.php` desde la misma web:
 
-No publicar hasta completar y comprobar:
+- `name`, `company`, `email`, `phone` opcional, `process`, `privacy=accepted`.
+- `service=automatizacion-ia`, honeypot `website` vacío, `cf-turnstile-response`.
+- Límites de servidor, origen exacto, Turnstile con hostname/action y fallo cerrado, cuotas de diez minutos después de superar Turnstile.
+- Éxito JSON `{ success: true, submissionId: "32 caracteres hexadecimales" }` exclusivamente después de aceptación SMTP. Esto no demuestra por sí solo la entrega final en el buzón.
+- Los errores conservan los campos, no disparan conversiones ni exponen destinatarios privados o trazas SMTP.
+- No hay reintento automático. Si se pierde la conexión después de aceptar el correo, un reintento manual puede duplicarlo; la referencia del mensaje permite reconocerlo.
+- No se almacenan mensajes ni una base de datos de clientes en el alojamiento.
 
-1. Validar y registrar «Oficio Lógico» como marca definitiva.
-2. Registrar el dominio definitivo y configurar la URL canónica.
-3. Nombre, función, biografía, empresas, periodos y logros verificables de cada fundador.
-4. Fotografías reales de ambos fundadores y sus textos alternativos, si se van a mostrar.
-5. Correo operativo de contacto.
-6. Enlace de reserva, si se va a ofrecer.
-7. Razón social, NIF, domicilio y datos registrales, si corresponden.
-8. Email operativo para derechos de protección de datos.
-9. Servicio de recepción del formulario, plazo de conservación, encargados de tratamiento y posibles transferencias.
-10. Revisión jurídica final del aviso legal, la privacidad y el texto de consentimiento.
-11. Prueba real del canal de contacto elegido de extremo a extremo.
+## Medición y primera prueba comercial
 
-Después de completar esos puntos, cambiar `PUBLICAR` y `LEGAL_REVISADO` a `true`, confirmar que `DOMINIO` contiene la URL HTTPS completa y volver a ejecutar la validación.
+«Contacto · Automatización» tiene su propio destino; nunca se utiliza la conversión de rendimiento. Se crea como **secundaria** para no cambiar las pujas de las campañas existentes. Al preparar la futura campaña, seleccionar únicamente esta acción mediante un objetivo específico de automatización.
 
-## Decisiones técnicas
+`public/lead-measurement.js`:
 
-- Una única página principal y dos rutas legales.
-- Identidad de trabajo «Oficio Lógico»: marfil, tinta y naranja señal; tipografía editorial y lenguaje directo.
-- Contenido mayoritariamente estático; el JavaScript interactivo se limita a la navegación móvil y al formulario.
-- Sin analítica, rastreadores, cookies no esenciales ni fuentes externas.
-- Sin testimonios, métricas, clientes, logotipos o credenciales no verificadas.
-- Dirección visual editorial basada en cuatro fotografías reales de Unsplash, servidas localmente como WebP y acreditadas en cada uso y en el pie.
-- Fotografías de Aleksandr Zaitsev, Tanja Tepavac, Bank Phrom y Sebastian Schuster, usadas bajo la [licencia de Unsplash](https://unsplash.com/license).
+- no carga Google hasta aceptar;
+- permite rechazo y retirada desde el pie;
+- no comparte el contenido del formulario;
+- atribución de campaña solo consentida, acotada a sesión/24 horas;
+- deduplica por referencia del servidor y utiliza una conversión por clic;
+- se desactiva fuera de `https://www.innure.es`.
+
+El presupuesto de 100 € es una propuesta de prueba, no una campaña activa. No se publica ningún anuncio desde este repositorio. Antes de lanzar: comprobar recepción real, objetivos específicos, palabras clave/costes, tope total y aprobación del gasto. Registrar conversaciones cualificadas, propuestas y proyectos, no solo clics.
+
+Los registros de contactos deben mantenerse privados, fuera de Git. No incluir datos de potenciales clientes en este repositorio público.
+
+## Fuentes de identidad y privacidad
+
+- Identidad, foto y experiencia: https://www.innure.es/ y su aviso legal.
+- Registro Mercantil: [BORME de 24-04-2024, asiento 196497](https://www.boe.es/diario_borme/txt.php?id=BORME-A-2024-80-28).
+- El receptor reutiliza el proveedor de correo configurado en Innure (DonDominio en la revisión del 08-09-2026).
+- [Validación de Turnstile](https://developers.cloudflare.com/turnstile/get-started/server-side-validation/).
+- [Modo de consentimiento básico de Google](https://developers.google.com/tag-platform/security/concepts/consent-mode).

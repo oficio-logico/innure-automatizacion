@@ -1,109 +1,32 @@
 import type { Metadata } from 'next';
 import { siteContent, withBasePath } from '../site-content';
+import { LegalShell } from '../legal-shell';
 
 export const dynamic = 'force-static';
-
 export const metadata: Metadata = {
-  title: 'Aviso legal — borrador pendiente',
-  description: 'Aviso legal provisional pendiente de completar y validar antes de publicar.',
+  title: 'Aviso legal', description: 'Titular y condiciones de uso de Innure · Automatización e IA.',
+  robots: { index: false, follow: true },
+  alternates: { canonical: siteContent.brand.domain + 'aviso-legal/' },
 };
 
 export default function LegalNoticePage() {
-  const { brand, legal } = siteContent;
-
-  return (
-    <div className="legal-page">
-      <header className="legal-header">
-        <div className="shell header-inner">
-          <a className="wordmark" href={withBasePath('/')} aria-label="Volver al inicio">
-            <span>{brand.displayName}</span>
-            <small>{brand.statusLabel}</small>
-          </a>
-          <a className="legal-back" href={withBasePath('/')}>
-            ← Volver a la página principal
-          </a>
-        </div>
-      </header>
-
-      <main>
-        <section className="legal-hero shell" aria-labelledby="legal-title">
-          <p className="legal-status">Borrador incompleto · no publicar</p>
-          <div>
-            <h1 id="legal-title">Aviso legal</h1>
-            <p>
-              Esta página deja preparada la estructura mínima, pero no puede considerarse un aviso legal definitivo hasta completar la identidad del titular y someter el texto a revisión jurídica.
-            </p>
-          </div>
-        </section>
-
-        <div className="legal-content shell">
-          <aside className="legal-toc">
-            <strong>Estado del documento</strong>
-            Estructura preparada.<br />
-            Datos del titular pendientes.<br />
-            Revisión jurídica pendiente.
-          </aside>
-
-          <article className="legal-article">
-            <section className="legal-section">
-              <h2>1. Titular del sitio</h2>
-              <p>
-                Los datos obligatorios de identificación no se han facilitado. Deben completarse antes de publicar el sitio.
-              </p>
-              <dl className="legal-data">
-                <div>
-                  <dt>Marca</dt>
-                  <dd>{brand.finalName}</dd>
-                </div>
-                <div>
-                  <dt>Dominio</dt>
-                  <dd>{brand.domain}</dd>
-                </div>
-                <div>
-                  <dt>Razón social</dt>
-                  <dd>{legal.companyName}</dd>
-                </div>
-                <div>
-                  <dt>NIF</dt>
-                  <dd>{legal.taxId}</dd>
-                </div>
-                <div>
-                  <dt>Domicilio</dt>
-                  <dd>{legal.registeredAddress}</dd>
-                </div>
-                <div>
-                  <dt>Datos registrales</dt>
-                  <dd>{legal.registryDetails}</dd>
-                </div>
-              </dl>
-            </section>
-
-            <section className="legal-section">
-              <h2>2. Objeto</h2>
-              <p>
-                El sitio presenta servicios de análisis de procesos, automatización, desarrollo de software a medida e implantación práctica de soluciones apoyadas en inteligencia artificial para empresas.
-              </p>
-            </section>
-
-            <section className="legal-section">
-              <h2>3. Uso del sitio</h2>
-              <p>
-                La información tiene carácter general y no constituye una oferta vinculante. Las condiciones, alcance y responsabilidades de cada piloto o proyecto deberán acordarse expresamente entre las partes.
-              </p>
-            </section>
-
-            <section className="legal-section">
-              <h2>4. Propiedad intelectual y enlaces</h2>
-              <p>
-                La titularidad de la marca, los textos, el diseño y el software deberá confirmarse con los datos definitivos del proyecto. Cualquier mención a servicios o sitios de terceros deberá revisarse antes de publicar.
-              </p>
-              <p className="legal-note">
-                Nota de implementación: completar la identidad del titular, revisar las cláusulas aplicables y sustituir este borrador por una versión validada antes de activar la publicación.
-              </p>
-            </section>
-          </article>
-        </div>
-      </main>
-    </div>
-  );
+  const { legal, brand } = siteContent;
+  return <LegalShell title="Aviso legal">
+    <section className="legal-section"><h2>1. Titular del sitio</h2>
+      <dl className="legal-data">
+        <div><dt>Razón social</dt><dd>{legal.companyName}</dd></div>
+        <div><dt>NIF</dt><dd>{legal.taxId}</dd></div>
+        <div><dt>Domicilio</dt><dd>{legal.registeredAddress}</dd></div>
+        <div><dt>Registro</dt><dd>{legal.registryDetails}</dd></div>
+        <div><dt>Contacto</dt><dd><a href="mailto:info@innure.es">info@innure.es</a></dd></div>
+        <div><dt>Sitio web</dt><dd>{brand.domain}</dd></div>
+      </dl>
+    </section>
+    <section className="legal-section"><h2>2. Objeto</h2><p>Esta página presenta la línea de automatización de procesos, integración de inteligencia artificial y desarrollo de herramientas a medida de Innure. La información es general: el alcance, precio, plazo y soporte de cada proyecto se acuerdan expresamente antes de contratar.</p></section>
+    <section className="legal-section"><h2>3. Condiciones de uso</h2><p>El acceso es gratuito. La persona usuaria se compromete a utilizar el sitio de forma lícita, sin vulnerar derechos de terceros ni dañar o sobrecargar sus sistemas. Innure puede actualizar sus contenidos y servicios.</p></section>
+    <section className="legal-section"><h2>4. Propiedad intelectual y proyectos</h2><p>Los textos, diseños, imágenes, marcas y programas pertenecen a sus respectivos titulares. Su publicación no concede una licencia de uso o distribución. Los proyectos del portfolio se presentan con su estado y condiciones de acceso; no constituyen, por sí mismos, una oferta de descarga pública.</p><p>Las referencias a terceros tienen una finalidad informativa y no implican patrocinio ni una relación comercial que no se indique expresamente. Los ejemplos de procesos son ilustrativos y no garantizan un ahorro concreto.</p></section>
+    <section className="legal-section"><h2>5. Disponibilidad y enlaces</h2><p>Trabajamos para mantener la información y el funcionamiento del sitio, pero no garantizamos disponibilidad ininterrumpida. Los enlaces externos conducen a páginas con sus propias condiciones y políticas, ajenas al control de Innure.</p></section>
+    <section className="legal-section"><h2>6. Protección de datos</h2><p>El uso de los datos del formulario y de la medición opcional se explica en la <a href={withBasePath('/privacidad/')}>política de privacidad y cookies</a>.</p></section>
+    <section className="legal-section"><h2>7. Legislación aplicable</h2><p>Se aplica la legislación española. Las controversias se someterán a los juzgados que correspondan conforme a la normativa aplicable, sin limitar los derechos que asistan a las personas consumidoras.</p></section>
+  </LegalShell>;
 }

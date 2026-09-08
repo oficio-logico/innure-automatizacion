@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
-import { siteContent } from './site-content';
+import { siteContent, withBasePath } from './site-content';
 
 const metadataBaseUrl = siteContent.publishing.ready
   ? siteContent.brand.domain
@@ -18,9 +18,10 @@ export const metadata: Metadata = {
   },
   description: siteContent.seo.description,
   applicationName: siteContent.brand.displayName,
+  icons: { icon: [{ url: (process.env.NEXT_PUBLIC_BASE_PATH || '') + '/innure-favicon.png', type: 'image/png' }] },
   category: 'business',
   alternates: {
-    canonical: '/',
+    canonical: metadataBaseUrl.replace(/\/$/, '') + '/',
   },
   openGraph: {
     type: 'website',
@@ -52,7 +53,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#ef4b2d',
+  themeColor: '#0d1720',
   colorScheme: 'light',
 };
 
@@ -63,7 +64,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body>{children}</body>
+      <body>{children}
+        {siteContent.advertising.conversionDestination ? <script src={withBasePath('/lead-measurement.js')} data-conversion={siteContent.advertising.conversionDestination} defer /> : null}
+      </body>
     </html>
   );
 }

@@ -1,29 +1,82 @@
 'use client';
 
-import { FormEvent, useState, useSyncExternalStore } from 'react';
+import { FormEvent, useRef, useState, useSyncExternalStore } from 'react';
 import { siteContent, withBasePath } from './site-content';
+import { Icon } from './icons';
+import { Turnstile } from './turnstile';
+
+declare global {
+  interface Window { innureAutomationAttribution?: () => Record<string, string> }
+}
+
+export function ProcessExamples() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const examples = siteContent.landing.examples;
+  const active = examples[activeIndex];
+  return (
+    <div className="examples">
+      <div className="example-tabs" role="tablist" aria-label="Elige un ejemplo">
+        {examples.map((example, index) => (
+          <button type="button" role="tab" key={example.id}
+            id={'tab-' + example.id} aria-controls="example-panel"
+            aria-selected={index === activeIndex} tabIndex={index === activeIndex ? 0 : -1}
+            onClick={() => setActiveIndex(index)}
+            onKeyDown={(event) => {
+              let nextIndex = index;
+              if (event.key === 'ArrowRight') nextIndex = (index + 1) % examples.length;
+              else if (event.key === 'ArrowLeft') nextIndex = (index + examples.length - 1) % examples.length;
+              else if (event.key === 'Home') nextIndex = 0;
+              else if (event.key === 'End') nextIndex = examples.length - 1;
+              else return;
+              event.preventDefault();
+              setActiveIndex(nextIndex);
+              document.getElementById('tab-' + examples[nextIndex].id)?.focus();
+            }}>
+            <Icon name={example.icon} />{example.label}
+          </button>
+        ))}
+      </div>
+      <div className="example-panel" id="example-panel" role="tabpanel" aria-labelledby={'tab-' + active.id} tabIndex={0}>
+        <div className="example-scene" key={active.id}>
+        <div className="example-story">
+          <h3>{active.title}</h3>
+          <div className="before-after"><div><span>Ahora, a mano</span><p>{active.before}</p></div><div><span>Con la solución</span><p>{active.after}</p></div></div>
+        </div>
+        <ol className="process-flow" role="list">
+          {active.steps.map((step, index) => <li key={step.title}>
+            <div className="flow-icon"><Icon name={step.icon} /><span>{index + 1}</span></div>
+            <h4>{step.title}</h4><p>{step.detail}</p>
+          </li>)}
+        </ol>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function MobileNavigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
 
   const closeMenu = () => {
     setIsOpen(false);
   };
 
   return (
-    <div className="mobile-navigation" data-open={isOpen}>
+    <div className="mobile-navigation" data-open={isOpen} onKeyDown={(event) => {
+      if (event.key === 'Escape' && isOpen) {
+        closeMenu();
+        menuButton.current?.focus();
+      }
+    }}>
       <button
+        ref={menuButton}
         className="menu-button"
         type="button"
         aria-expanded={isOpen}
         aria-controls="mobile-menu-panel"
+        aria-label={isOpen ? 'Cerrar menú' : 'Abrir menú'}
         onClick={() => setIsOpen((open) => !open)}
-        onKeyDown={(event) => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            setIsOpen((open) => !open);
-          }
-        }}
       >
         <span className="menu-label">Menú</span>
         <span className="menu-icon" aria-hidden="true">
@@ -37,6 +90,7 @@ export function MobileNavigation() {
             {item.label}
           </a>
         ))}
+        <a href="#contacto" onClick={closeMenu}>Cuéntanos tu caso</a>
         <a className="mobile-legal-link" href={withBasePath('/aviso-legal/')} onClick={closeMenu}>
           Aviso legal
         </a>
@@ -56,6 +110,9 @@ type FormStatus =
   | { kind: 'local'; message: string };
 
 export function ContactForm() {
+  const sending = useRef(false);
+  const [turnstileToken, setTurnstileToken] = useState('');
+  const [challengeKey, setChallengeKey] = useState(0);
   const [status, setStatus] = useState<FormStatus>({
     kind: 'idle',
     message: '',
@@ -64,8 +121,9 @@ export function ContactForm() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
-
-    if (!form.reportValidity()) return;
+    if (sending.current || !form.reportValidity()) return;
+    const data = new FormData(form);
+    if (String(data.get('website') || '').trim()) return;
 
     if (!siteContent.contact.formEndpoint) {
       // Sin servicio de recepción todavía. Si hay un correo publicado, no
@@ -73,16 +131,15 @@ export function ContactForm() {
       // programa de correo de la persona. Nada sale del navegador por su
       // cuenta: quien envía es siempre ella.
       if (siteContent.contact.emailHref) {
-        const data = new FormData(form);
         const value = (field: string) => String(data.get(field) ?? '').trim();
-        const subject = `Primera conversación — ${value('company') || value('name')}`;
+        const subject = `Innure · Automatización e IA — ${value('company') || value('name')}`;
         const body = [
           `Nombre: ${value('name')}`,
           `Empresa: ${value('company')}`,
           `Correo: ${value('email')}`,
           `Teléfono: ${value('phone') || '—'}`,
           '',
-          'Qué se repite:',
+          'Qué queremos resolver:',
           value('process'),
         ].join('\n');
 
@@ -106,69 +163,102 @@ export function ContactForm() {
       return;
     }
 
+    if (!siteContent.contact.turnstileSiteKey || !turnstileToken) {
+      setStatus({ kind: 'error', message: 'Completa la comprobación de seguridad antes de enviar. Si no aparece, recarga la página o escríbenos por correo.' });
+      return;
+    }
+    data.set('cf-turnstile-response', turnstileToken);
+    const attribution = window.innureAutomationAttribution?.() || {};
+    for (const [key, value] of Object.entries(attribution)) data.set(key, value);
+    sending.current = true;
     setStatus({ kind: 'sending', message: 'Enviando…' });
 
     try {
       const response = await fetch(siteContent.contact.formEndpoint, {
         method: 'POST',
-        body: new FormData(form),
+        body: data,
         headers: { Accept: 'application/json' },
+        signal: AbortSignal.timeout(45000),
       });
 
-      if (!response.ok) throw new Error('El servicio no aceptó la solicitud.');
+      // El receptor debe confirmar que el mensaje ha sido aceptado y devolver
+      // un ID propio. Una página HTML o un HTTP 200 no acreditan la recepción.
+      const result = await response.json() as { success?: boolean; submissionId?: string; message?: string };
+      if (!response.ok || result.success !== true ||
+          typeof result.submissionId !== 'string' || !/^[a-zA-Z0-9_-]{8,128}$/.test(result.submissionId)) {
+        setStatus({ kind: 'error', message: result.message || 'No hemos podido enviar la solicitud. Inténtalo de nuevo o escríbenos por correo.' });
+        return;
+      }
 
       form.reset();
       setStatus({
         kind: 'success',
         message: 'Solicitud enviada. Nos pondremos en contacto contigo.',
       });
+      // Evento local para la futura medición con consentimiento. No carga
+      // etiquetas ni comparte el contenido del formulario con terceros.
+      window.dispatchEvent(new CustomEvent('innure:lead-received', {
+        detail: { service: siteContent.contact.serviceId, submissionId: result.submissionId },
+      }));
     } catch {
       setStatus({
         kind: 'error',
         message:
           'No hemos podido enviar la solicitud. Inténtalo de nuevo o utiliza el correo de contacto.',
       });
+    } finally {
+      sending.current = false;
+      setTurnstileToken('');
+      setChallengeKey((key) => key + 1);
     }
   }
 
   return (
-    <form className="contact-form" onSubmit={handleSubmit} noValidate={false}>
+    <form className="contact-form" onSubmit={handleSubmit} noValidate={false} aria-labelledby="contact-form-title">
+      <h3 className="form-heading" id="contact-form-title">Vamos a conocer tu caso</h3>
+      <input type="hidden" name="service" value={siteContent.contact.serviceId} />
+      <div className="honeypot" aria-hidden="true">
+        <label htmlFor="website">Deja este campo vacío</label>
+        <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+      </div>
       <div className="form-row">
         <div className="field">
           <label htmlFor="name">Nombre</label>
-          <input id="name" name="name" type="text" autoComplete="name" required />
+          <input id="name" name="name" type="text" autoComplete="name" maxLength={120} required />
         </div>
         <div className="field">
           <label htmlFor="company">Empresa</label>
-          <input id="company" name="company" type="text" autoComplete="organization" required />
+          <input id="company" name="company" type="text" autoComplete="organization" maxLength={160} required />
         </div>
       </div>
 
       <div className="form-row">
         <div className="field">
           <label htmlFor="email">Correo profesional</label>
-          <input id="email" name="email" type="email" autoComplete="email" required />
+          <input id="email" name="email" type="email" autoComplete="email" maxLength={254} required />
         </div>
         <div className="field">
           <label htmlFor="phone">
             Teléfono <span>opcional</span>
           </label>
-          <input id="phone" name="phone" type="tel" autoComplete="tel" />
+          <input id="phone" name="phone" type="tel" autoComplete="tel" maxLength={40} />
         </div>
       </div>
 
       <div className="field field-wide">
-        <label htmlFor="process">¿Qué tarea o proceso se repite?</label>
+        <label htmlFor="process">¿Qué te gustaría resolver en tu empresa?</label>
         <textarea
           id="process"
           name="process"
-          rows={5}
+          rows={4}
           minLength={20}
+          maxLength={3000}
+          placeholder="Por ejemplo: copiamos cada pedido del correo a una hoja de cálculo y se nos van las mañanas."
           required
           aria-describedby="process-help"
         />
         <small id="process-help">
-          Basta con explicar qué ocurre, quién interviene y dónde se atasca.
+          Cuéntalo con tus palabras. No incluyas datos confidenciales.
         </small>
       </div>
 
@@ -180,14 +270,18 @@ export function ContactForm() {
         </label>
       </div>
 
+      {siteContent.contact.formEndpoint && siteContent.contact.turnstileSiteKey ?
+        <Turnstile key={challengeKey} siteKey={siteContent.contact.turnstileSiteKey} onToken={setTurnstileToken} /> : null}
+
       {!siteContent.contact.formEndpoint ? (
         <div className="local-notice" role="note">
           <span aria-hidden="true" />
           <p>
             {siteContent.contact.emailHref ? (
               <>
-                <strong>Vista de revisión:</strong> todavía no hay servicio de recepción, así que
-                el formulario prepara la solicitud en tu programa de correo y la envías tú.
+                <strong>En esta versión, el envío se hace por correo.</strong> Al continuar se
+                abre un borrador para que lo revises y lo envíes. También puedes usar el{' '}
+                <a href={siteContent.contact.externalFormUrl} target="_blank" rel="noreferrer">formulario de Innure</a>.
               </>
             ) : (
               <>
@@ -201,7 +295,7 @@ export function ContactForm() {
 
       <div className="form-footer">
         <button className="button submit-button" type="submit" disabled={status.kind === 'sending'}>
-          Pedir una primera conversación
+          {siteContent.contact.formEndpoint ? 'Enviar mi consulta' : 'Preparar mi consulta por correo'}
           <span aria-hidden="true">↗</span>
         </button>
         <p className="form-assurance">Primera conversación gratuita. Sin compromiso.</p>

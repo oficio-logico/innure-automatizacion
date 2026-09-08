@@ -1,316 +1,119 @@
 /* eslint-disable @next/next/no-img-element */
-import { ContactForm, CurrentYear, MobileNavigation } from './interactive';
+import { ContactForm, CurrentYear, MobileNavigation, ProcessExamples } from './interactive';
+import { Icon } from './icons';
+import { Portfolio } from './portfolio';
+import { PageExperience } from './page-experience';
 import { siteContent, withBasePath } from './site-content';
 
 export const dynamic = 'force-static';
 
-function PhotoCredit({ author, sourceUrl }: { author: string; sourceUrl: string }) {
-  return (
-    <figcaption className="photo-credit">
-      Foto ·{' '}
-      <a href={sourceUrl} target="_blank" rel="noreferrer">
-        {author} / Unsplash
-      </a>
-    </figcaption>
-  );
-}
-
 export default function Home() {
-  const {
-    brand,
-    navigation,
-    hero,
-    sections,
-    photography,
-    problems,
-    capabilities,
-    example,
-    method,
-    principles,
-    founders,
-    faqs,
-    contact,
-  } = siteContent;
-  const foundersReady = founders.length === 2 && founders.every((founder) => founder.listo);
+  const { brand, navigation, hero, landing, contact, founders } = siteContent;
+  const publicFounders = founders.filter((founder) => founder.listo);
 
   return (
     <>
-      <a className="skip-link" href="#contenido">
-        Saltar al contenido
-      </a>
-
+      <PageExperience />
+      <a className="skip-link" href="#contenido">Saltar al contenido</a>
       <header className="site-header">
         <div className="shell header-inner">
-          <a className="wordmark" href="#inicio" aria-label="Volver al inicio">
-            <span>{brand.displayName}</span>
+          <a className="wordmark" href="#inicio" aria-label="Innure, volver al inicio">
+            <img className="brand-logo" src={withBasePath('/images/innure-logo-white.png')} alt="Innure" width="112" height="28" />
             <small>{brand.statusLabel}</small>
           </a>
-
           <nav className="desktop-nav" aria-label="Navegación principal">
-            {navigation.map((item) => (
-              <a key={item.href} href={item.href}>
-                {item.label}
-              </a>
-            ))}
+            {navigation.map((item) => <a key={item.href} href={item.href}>{item.label}</a>)}
           </nav>
-
-          <a className="button button-small" href="#contacto">
-            Contadnos qué se repite
-          </a>
-
+          <a className="button button-small header-cta" href="#contacto">Hablemos <Icon name="arrow" /></a>
           <MobileNavigation />
         </div>
       </header>
 
       <main id="contenido">
-        <section className="editorial-hero" id="inicio" aria-labelledby="hero-title">
-          <figure className="editorial-hero-image">
-            <img
-              src={photography.hero.src}
-              alt={photography.hero.alt}
-              width={photography.hero.width}
-              height={photography.hero.height}
-              fetchPriority="high"
-              decoding="async"
-            />
-            <PhotoCredit author={photography.hero.author} sourceUrl={photography.hero.sourceUrl} />
-          </figure>
-
-          <div className="editorial-hero-card">
-            <p className="eyebrow">{hero.eyebrow}</p>
-            <h1 id="hero-title">{hero.title}</h1>
+        <section className="hero shell" id="inicio" aria-labelledby="hero-title">
+          <div className="hero-copy">
+            <p className="eyebrow"><span aria-hidden="true" />{hero.eyebrow}</p>
+            <h1 id="hero-title">{hero.title}{' '}<em>{hero.titleAccent}</em></h1>
             <p className="hero-lede">{hero.description}</p>
-
-            <div className="hero-actions" aria-label="Acciones principales">
-              <a className="button" href="#contacto">
-                {hero.primaryCta}
-              </a>
-              <a className="text-link" href="#como-trabajamos">
-                {hero.secondaryCta}
-                <span aria-hidden="true">↓</span>
-              </a>
+            <div className="hero-actions">
+              <a className="button" href="#contacto">{hero.primaryCta}<Icon name="arrow" /></a>
+              <a className="text-link" href="#ejemplos">{hero.secondaryCta}<span aria-hidden="true">↓</span></a>
             </div>
-
             <p className="hero-note">{hero.support}</p>
           </div>
-        </section>
-
-        <aside className="focus-strip" aria-label="Ámbitos de trabajo">
-          <span>Miramos el proceso real</span>
-          <span>Construimos una solución concreta</span>
-          <span>Medimos antes de escalar</span>
-        </aside>
-
-        <section
-          className="friction-section section-space"
-          id="que-resolvemos"
-          aria-labelledby="friction-title"
-        >
-          <div className="shell friction-layout">
-            <div className="friction-copy">
-              <p className="section-eyebrow">{sections.friction.eyebrow}</p>
-              <h2 id="friction-title">{sections.friction.title}</h2>
-              <p>{sections.friction.description}</p>
-            </div>
-
-            <figure className="friction-photo editorial-photo">
-              <img
-                src={photography.friction.src}
-                alt={photography.friction.alt}
-                width={photography.friction.width}
-                height={photography.friction.height}
-                loading="lazy"
-                decoding="async"
-              />
-              <PhotoCredit
-                author={photography.friction.author}
-                sourceUrl={photography.friction.sourceUrl}
-              />
-            </figure>
-          </div>
-
-          <div className="shell friction-list" role="list" aria-label="Situaciones habituales">
-            {problems.slice(0, 4).map((problem, index) => (
-              <article role="listitem" key={problem}>
-                <span>{String(index + 1).padStart(2, '0')}</span>
-                <p>{problem}</p>
-              </article>
-            ))}
-            <aside className="friction-principle">
-              <small>Nuestro punto de partida</small>
-              <p>
-                <strong>Primero el proceso.</strong>
-                Después, la tecnología que mejor lo resuelva.
-              </p>
-            </aside>
-          </div>
-        </section>
-
-        <section className="solutions-section section-space" aria-labelledby="solutions-title">
-          <div className="shell solutions-heading">
-            <p className="section-eyebrow">{sections.capabilities.eyebrow}</p>
-            <h2 id="solutions-title">{sections.capabilities.title}</h2>
-          </div>
-
-          <div className="shell solution-list">
-            {capabilities.map((capability) => (
-              <article key={capability.number}>
-                <span className="solution-number" aria-hidden="true">
-                  {capability.number}
-                </span>
-                <h3>{capability.title}</h3>
-                <div>
-                  <p>{capability.description}</p>
-                  <small>{capability.examples}</small>
-                </div>
-                <span className="solution-arrow" aria-hidden="true">
-                  ↘
-                </span>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="process-story" aria-labelledby="process-title">
-          <figure className="process-photo">
-            <img
-              src={photography.process.src}
-              alt={photography.process.alt}
-              width={photography.process.width}
-              height={photography.process.height}
-              loading="lazy"
-              decoding="async"
-            />
-            <div className="process-photo-title">
-              <p className="section-eyebrow">{sections.process.eyebrow}</p>
-              <h2 id="process-title">{sections.process.title}</h2>
-            </div>
-            <PhotoCredit author={photography.process.author} sourceUrl={photography.process.sourceUrl} />
+          <figure className="hero-visual">
+            <div className="hero-visual-heading"><Icon name="connect" /><span>De tareas sueltas a un proceso conectado.</span></div>
+            <img className="hero-illustration" src={withBasePath('/images/automatizacion-flujo.webp')} srcSet={`${withBasePath('/images/automatizacion-flujo-768.webp')} 768w, ${withBasePath('/images/automatizacion-flujo.webp')} 1536w`} sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 850px) calc(50vw - 40px), (max-width: 1300px) 48vw, 620px" alt="Ilustración de correos y datos que recorren un proceso conectado y se convierten en agenda y tareas organizadas, con un reloj que representa el tiempo liberado." width="1536" height="1024" fetchPriority="high" decoding="async" />
+            <figcaption className="hero-visual-caption"><span>Correos<br />y datos</span><Icon name="arrow" /><span>Proceso<br />automatizado</span><Icon name="arrow" /><span>Trabajo<br />organizado</span></figcaption>
           </figure>
-
-          <div className="shell process-flow" aria-label="Ejemplo de transformación de un proceso">
-            {[example.before, example.intervention, example.after].map((phase, index) => (
-              <article
-                key={phase.title}
-                className={index === 1 ? 'process-phase process-phase-active' : 'process-phase'}
-              >
-                <span>{String(index + 1).padStart(2, '0')}</span>
-                <h3>{phase.title}</h3>
-                <p>{phase.description}</p>
-                <ul>
-                  {phase.items.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </article>
-            ))}
-          </div>
-          <p className="shell process-note">{sections.process.note}</p>
         </section>
 
-        <section
-          className="method-section section-space"
-          id="como-trabajamos"
-          aria-labelledby="method-title"
-        >
-          <div className="shell method-editorial">
-            <figure className="structure-photo editorial-photo">
-              <img
-                src={photography.structure.src}
-                alt={photography.structure.alt}
-                width={photography.structure.width}
-                height={photography.structure.height}
-                loading="lazy"
-                decoding="async"
-              />
-              <PhotoCredit
-                author={photography.structure.author}
-                sourceUrl={photography.structure.sourceUrl}
-              />
-            </figure>
+        <div className="shell benefit-strip" aria-label="Lo que buscamos para tu negocio">
+          {landing.benefits.map((benefit) => <p key={benefit}><Icon name="check" />{benefit}</p>)}
+        </div>
 
-            <div className="method-copy">
-              <p className="section-eyebrow">{sections.method.eyebrow}</p>
-              <h2 id="method-title">{sections.method.title}</h2>
-              <p className="method-intro">{sections.method.description}</p>
-
-              <ol className="method-steps">
-                {method.map((step) => (
-                  <li key={step.number}>
-                    <span>{step.number}</span>
-                    <div>
-                      <h3>{step.title}</h3>
-                      <p>{step.description}</p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
+        <section className="services section-space" id="que-hacemos" aria-labelledby="services-title">
+          <div className="shell">
+            <div className="section-heading">
+              <div><p className="eyebrow">Qué hacemos</p><h2 id="services-title">Resolvemos ese «esto debería<br className="desktop-break" /> ser más fácil».</h2></div>
+              <p>Nos cuentas qué falla o qué te quita tiempo. Nosotros nos encargamos de convertirlo en una solución que puedas usar.</p>
             </div>
-          </div>
-
-          <div className="shell principles-rail" aria-labelledby="principles-title">
-            <div>
-              <p className="section-eyebrow">Implantar con control</p>
-              <h3 id="principles-title">Lo que no se negocia.</h3>
-            </div>
-            {principles.map((principle) => (
-              <article key={principle.title}>
-                <h4>{principle.title}</h4>
-                <p>{principle.description}</p>
-              </article>
-            ))}
-          </div>
-
-          <aside className="shell team-band" id="equipo" aria-labelledby="team-title">
-            <div>
-              <p className="section-eyebrow">{sections.team.eyebrow}</p>
-              <h2 id="team-title">{sections.team.title}</h2>
-            </div>
-            <p>{sections.team.description}</p>
-            {foundersReady ? null : <small>{sections.team.status}</small>}
-          </aside>
-
-          {foundersReady ? (
-            <div className="shell founders">
-              {founders.map((f) => (
-                <article key={f.number}>
-                  {f.photo ? (
-                    <img
-                      className="founder-photo"
-                      src={withBasePath(f.photo)}
-                      alt={f.name}
-                      loading="lazy"
-                    />
-                  ) : null}
-                  <p className="founder-number">{f.number}</p>
-                  <h3>{f.name}</h3>
-                  <p className="founder-role">{f.role}</p>
-                  <p className="founder-career">{f.career}</p>
+            <div className="services-grid">
+              {landing.services.map((service) => (
+                <article className="service" key={service.number}>
+                  <div className="service-top"><Icon name={service.icon} /><span>{service.number}</span></div>
+                  <h3>{service.title}</h3><p>{service.description}</p><p className="service-example">{service.example}</p>
                 </article>
               ))}
             </div>
-          ) : null}
+          </div>
+        </section>
+
+        <section className="examples-section section-space" id="ejemplos" aria-labelledby="examples-title">
+          <div className="shell">
+            <div className="section-heading">
+              <div><p className="eyebrow">Del problema al proceso</p><h2 id="examples-title">Así cambia el día a día.</h2></div>
+              <p>Elige una tarea y descubre qué podríamos simplificar. Con tu equipo al mando.</p>
+            </div>
+            <ProcessExamples />
+            <div className="example-bottom"><p className="example-note">Ejemplos ilustrativos. Estudiamos la viabilidad en cada empresa.</p><a className="text-link" href="#contacto">Quiero algo así para mi negocio <Icon name="arrow" /></a></div>
+          </div>
+        </section>
+
+        <Portfolio />
+
+        <section className="method-section section-space" id="como-trabajamos" aria-labelledby="method-title">
+          <div className="shell">
+            <div className="section-heading">
+              <div><p className="eyebrow">Cómo trabajamos</p><h2 id="method-title">Un problema concreto.<br />Una solución bien hecha.</h2></div>
+              <p>Empezamos por algo que puedas comprobar. Con alcance y presupuesto acordados antes de construir.</p>
+            </div>
+            <ol className="method-steps" role="list">
+              {landing.method.map((step) => <li key={step.number}><span className="step-number">{step.number}</span><h3>{step.title}</h3><p>{step.description}</p></li>)}
+            </ol>
+            <div className="method-assurance"><Icon name="check" /><p>Probamos antes de implantar. Tú mantienes el control de los datos y las decisiones importantes.</p></div>
+          </div>
+        </section>
+
+        <section className="innure-section" id="equipo" aria-labelledby="innure-title">
+          <div className="shell innure-layout">
+            <div><p className="eyebrow">El equipo detrás</p><h2 id="innure-title">Somos Innure.</h2></div>
+            <div className="innure-description">
+              <p>Esta es nuestra línea de automatización, IA y desarrollo a medida para pequeñas empresas. Hablamos contigo, construimos la solución y te acompañamos al ponerla en marcha.</p>
+              <a className="text-link" href={brand.parentUrl} target="_blank" rel="noreferrer">Conoce también nuestro trabajo en pruebas de rendimiento <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+          {publicFounders.length ? <div className="shell founders">{publicFounders.map((founder) => <article key={founder.number}>
+            {founder.photo ? <img src={withBasePath(founder.photo)} alt={founder.name} width="320" height="320" loading="lazy" /> : null}
+            <div><h3>{founder.name}</h3><p className="founder-role">{founder.role}</p><p className="founder-biography">{founder.biography}</p></div>
+          </article>)}</div> : null}
         </section>
 
         <section className="faq-section section-space" aria-labelledby="faq-title">
           <div className="shell faq-layout">
-            <header className="faq-heading">
-              <p className="section-eyebrow">{sections.faq.eyebrow}</p>
-              <h2 id="faq-title">{sections.faq.title}</h2>
-            </header>
-
+            <div><p className="eyebrow">Antes de hablar</p><h2 id="faq-title">Lo que quizá<br />te estás preguntando.</h2></div>
             <div className="faq-list">
-              {faqs.map((faq) => (
-                <details key={faq.question}>
-                  <summary>
-                    <span>{faq.question}</span>
-                    <i aria-hidden="true" />
-                  </summary>
-                  <div>
-                    <p>{faq.answer}</p>
-                  </div>
-                </details>
-              ))}
+              {landing.faqs.map((faq) => <details key={faq.question}><summary>{faq.question}<span aria-hidden="true">+</span></summary><p>{faq.answer}</p></details>)}
             </div>
           </div>
         </section>
@@ -318,25 +121,12 @@ export default function Home() {
         <section className="contact-section section-space" id="contacto" aria-labelledby="contact-title">
           <div className="shell contact-layout">
             <div className="contact-copy">
-              <p className="section-eyebrow">{sections.contact.eyebrow}</p>
-              <h2 id="contact-title">{sections.contact.title}</h2>
-              <p>{sections.contact.description}</p>
-
-              <div className="contact-promise">
-                <span>01</span>
-                <p>
-                  <strong>Leemos el contexto antes de hablar.</strong>
-                  La primera conversación sirve para saber si merece la pena probar.
-                </p>
-              </div>
-
-              {contact.bookingUrl ? (
-                <a className="text-link text-link-light" href={contact.bookingUrl}>
-                  Reservar directamente <span aria-hidden="true">↗</span>
-                </a>
-              ) : null}
+              <p className="eyebrow">Empezamos por escucharte</p>
+              <h2 id="contact-title">Cuéntanos qué te<br /> hace perder tiempo.</h2>
+              <p>No necesitas un documento técnico. Explica qué ocurre en tu empresa y vemos cómo podemos ayudarte.</p>
+              <div className="contact-next"><Icon name="mail" /><p>Leemos tu consulta y nos ponemos en contacto para entender el caso. Primera conversación gratuita, sin compromiso.</p></div>
+              {contact.emailHref ? <a className="contact-email" href={'mailto:' + contact.emailHref}>{contact.email}<span aria-hidden="true">↗</span></a> : null}
             </div>
-
             <ContactForm />
           </div>
         </section>
@@ -344,50 +134,13 @@ export default function Home() {
 
       <footer className="site-footer">
         <div className="shell footer-main">
-          <div>
-            <a className="wordmark wordmark-footer" href="#inicio">
-              <span>{brand.displayName}</span>
-              <small>{brand.statusLabel}</small>
-            </a>
-            <p>{brand.tagline}</p>
-          </div>
-
-          <nav aria-label="Navegación del pie">
-            {navigation.map((item) => (
-              <a key={item.href} href={item.href}>
-                {item.label}
-              </a>
-            ))}
-          </nav>
-
-          <div className="footer-contact">
-            <span>Contacto</span>
-            {contact.emailHref ? (
-              <a href={`mailto:${contact.emailHref}`}>{contact.email}</a>
-            ) : (
-              <p>A través del formulario</p>
-            )}
-          </div>
+          <a className="wordmark" href="#inicio"><img className="brand-logo" src={withBasePath('/images/innure-logo-color.png')} alt="Innure" width="112" height="28" /><small>{brand.statusLabel}</small></a>
+          <p>{brand.tagline}</p><a className="text-link" href="#contacto">Hablemos <Icon name="arrow" /></a>
         </div>
-
-        <div className="shell footer-credits">
-          <p>
-            Fotografía editorial:{' '}
-            {Object.values(photography).map((photo, index) => (
-              <span key={photo.author}>
-                {index > 0 ? ' · ' : ''}
-                <a href={photo.sourceUrl} target="_blank" rel="noreferrer">
-                  {photo.author}
-                </a>
-              </span>
-            ))}{' '}
-            en Unsplash.
-          </p>
-          <div>
-            <span>© <CurrentYear fallback={new Date().getFullYear()} /> · Nombre de trabajo · datos legales pendientes</span>
-            <a href={withBasePath('/aviso-legal/')}>Aviso legal</a>
-            <a href={withBasePath('/privacidad/')}>Privacidad</a>
-          </div>
+        <div className="shell footer-bottom">
+          <span>© <CurrentYear fallback={new Date().getFullYear()} /> Innure</span>
+          <nav aria-label="Información legal"><a href={withBasePath('/aviso-legal/')}>Aviso legal</a><a href={withBasePath('/privacidad/')}>Privacidad</a>{siteContent.advertising.conversionDestination ? <button type="button" className="measurement-settings" data-automation-measurement>Configurar medición</button> : null}</nav>
+          <a href={brand.parentUrl} target="_blank" rel="noreferrer">innure.es ↗</a>
         </div>
       </footer>
     </>

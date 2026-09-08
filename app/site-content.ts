@@ -22,29 +22,28 @@ export function withBasePath(path: string) {
                   formulario" y pone el correo.
 
    2) FUNDADORES  Nombre, función y trayectoria de los dos. Mientras estén a
-                  null, la sección de Equipo sigue mostrando el aviso de
-                  "pendiente de validar". En cuanto haya nombres, se pinta
-                  sola. Las fotos son opcionales.
+                  null, los perfiles individuales no se muestran. La marca
+                  se presenta como una línea de Innure. Las fotos son opcionales.
 
-   3) PUBLICAR    Es la intención de hacer la web indexable. No basta por sí
-                  solo: el correo, el dominio, los dos perfiles y la revisión
-                  legal también deben estar completos.
+   3) PUBLICAR    Solo la compilación de Innure habilita indexación. Requiere
+                  dominio, contacto, información legal y un perfil confirmado.
+                  Los perfiles que falten no se publican ni se inventan.
 
    Los textos legales siguen teniendo datos pendientes. `LEGAL_REVISADO` solo
    puede pasar a true después de completarlos y validarlos expresamente.
    ══════════════════════════════════════════════════════════════════════════ */
 
-/** Correo de contacto. Ej.: 'hola@oficiologico.com' */
-const CORREO = null as string | null;
+/** Correo comercial publicado en www.innure.es, comprobado el 08-09-2026. */
+const CORREO = 'info@innure.es';
 
-/** URL completa del dominio ya registrado. Ej.: 'https://oficiologico.com' */
-const DOMINIO = null as string | null;
+/** Dirección aprobada: misma marca y dominio, una página por servicio. */
+const DOMINIO = 'https://www.innure.es/automatizacion/';
 
 /** true = web publicada e indexable. false = vista de revisión con noindex. */
-const PUBLICAR = false;
+const PUBLICAR = process.env.NEXT_PUBLIC_PUBLISH === 'true';
 
 /** true solo después de completar y validar aviso legal y privacidad. */
-const LEGAL_REVISADO = false;
+const LEGAL_REVISADO = true;
 
 /** Los dos fundadores. Trayectoria: empresas, periodos y logros comprobables. */
 const FUNDADORES: Array<{
@@ -53,13 +52,17 @@ const FUNDADORES: Array<{
   trayectoria: string | null;
   foto: string | null;
 }> = [
-  { nombre: null, funcion: null, trayectoria: null, foto: null },
+  {
+    nombre: 'Sergio Herencias Redondo',
+    funcion: 'Fundador · Ingeniería y desarrollo',
+    trayectoria: '8 años de experiencia probando el rendimiento de sistemas críticos. Desarrollo de herramientas propias y automatizaciones para resolver problemas concretos, con foco en la calidad y el uso real.',
+    foto: '/images/sergio-herencias.jpg',
+  },
   { nombre: null, funcion: null, trayectoria: null, foto: null },
 ];
 
 const FUNDADORES_LISTOS =
-  FUNDADORES.length === 2 &&
-  FUNDADORES.every((fundador) =>
+  FUNDADORES.some((fundador) =>
     Boolean(fundador.nombre && fundador.funcion && fundador.trayectoria),
   );
 
@@ -78,29 +81,44 @@ export const siteContent = {
   },
 
   brand: {
-    displayName: 'Oficio Lógico',
-    statusLabel: 'automatización y software',
-    finalName: 'PENDING: CONFIRMAR Y REGISTRAR «OFICIO LÓGICO»',
-    domain: DOMINIO ?? 'PENDING: REGISTRAR DOMINIO DEFINITIVO',
-    domainCandidate: 'oficiologico.com',
-    tagline: 'Tecnología bien hecha para el trabajo que se repite.',
+    displayName: 'innure',
+    statusLabel: 'Automatización e IA',
+    finalName: 'Innure',
+    parentUrl: 'https://www.innure.es/',
+    proposedUrl: 'https://www.innure.es/automatizacion/',
+    domain: DOMINIO ?? 'PENDING: CONFIRMAR Y PUBLICAR LA RUTA DE INNURE',
+    domainCandidate: 'innure.es/automatizacion/',
+    tagline: 'Tecnología para hacer más fácil el trabajo de cada día.',
   },
 
   contact: {
     email: CORREO ?? 'PENDING: EMAIL DE CONTACTO',
     emailHref: CORREO,
     bookingUrl: null as string | null,
-    formEndpoint: null as string | null,
+    // Contrato: POST FormData -> JSON { success: true, submissionId: string }.
+    // El PHP actual de Innure requiere adaptación; no asignar su URL sin ella.
+    formEndpoint: process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || null,
+    turnstileSiteKey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || null,
+    externalFormUrl: 'https://www.innure.es/#contacto',
+    serviceId: 'automatizacion-ia',
+  },
+
+  advertising: {
+    // Solo la conversión de automatización; nunca reutilizar la de rendimiento.
+    conversionDestination: process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION || null,
   },
 
   legal: {
-    companyName: 'PENDING: RAZÓN SOCIAL',
-    taxId: 'PENDING: NIF',
-    registeredAddress: 'PENDING: DOMICILIO',
-    registryDetails: 'PENDING: DATOS REGISTRALES, SI CORRESPONDEN',
-    privacyContact: 'PENDING: EMAIL PARA DERECHOS DE PROTECCIÓN DE DATOS',
-    retentionPeriod: 'PENDING: PLAZO DE CONSERVACIÓN VALIDADO',
-    serviceProviders: 'PENDING: ENCARGADOS DE TRATAMIENTO, CUANDO SE ELIJAN',
+    companyName: 'Grupo Empresarial Innure, S.L.',
+    taxId: 'B09882580',
+    registeredAddress: 'Calle de la Bureba, 1, 5.º A — 28915 Leganés (Madrid), España',
+    registryDetails: 'Registro Mercantil de Madrid: tomo 43255, folio 43, sección 8, hoja M-764215.',
+    privacyContact: 'info@innure.es',
+    publicLegalUrl: 'https://www.innure.es/aviso-legal.html',
+    publicPrivacyUrl: 'https://www.innure.es/privacidad.html',
+    publicCookiesUrl: 'https://www.innure.es/cookies.html',
+    retentionPeriod: 'Durante el tiempo necesario para atender la solicitud y, posteriormente, durante los plazos legalmente exigibles para atender posibles responsabilidades. Puedes solicitar la supresión.',
+    serviceProviders: 'DonDominio para alojamiento y transporte de correo; Cloudflare para seguridad y Turnstile; Google para el buzón operativo y, solo con consentimiento, la medición publicitaria.',
   },
 
   founders: FUNDADORES.map((f, i) => ({
@@ -115,68 +133,101 @@ export const siteContent = {
   })),
 
   navigation: [
-    { label: 'Qué resolvemos', href: '#que-resolvemos' },
+    { label: 'Qué hacemos', href: '#que-hacemos' },
+    { label: 'Proyectos reales', href: '#proyectos' },
     { label: 'Cómo trabajamos', href: '#como-trabajamos' },
-    { label: 'Equipo', href: '#equipo' },
-    { label: 'Contacto', href: '#contacto' },
+    { label: 'Quiénes somos', href: '#equipo' },
   ],
 
   seo: {
-    title: 'Oficio Lógico | Automatización y software a medida',
+    title: 'Automatización, IA y herramientas a medida para pymes | Innure',
     description:
-      'Quitamos trabajo repetitivo de en medio con automatización, software a medida e IA aplicada con criterio. Empezamos por un piloto concreto y medible.',
+      'Automatizamos tareas, conectamos tus aplicaciones e integramos IA en tu pequeña empresa. Herramientas a medida para ahorrar tiempo. Cuéntanos tu caso.',
   },
 
   hero: {
-    eyebrow: 'Software a medida · automatización · IA aplicada',
-    title: 'Quitamos el trabajo repetitivo de en medio.',
+    eyebrow: 'Automatización e IA para pequeñas empresas',
+    title: 'Menos tareas manuales.',
+    titleAccent: 'Más tiempo para tu negocio.',
     description:
-      'Diseñamos sistemas que conectan lo que ya usáis y preparan el trabajo para que vuestro equipo decida, no copie y pegue.',
-    primaryCta: 'Contadnos qué se repite',
-    secondaryCta: 'Ver el método',
+      'Automatizamos tareas, integramos IA y conectamos las aplicaciones que ya usas. También creamos herramientas a medida para que tu negocio funcione mejor.',
+    primaryCta: 'Cuéntanos tu caso',
+    secondaryCta: 'Ver un ejemplo',
     support:
-      'Empezamos por un piloto. Medimos. Decidimos si merece la pena escalar.',
+      'Primera conversación gratuita. Sin compromiso.',
   },
 
-  sections: {
-    friction: {
-      eyebrow: 'Esto suele empezar así',
-      title: 'Si una tarea termina en copiar, buscar o perseguir, hay algo que mirar.',
-      description:
-        'No hace falta una gran transformación. Hace falta encontrar el paso que se repite y deja al equipo sin tiempo para decidir.',
-    },
-    capabilities: {
-      eyebrow: 'Tres formas de intervenir',
-      title: 'Tres maneras de quitar fricción.',
-    },
-    process: {
-      eyebrow: 'Un proceso, de principio a fin',
-      title: 'De información dispersa a una decisión preparada.',
-      note: 'Ejemplo ilustrativo. No es un caso de cliente.',
-    },
-    method: {
-      eyebrow: 'Cómo trabajamos',
-      title: 'Primero un piloto. Luego, si compensa, se escala.',
-      description:
-        'La primera conversación es gratuita. Sirve para entender el proceso y acotar una prueba real.',
-    },
-    team: {
-      eyebrow: 'Quién hace el trabajo',
-      title: 'Pocas manos. Responsabilidad de principio a fin.',
-      description:
-        'El trabajo lo realizan directamente dos perfiles senior capaces de analizar, diseñar, construir e integrar la solución.',
-      status: 'Nombres, funciones y trayectoria pendientes de validar para publicación',
-    },
-    faq: {
-      eyebrow: 'Preguntas frecuentes',
-      title: 'Lo importante, antes de empezar.',
-    },
-    contact: {
-      eyebrow: 'Primera conversación',
-      title: 'Contadnos qué se repite. Lo demás lo preguntamos nosotros.',
-      description:
-        'No hace falta llegar con la solución pensada. Basta con explicar qué ocurre, quién interviene y dónde se atasca.',
-    },
+  landing: {
+    benefits: ['Menos copiar y pegar', 'Tus herramientas conectadas', 'Más tiempo para tus clientes'],
+    services: [
+      {
+        number: '01', icon: 'connect', title: 'Automatizamos y conectamos',
+        description: 'Hacemos que la información pase de una herramienta a otra y que las tareas repetitivas avancen solas.',
+        example: 'Correos, pedidos, facturas, avisos y seguimiento.',
+      },
+      {
+        number: '02', icon: 'spark', title: 'Integramos IA en tu trabajo',
+        description: 'Aplicamos IA para leer documentos, organizar información o preparar respuestas que tu equipo puede revisar.',
+        example: 'Documentos, consultas, propuestas e informes.',
+      },
+      {
+        number: '03', icon: 'tool', title: 'Creamos tu propia herramienta',
+        description: 'Desarrollamos una aplicación a medida cuando las que ya existen no encajan con la forma de trabajar de tu empresa.',
+        example: 'Gestión interna, portales y aplicaciones para el equipo.',
+      },
+    ],
+    examples: [
+      {
+        id: 'pedidos', label: 'Pedidos y facturas', icon: 'document',
+        title: 'Del correo a tu herramienta, sin volver a teclearlo.',
+        before: 'Llega un pedido por correo. Alguien abre el adjunto, copia los datos y avisa al resto del equipo.',
+        after: 'La solución recoge la información, prepara el registro y te pide revisar lo que necesita confirmación.',
+        steps: [
+          { icon: 'mail', title: 'Llega el correo', detail: 'Con el pedido adjunto' },
+          { icon: 'spark', title: 'Se extraen los datos', detail: 'Cliente, productos e importes' },
+          { icon: 'check', title: 'Tu equipo revisa', detail: 'Confirma lo importante' },
+          { icon: 'connect', title: 'Todo queda registrado', detail: 'En la herramienta que usáis' },
+        ],
+      },
+      {
+        id: 'informes', label: 'Informes y documentos', icon: 'report',
+        title: 'El informe empieza con los datos reunidos.',
+        before: 'Cada semana buscas cifras en varias hojas, las copias y vuelves a preparar el mismo documento.',
+        after: 'La solución reúne los datos y prepara un borrador para que puedas dedicarte a revisarlo y sacar conclusiones.',
+        steps: [
+          { icon: 'connect', title: 'Se reúnen los datos', detail: 'De las fuentes acordadas' },
+          { icon: 'report', title: 'Se prepara el informe', detail: 'Con vuestra estructura' },
+          { icon: 'check', title: 'Tu equipo revisa', detail: 'Comprueba y completa' },
+          { icon: 'document', title: 'Documento listo', detail: 'Para compartir cuando decidas' },
+        ],
+      },
+      {
+        id: 'gestion', label: 'Gestión del negocio', icon: 'tool',
+        title: 'Un lugar donde saber en qué punto está cada trabajo.',
+        before: 'Los encargos viven entre hojas de cálculo, mensajes y notas. Saber qué falta obliga a preguntar a todo el mundo.',
+        after: 'Una herramienta a medida reúne los encargos, sus responsables y sus próximos pasos. Cada persona ve lo que le toca.',
+        steps: [
+          { icon: 'document', title: 'Entra un encargo', detail: 'Con toda su información' },
+          { icon: 'tool', title: 'Se organiza el trabajo', detail: 'Responsables y tareas' },
+          { icon: 'check', title: 'El equipo actualiza', detail: 'En un único lugar' },
+          { icon: 'report', title: 'Ves cómo avanza', detail: 'Sin perseguir actualizaciones' },
+        ],
+      },
+    ],
+    method: [
+      { number: '01', title: 'Nos cuentas el problema', description: 'Vemos qué tarea os complica el día y qué herramientas utilizáis. La primera conversación es gratuita.' },
+      { number: '02', title: 'Te proponemos una solución', description: 'Acordamos qué vamos a resolver, cuánto cuesta y cómo comprobaremos que mejora el trabajo.' },
+      { number: '03', title: 'La construimos y la probamos', description: 'Empezamos por un proceso concreto. Integramos la solución y la probamos con tu equipo.' },
+      { number: '04', title: 'La ponéis a trabajar', description: 'Os enseñamos a utilizarla, medimos el resultado y acordamos el soporte que necesitéis.' },
+    ],
+    faqs: [
+      { question: '¿También trabajáis con empresas pequeñas?', answer: 'Sí. El servicio está pensado para pequeñas empresas que necesitan resolver un problema concreto: tareas que se repiten, herramientas desconectadas o una gestión que se ha quedado pequeña.' },
+      { question: '¿Tengo que saber de IA o tener la solución pensada?', answer: 'No. Cuéntanos qué te hace perder tiempo o qué te gustaría que funcionara mejor. Nosotros estudiamos cómo resolverlo y te explicamos la propuesta en un lenguaje claro.' },
+      { question: '¿Hay que cambiar los programas que ya usamos?', answer: 'Primero estudiamos cómo conectar lo que ya utilizáis. Si alguna herramienta no permite integrarse o el cambio no compensa, te lo explicamos antes de presupuestar.' },
+      { question: '¿Cuánto cuesta y cuánto tarda?', answer: 'Depende del problema y de las herramientas que haya que conectar o construir. Tras la primera conversación te proponemos un alcance, un presupuesto y un plazo antes de empezar.' },
+      { question: '¿Qué pasa con los datos y las decisiones importantes?', answer: 'Antes de construir acordamos qué datos necesita la solución, dónde se tratarán y quién tendrá acceso. Dejamos revisión humana en las tareas que requieren criterio o autorización.' },
+      { question: '¿Y después de ponerlo en marcha?', answer: 'Te enseñamos a usar la solución y dejamos acordadas la documentación, el mantenimiento y las posibles mejoras. Si la primera prueba no compensa, revisamos el enfoque antes de ampliar el proyecto.' },
+    ],
   },
 
   photography: {
@@ -214,145 +265,6 @@ export const siteContent = {
     },
   },
 
-  problems: [
-    'Abrir correos y copiar la misma información a otra herramienta.',
-    'Buscar datos repartidos entre hojas, aplicaciones y conversaciones.',
-    'Rehacer documentos que cambian poco de una ocasión a otra.',
-    'Preparar informes repetitivos reuniendo datos a mano.',
-    'Perseguir aprobaciones, respuestas o actualizaciones de estado.',
-    'Mantener varias licencias para sostener un único flujo de trabajo.',
-    'Depender de una persona para tareas que deberían estar sistematizadas.',
-  ],
-
-  capabilities: [
-    {
-      number: '01',
-      title: 'Automatización de procesos',
-      description:
-        'Conectamos correos, documentos, datos y avisos que hoy se mueven a mano.',
-      examples: 'Administración · clasificación · extracción de datos · avisos',
-    },
-    {
-      number: '02',
-      title: 'Software para el equipo',
-      description:
-        'Creamos herramientas internas alrededor de la forma real de trabajar, sin módulos de sobra.',
-      examples: 'Aplicaciones internas · integraciones · interfaces · mantenimiento',
-    },
-    {
-      number: '03',
-      title: 'IA donde aporta',
-      description:
-        'Clasificamos, extraemos o preparamos una primera versión, con revisión humana cuando importa.',
-      examples: 'Documentos · propuestas · informes · apoyo a decisiones',
-    },
-  ],
-
-  example: {
-    label: 'Ejemplo ilustrativo · no es un caso de cliente',
-    title: 'De información dispersa a una decisión preparada.',
-    before: {
-      title: 'Antes',
-      description:
-        'Llegan correos, documentos y datos en formatos distintos. Una persona localiza lo relevante, lo copia y prepara el siguiente paso.',
-      items: ['Entradas dispersas', 'Criterios en la cabeza de una persona', 'Trabajo manual antes de decidir'],
-    },
-    intervention: {
-      title: 'Intervención',
-      description:
-        'El sistema captura la información, la clasifica y propone una salida. Una persona revisa los puntos que requieren criterio o autorización.',
-      items: ['Captura', 'Clasificación', 'Propuesta', 'Revisión humana'],
-    },
-    after: {
-      title: 'Después',
-      description:
-        'La información queda ordenada y el trabajo previo está preparado. La decisión importante sigue en manos de la persona responsable.',
-      items: ['Contexto reunido', 'Siguiente acción preparada', 'Decisión humana'],
-    },
-  },
-
-  method: [
-    {
-      number: '01',
-      title: 'Miramos el trabajo',
-      description: 'Entendemos qué consume tiempo, con qué frecuencia ocurre y qué no puede fallar.',
-      output: 'Una primera lectura del proceso y de sus límites.',
-    },
-    {
-      number: '02',
-      title: 'Elegimos una pieza',
-      description: 'Elegimos un único proceso, describimos la situación inicial y acordamos cómo evaluar el piloto.',
-      output: 'Un alcance concreto y un criterio de éxito comprensible.',
-    },
-    {
-      number: '03',
-      title: 'La ponemos a prueba',
-      description: 'Integramos, probamos y dejamos revisión humana en los puntos donde aporta control.',
-      output: 'Una solución operativa sobre un proceso real.',
-    },
-    {
-      number: '04',
-      title: 'Medimos y decidimos',
-      description: 'Comparamos el antes y el después. Solo ampliamos si el resultado justifica la inversión.',
-      output: 'Una decisión basada en lo ocurrido, no en una promesa.',
-    },
-  ],
-
-  principles: [
-    {
-      title: 'Acceso mínimo',
-      description: 'Cada integración debe acceder únicamente a los datos y permisos necesarios para su función.',
-    },
-    {
-      title: 'Control humano',
-      description: 'Las decisiones sensibles o ambiguas conservan un punto claro de revisión y autorización.',
-    },
-    {
-      title: 'Prueba antes de uso',
-      description: 'El piloto se prueba con escenarios acordados antes de incorporarlo al trabajo habitual.',
-    },
-    {
-      title: 'Implantación gradual',
-      description: 'Se integra por partes, con capacidad para detener o revertir el piloto si no responde como debe.',
-    },
-    {
-      title: 'Medición desde el inicio',
-      description: 'Definimos la situación de partida para comparar el resultado con una referencia real.',
-    },
-  ],
-
-  faqs: [
-    {
-      question: '¿Necesitamos tener una estrategia de IA?',
-      answer:
-        'No. Empezamos por entender un proceso que genera trabajo manual, errores o esperas. Después elegimos la tecnología adecuada. En algunos casos será IA; en otros, una automatización convencional o una herramienta sencilla resolverá mejor el problema.',
-    },
-    {
-      question: '¿Hay que cambiar las herramientas que ya utilizamos?',
-      answer:
-        'No necesariamente. Primero estudiamos cómo encajar la solución con las herramientas actuales. Solo proponemos sustituir algo cuando la integración no es razonable o cuando simplificar el conjunto forma parte del valor del piloto.',
-    },
-    {
-      question: '¿Sirve cualquier proceso?',
-      answer:
-        'No. Un buen candidato suele repetirse, tener entradas y salidas reconocibles y permitir comparar la situación inicial con el resultado. Los procesos muy esporádicos, mal definidos o sin criterio claro pueden no justificar una construcción específica.',
-    },
-    {
-      question: '¿Cómo se calcula el precio?',
-      answer:
-        'Depende del proceso, las integraciones, el riesgo, el volumen de pruebas y el alcance acordado. La primera conversación sirve para entenderlo; después se plantea un piloto delimitado, sin una tabla genérica de precios.',
-    },
-    {
-      question: '¿Qué ocurre con los datos de la empresa?',
-      answer:
-        'El diseño parte del acceso mínimo, el control de permisos y la revisión de qué información necesita realmente cada paso. Antes del piloto se concreta dónde se procesa, quién puede acceder y qué proveedores intervienen. No afirmamos certificaciones que no se hayan comprobado.',
-    },
-    {
-      question: '¿Qué pasa si el piloto no aporta suficiente valor?',
-      answer:
-        'Se detiene. El piloto se plantea precisamente para aprender con un alcance controlado. Si la comparación con la situación inicial no justifica continuar, no se amplía el proyecto.',
-    },
-  ],
 };
 
 export type SiteContent = typeof siteContent;
