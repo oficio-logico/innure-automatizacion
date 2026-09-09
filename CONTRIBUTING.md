@@ -17,15 +17,17 @@ Por petición de Sergio, por ahora aparecen el nombre y el texto provisional «l
 
 1. Actualiza desde `main` y crea una rama para tu propuesta; no trabajes directamente sobre `main`.
 2. Cambia los datos, comprueba la vista local y ejecuta las comprobaciones del README.
-3. Sube la rama y abre una **Pull Request hacia `main`**. Explica lo cambiado y solicita revisión a **@sh3rencr (Sergio)**. Los dos socios figuran en CODEOWNERS; como el autor no puede aprobar su propia PR, la propuesta de Santi necesita revisión de Sergio.
+3. Sube la rama y abre una **Pull Request hacia `main`**. Explica lo cambiado y solicita revisión a **@sh3rencr (Sergio)**. Ambos colaboradores figuran en CODEOWNERS; como el autor no puede aprobar su propia PR, la propuesta de Santiago necesita revisión de Sergio.
 4. Espera a que pase `validate` y Sergio apruebe. Si añades cambios, la aprobación anterior deja de ser válida. Atiende los comentarios pendientes.
-5. Con aprobación y comprobaciones correctas, **Sergio fusiona la PR**. También puede habilitar **auto-merge** en esa PR para fusionarla cuando se cumplan ambos requisitos. Las propuestas escritas por Sergio requieren la revisión de Santi.
+5. Con aprobación y comprobaciones correctas, **Sergio fusiona la PR**. También puede habilitar **auto-merge** en esa PR para fusionarla cuando se cumplan ambos requisitos.
+
+Solo **@sh3rencr** tiene una excepción a la revisión de PR, autorizada por Sergio, para publicar sus propios cambios sin depender de otro revisor. Las pruebas obligatorias no se omiten: trabaja en una rama y ejecuta «Validar cambios» sobre ella antes de integrarla en `main`. GitHub aplica la excepción a la cuenta, no al autor de cada PR; Sergio debe mantener la aprobación explícita como paso habitual para las propuestas de Santiago. Santiago no tiene esta excepción ni permiso para integrar cambios en `main` por sí mismo.
 
 Al integrarse en `main`, **Publicar Innure Automatización** construye y publica la web comercial automáticamente. No hace falta pedir un despliegue manual, compartir contraseñas ni activar Google Ads. Comprueba que los tres pasos de la acción terminan bien: preparación, publicación y verificación pública.
 
 ## Límites de seguridad y publicación
 
-- `main` exige revisión del propietario de código, pruebas correctas y conversaciones resueltas. La protección se aplica también a administradores; solo Sergio puede fusionar en la rama principal.
+- `main` exige revisión del propietario de código, pruebas correctas y conversaciones resueltas. La protección se aplica también a administradores, con la excepción de revisión limitada a la cuenta de Sergio descrita arriba; solo él puede integrar en la rama principal. Las pruebas, la prohibición de forzar cambios y el bloqueo del borrado de la rama se mantienen.
 - El entorno `innure-production` admite únicamente la rama `main`. Contiene solo las claves FTP cifradas necesarias para subir la web. No están en los archivos ni disponibles en pruebas de PR.
 - La subida está limitada por el workflow a `public/automatizacion/`. No cambiar el destino, los secretos, CODEOWNERS o las reglas de protección sin acordarlo con Sergio.
 - La vista de GitHub Pages es de revisión: no indexable, sin envío directo ni medición publicitaria. La dirección comercial es la de Innure.
