@@ -6,7 +6,8 @@ Landing para pequeñas empresas: automatizar tareas, conectar herramientas e int
 
 - URL comercial: https://www.innure.es/automatizacion/
 - Rendimiento permanece en https://www.innure.es/.
-- Este repositorio contiene solo automatización. El alojamiento es compartido; el código y la publicación son independientes.
+- [oficio-logico/innure-automatizacion](https://github.com/oficio-logico/innure-automatizacion) es el repositorio público de esta línea, antes llamado Oficio Lógico. Contiene solo automatización.
+- `sh3rencr/innure-web` permanece privado y mantiene la web de rendimiento. El alojamiento es compartido; el código y la publicación son independientes.
 - GitHub Pages conserva una vista de revisión con `noindex`, sin receptor ni etiquetas publicitarias.
 
 ## Desarrollo y comprobaciones
@@ -25,7 +26,7 @@ php scripts/contact.test.php
 
 Las pruebas del receptor usan funciones aisladas; no envían correos externos. La medición se comprueba con un navegador simulado, sin cargar Google.
 
-`app/site-content.ts` centraliza textos, equipo, identidad y opciones públicas. El perfil de Sergio y su foto proceden de la web de Innure. Santi aparece con nombre y función confirmados; su biografía, foto y LinkedIn quedan a su cargo, sin mostrar marcadores ni inventar datos. Consulta [CONTRIBUTING.md](CONTRIBUTING.md) para completarlos mediante una PR revisada por Sergio.
+`app/site-content.ts` centraliza textos, equipo, identidad y opciones públicas. El perfil de Sergio y su foto proceden de la web de Innure. Santiago Correas aparece con su nombre y, por petición de Sergio, el texto provisional «lqdifnqldknf» en su función. Santiago debe sustituirlo por información real; su biografía, foto y LinkedIn quedan a su cargo. Consulta [CONTRIBUTING.md](CONTRIBUTING.md) para completarlos mediante una PR revisada por Sergio.
 
 ## Compilación de producción
 
@@ -39,9 +40,9 @@ La configuración privada NO está en este repositorio. El receptor lee exclusiv
 
 ## Publicación
 
-Al integrar una PR aprobada en `main`, «Publicar Innure Automatización» comprueba código y pruebas, construye, conserva un artefacto y publica exclusivamente en `public/automatizacion/`. Las claves FTP se guardan cifradas en el entorno `innure-production`, limitado a `main`; no se incluyen en el código ni están disponibles en las pruebas de PR. La compilación se ejecuta sin acceso a esas claves. La configuración privada del correo permanece en el alojamiento y el repositorio privado de Innure.
+Al integrar cambios autorizados en `main`, «Publicar Innure Automatización» comprueba código y pruebas, construye, conserva un artefacto y publica exclusivamente en `public/automatizacion/`. Las claves FTP se guardan cifradas en el entorno `innure-production`, limitado a `main`; no se incluyen en el código ni están disponibles en las pruebas de PR. La compilación se ejecuta sin acceso a esas claves. La configuración privada del correo permanece en el alojamiento y el repositorio privado de Innure.
 
-`main` requiere una revisión de CODEOWNERS, el resultado correcto de `validate` y conversaciones resueltas. Los dos socios son revisores: una PR de Santi necesita aprobación de Sergio, y viceversa. La aprobación caduca al cambiar la propuesta y la protección se aplica a administradores. Solo Sergio puede fusionar; auto-merge queda disponible para cuando se cumplan los requisitos. No activar anuncios al publicar.
+`main` requiere una revisión de CODEOWNERS, el resultado correcto de `validate` y conversaciones resueltas. Una PR de Santiago requiere la revisión de Sergio y las aprobaciones caducan al cambiar la propuesta. La protección se aplica también a administradores, con una única excepción de revisión para **@sh3rencr**, autorizada para publicar sus propios cambios sin otro revisor; las pruebas siguen siendo obligatorias. GitHub concede esta excepción a la cuenta y no la limita por autor de la PR, por lo que Sergio conserva la aprobación explícita como paso habitual para las propuestas de Santiago. Solo Sergio puede integrar cambios; auto-merge sigue disponible. No activar anuncios al publicar.
 
 La acción manual «Publicar automatización de Innure» del repositorio privado de despliegue se conserva como recuperación: recibe un SHA exacto y el destino de conversión. No ejecutarla en paralelo al despliegue automático. Ambas usan el mismo estado de sincronización de automatización, independiente del de rendimiento.
 
