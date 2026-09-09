@@ -4,14 +4,14 @@ La web que empezó como Oficio Lógico es ahora la línea de automatización, IA
 
 ## Completar el perfil de Santi
 
-En `app/site-content.ts`, busca `nombre: 'Santi Correas'` dentro de `FUNDADORES`.
+En `app/site-content.ts`, busca `nombre: 'Santiago Correas'` dentro de `FUNDADORES`.
 
-- Confirma el nombre que quieres mostrar y ajusta `funcion` a tu aportación real.
+- El nombre visible es Santiago Correas. Sustituye el texto provisional de `funcion` por tu aportación real.
 - Completa `trayectoria` con 2–4 frases: experiencia comprobable, tu aportación al equipo y los problemas en los que puedes ayudar. No incluir métricas, clientes o credenciales no verificados.
 - Añade una foto autorizada en `public/images/` e indica su ruta en `foto`, por ejemplo `/images/santi-correas.jpg`. Preferible cuadrada, al menos 640 × 640 px, optimizada para web y sin metadatos personales innecesarios.
 - `linkedin` es opcional: usa la dirección HTTPS de tu perfil, o deja `null`.
 
-Por ahora solo aparecen el nombre y «Socio · Innure». La biografía y el enlace no se muestran hasta completarlos; las iniciales sustituyen a la foto sin inventar un retrato.
+Por petición de Sergio, por ahora aparecen el nombre y el texto provisional «lqdifnqldknf»; no representa un cargo ni una vinculación profesional. Debes sustituirlo al completar el perfil. La biografía y el enlace no se muestran hasta completarlos; las iniciales sustituyen a la foto sin inventar un retrato.
 
 ## Proponer y autorizar los cambios
 

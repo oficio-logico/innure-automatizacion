@@ -12,7 +12,7 @@ const exports = {};
 vm.runInNewContext(outputText, { exports, process: { env: {} } });
 const { founders, publishing } = exports.siteContent;
 
-test('los dos perfiles del equipo tienen nombre y función sin textos de relleno', () => {
+test('los dos perfiles del equipo tienen nombre y función configurados', () => {
   assert.equal(founders.filter((founder) => founder.listo).length, 2);
   for (const founder of founders) {
     assert.ok(founder.name.trim().length > 2);

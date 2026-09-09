@@ -6,7 +6,8 @@ Landing para pequeñas empresas: automatizar tareas, conectar herramientas e int
 
 - URL comercial: https://www.innure.es/automatizacion/
 - Rendimiento permanece en https://www.innure.es/.
-- Este repositorio contiene solo automatización. El alojamiento es compartido; el código y la publicación son independientes.
+- [oficio-logico/innure-automatizacion](https://github.com/oficio-logico/innure-automatizacion) es el repositorio público de esta línea, antes llamado Oficio Lógico. Contiene solo automatización.
+- `sh3rencr/innure-web` permanece privado y mantiene la web de rendimiento. El alojamiento es compartido; el código y la publicación son independientes.
 - GitHub Pages conserva una vista de revisión con `noindex`, sin receptor ni etiquetas publicitarias.
 
 ## Desarrollo y comprobaciones
@@ -25,7 +26,7 @@ php scripts/contact.test.php
 
 Las pruebas del receptor usan funciones aisladas; no envían correos externos. La medición se comprueba con un navegador simulado, sin cargar Google.
 
-`app/site-content.ts` centraliza textos, equipo, identidad y opciones públicas. El perfil de Sergio y su foto proceden de la web de Innure. Santi aparece con nombre y función confirmados; su biografía, foto y LinkedIn quedan a su cargo, sin mostrar marcadores ni inventar datos. Consulta [CONTRIBUTING.md](CONTRIBUTING.md) para completarlos mediante una PR revisada por Sergio.
+`app/site-content.ts` centraliza textos, equipo, identidad y opciones públicas. El perfil de Sergio y su foto proceden de la web de Innure. Santiago Correas aparece con su nombre y, por petición de Sergio, el texto provisional «lqdifnqldknf» en su función. Santiago debe sustituirlo por información real; su biografía, foto y LinkedIn quedan a su cargo. Consulta [CONTRIBUTING.md](CONTRIBUTING.md) para completarlos mediante una PR revisada por Sergio.
 
 ## Compilación de producción
 

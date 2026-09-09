@@ -61,9 +61,10 @@ const FUNDADORES: Array<{
     linkedin: null,
   },
   {
-    nombre: 'Santi Correas',
-    funcion: 'Socio · Innure',
-    // Santi: completa y propone estos datos en una PR para revisión de Sergio.
+    nombre: 'Santiago Correas',
+    // Texto provisional solicitado por Sergio; Santiago debe sustituirlo por su función real.
+    funcion: 'lqdifnqldknf',
+    // Santiago: completa y propone estos datos en una PR para revisión de Sergio.
     // Usa solo experiencia comprobable y una foto que autorices a publicar.
     trayectoria: null,
     foto: null,
