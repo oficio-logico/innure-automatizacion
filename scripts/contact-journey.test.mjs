@@ -44,7 +44,7 @@ function one(tree, predicate) {
 
 // Exercise the actual handlers with in-memory React state and a fake receiver.
 // This is not a browser test and never sends mail or loads third-party services.
-function setup({ receiver = false, accepted = true } = {}) {
+function setup({ receiver = false, accepted = true, hydrated = true } = {}) {
   const hookSlots = new Map();
   const contexts = [];
   const state = { fetches: [], events: [], focus: [], resetCount: 0 };
@@ -56,6 +56,7 @@ function setup({ receiver = false, accepted = true } = {}) {
     return [activeSlots, index];
   };
   const react = {
+    useSyncExternalStore: (_subscribe, getSnapshot, getServerSnapshot) => hydrated ? getSnapshot() : getServerSnapshot(),
     createContext(initial) {
       const context = { current: initial, Provider: 'ContactProvider' };
       contexts.push(context);
@@ -153,6 +154,28 @@ function setup({ receiver = false, accepted = true } = {}) {
   render('ContactJourney');
   return { state, window, form, render, choose, submit };
 }
+
+test('sin JS el formulario queda inerte y nunca degrada a un GET con datos', async () => {
+  const { render, submit, state } = setup({ receiver: true, hydrated: false });
+  const tree = render('ContactForm');
+  assert.equal(tree.props.method, 'post');
+  assert.equal(tree.props.action, '/automatizacion/contacto.php');
+  assert.equal(one(tree, (node) => node.type === 'fieldset').props.disabled, true);
+  assert.equal(one(tree, (node) => node.type === 'button' && node.props.type === 'submit').props.disabled, true);
+  assert.equal(nodes(tree, (node) => node.type === 'noscript').length, 1);
+  await submit();
+  assert.equal(state.fetches.length, 0);
+  assert.equal(state.resetCount, 0);
+});
+
+test('tras hidratar se habilitan los campos; la preview sigue sin receptor', () => {
+  const { render } = setup();
+  const tree = render('ContactForm');
+  assert.equal(tree.props.method, 'post');
+  assert.equal(tree.props.action, undefined);
+  assert.equal(one(tree, (node) => node.type === 'fieldset').props.disabled, false);
+  assert.equal(one(tree, (node) => node.type === 'button' && node.props.type === 'submit').props.disabled, false);
+});
 
 test('solo se resuelven los tres ejemplos conocidos y las preguntas de contexto están presentes', () => {
   assert.equal(examples.length, 3);

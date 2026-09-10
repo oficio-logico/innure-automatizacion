@@ -133,6 +133,8 @@ type FormStatus =
   | { kind: 'local'; message: string };
 
 export function ContactForm() {
+  // The static document stays inert until React can handle submission safely.
+  const isHydrated = useSyncExternalStore(neverChanges, () => true, () => false);
   const { needId, selectNeed } = useContext(ContactIntentContext);
   const selectedNeed = resolveContactNeed(siteContent.landing.examples, needId);
   const processInput = useRef<HTMLTextAreaElement>(null);
@@ -147,7 +149,7 @@ export function ContactForm() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
-    if (sending.current || !form.reportValidity()) return;
+    if (!isHydrated || sending.current || !form.reportValidity()) return;
     const data = new FormData(form);
     if (String(data.get('website') || '').trim()) return;
     const detail = String(data.get('process') || '').trim();
@@ -254,8 +256,10 @@ export function ContactForm() {
   }
 
   return (
-    <form className="contact-form" onSubmit={handleSubmit} noValidate={false} aria-labelledby="contact-form-title">
+    <form className="contact-form" method="post" action={siteContent.contact.formEndpoint || undefined} onSubmit={handleSubmit} noValidate={false} aria-labelledby="contact-form-title">
       <h3 className="form-heading" id="contact-form-title" tabIndex={-1}>Cuéntanos por dónde empezar</h3>
+      <noscript><p className="local-notice">El formulario necesita JavaScript para enviar tu consulta de forma segura. Puedes escribirnos a <a href={'mailto:' + siteContent.contact.emailHref}>{siteContent.contact.email}</a>.</p></noscript>
+      <fieldset className="contact-fields" disabled={!isHydrated} aria-labelledby="contact-form-title">
       <div className="form-interest" hidden={!selectedNeed}>
         <p role="status" aria-live="polite">{selectedNeed ? <><span>Tarea elegida</span><strong>{selectedNeed.label}</strong></> : null}</p>
         <button type="button" onClick={() => {
@@ -342,7 +346,7 @@ export function ContactForm() {
       ) : null}
 
       <div className="form-footer">
-        <button className="button submit-button" type="submit" disabled={status.kind === 'sending'}>
+        <button className="button submit-button" type="submit" disabled={!isHydrated || status.kind === 'sending'}>
           {siteContent.contact.formEndpoint ? 'Solicitar primera conversación' : 'Preparar mi consulta por correo'}
           <span aria-hidden="true">↗</span>
         </button>
@@ -357,6 +361,7 @@ export function ContactForm() {
       >
         {status.message}
       </p>
+      </fieldset>
     </form>
   );
 }

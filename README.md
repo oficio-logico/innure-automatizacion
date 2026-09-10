@@ -36,6 +36,8 @@ NEXT_PUBLIC_GOOGLE_ADS_CONVERSION=AW-18410180479/mBarCPixx_EcEP-e1MpE npm run bu
 
 La salida pública es `dist/client/`. El script fija `/automatizacion/`, habilita el formulario con la clave pública de Turnstile de Innure y copia `server/contacto.php` exactamente a `dist/client/contacto.php`. Nunca debe subirse este paquete a la raíz del alojamiento.
 
+La exportación también comprueba los metadatos por ruta, genera `sitemap.xml` solo con las páginas indexables y publica un `404.html` de Innure. `server/automatizacion.htaccess` se copia como `.htaccess` dentro de esta subcarpeta para conservar el estado HTTP 404. No modifica el error, robots ni sitemap del dominio raíz. El artefacto admite ese archivo oculto; la compilación rechaza otros archivos ocultos no previstos.
+
 La configuración privada NO está en este repositorio. El receptor lee exclusivamente `../config.php` y `../mail-config.php` del alojamiento existente. No ejecuta ni modifica el formulario de rendimiento.
 
 ## Publicación
@@ -57,6 +59,8 @@ La primera conversación se plantea como revisión de una tarea y orientación d
 Al enviar, el contexto elegido se incorpora al campo `process` del contrato existente. No viaja en eventos de medición. El límite de texto reserva espacio para esa etiqueta y los errores conservan tanto la elección como el borrador. El recorrido del Gestor de Certificados muestra una captura de desarrollo con datos sintéticos, no una demo interactiva del producto ni un caso de ahorro medido.
 
 POST multipart/form-data a `/automatizacion/contacto.php` desde la misma web:
+
+El HTML estático mantiene los campos y el botón desactivados hasta que React instala el manejador; el método nativo se declara POST para evitar que los datos acaben en la URL. Sin JavaScript se muestra el correo alternativo. Las pruebas simulan este estado sin solicitudes externas.
 
 - `name`, `company`, `email`, `phone` opcional, `process`, `privacy=accepted`.
 - `service=automatizacion-ia`, honeypot `website` vacío, `cf-turnstile-response`.

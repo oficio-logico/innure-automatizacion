@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 import { siteContent, withBasePath } from '../site-content';
 import { LegalShell } from '../legal-shell';
+import { socialMetadata } from '../social-metadata';
 
 export const dynamic = 'force-static';
 export const metadata: Metadata = {
   title: 'Aviso legal', description: 'Titular y condiciones de uso de Innure · Automatización e IA.',
+  ...socialMetadata('aviso-legal/', 'Aviso legal | Innure', 'Titular y condiciones de uso de Innure · Automatización e IA.', siteContent.brand.domain),
   robots: { index: false, follow: true },
   alternates: { canonical: siteContent.brand.domain + 'aviso-legal/' },
 };

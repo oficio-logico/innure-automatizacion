@@ -3,12 +3,14 @@ import type { Metadata } from 'next';
 import { Icon } from '../../icons';
 import { certificateProject as project } from '../../project-content';
 import { siteContent, withBasePath } from '../../site-content';
+import { socialMetadata } from '../../social-metadata';
 
 export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
   title: 'Gestor de Certificados — proyecto propio',
   description: project.description,
+  ...socialMetadata('proyectos/gestor-certificados/', 'Gestor de Certificados — proyecto propio | Innure', project.description),
   alternates: {
     canonical: new URL('proyectos/gestor-certificados/', (siteContent.publishing.ready ? siteContent.brand.domain : siteContent.publishing.localBaseUrl).replace(/\/$/, '') + '/').toString(),
   },
