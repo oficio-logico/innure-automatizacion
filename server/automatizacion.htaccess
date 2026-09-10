@@ -1,0 +1,3 @@
+# This file is deployed only inside public/automatizacion/.
+# A local ErrorDocument preserves the original HTTP 404 status.
+ErrorDocument 404 /automatizacion/404.html

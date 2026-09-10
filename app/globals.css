@@ -159,6 +159,10 @@ span.media-project-icon { display: grid; place-items: center; background: var(--
 .portfolio-cta .text-link { color: var(--accent-hover); flex-shrink: 0; }
 .project-header .header-inner { justify-content: space-between; }
 .project-hero { padding-block: 4rem 3rem; }
+.not-found-page { min-height: 70vh; padding-block: clamp(3rem, 8vw, 7rem); }
+.not-found-page h1 { max-width: 18ch; margin-top: 1rem; font-size: clamp(2.5rem, 7vw, 4.5rem); }
+.not-found-page .project-lede { max-width: 42rem; }
+.not-found-page .hero-note a { text-decoration: underline; }
 .project-product-name { font-size: 1.1rem; margin-bottom: .8rem; font-weight: 600; }
 .project-hero h1 { max-width: 23ch; font-size: clamp(2.5rem, 4.7vw, 4rem); }
 .project-lede { color: var(--muted); margin-top: 1.5rem; max-width: 43rem; font-size: 1.15rem; }
@@ -280,6 +284,7 @@ span.media-project-icon { display: grid; place-items: center; background: var(--
 .contact-next p { max-width: 23rem; color: #bfced7; font-size: .94rem; }
 .contact-email { display: inline-flex; gap: 2rem; align-items: center; font-size: 1.35rem; color: var(--cyan); text-decoration: underline; text-underline-offset: .3em; }
 .contact-form { min-width: 0; padding: 2.1rem; background: #fff; color: var(--ink); border-radius: .45rem; }
+.contact-fields { min-width: 0; margin: 0; padding: 0; border: 0; }
 .form-heading { font-size: 1.45rem; margin-bottom: 1.5rem; }
 .form-heading:focus { outline: 3px solid var(--accent); outline-offset: .5rem; }
 .form-interest:not([hidden]) { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .9rem 1rem; margin-bottom: 1.5rem; border-left: 3px solid var(--accent); background: var(--accent-light); }
@@ -291,7 +296,7 @@ span.media-project-icon { display: grid; place-items: center; background: var(--
 .field { display: flex; flex-direction: column; margin-bottom: 1.2rem; min-width: 0; }
 .field label { margin-bottom: .4rem; font-size: .875rem; font-weight: 600; }
 .field label span { color: var(--muted); font-size: .875rem; font-weight: 400; }
-.field input, .field textarea { width: 100%; border: 1px solid #a7b3bb; border-radius: .25rem; padding: .75rem .8rem; color: var(--ink); background: #fff; font-size: 1rem; min-height: 3rem; }
+.field input, .field textarea { width: 100%; border: 1px solid #697780; border-radius: .25rem; padding: .75rem .8rem; color: var(--ink); background: #fff; font-size: 1rem; min-height: 3rem; }
 .field textarea { resize: vertical; }
 .field input::placeholder, .field textarea::placeholder { color: #697780; opacity: 1; }
 .field > small { margin-top: .4rem; font-size: .875rem; color: var(--muted); }

@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 import { siteContent } from '../site-content';
 import { LegalShell } from '../legal-shell';
+import { socialMetadata } from '../social-metadata';
 
 export const dynamic = 'force-static';
 export const metadata: Metadata = {
   title: 'Privacidad y cookies', description: 'Cómo trata Innure tus consultas y cómo elegir la medición publicitaria.',
+  ...socialMetadata('privacidad/', 'Privacidad y cookies | Innure', 'Cómo trata Innure tus consultas y cómo elegir la medición publicitaria.', siteContent.brand.domain),
   robots: { index: false, follow: true },
   alternates: { canonical: siteContent.brand.domain + 'privacidad/' },
 };

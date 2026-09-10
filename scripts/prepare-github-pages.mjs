@@ -1,6 +1,8 @@
 import { access, copyFile, mkdir, readFile, rename, rmdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { indexableUrls } from '../app/indexable-routes.mjs';
+import { checkStaticPublication } from './publication-checks.mjs';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outputDir = path.join(projectRoot, 'dist', 'client');
@@ -37,7 +39,17 @@ await writeFile(
   'utf8',
 );
 
-const pagesToCheck = ['index.html', ...routes.map((route) => `${route}.html`)];
+// Metadata routes are not emitted by the current static exporter.
+// Only production gets indexable URLs; previews keep their existing noindex.
+if (process.env.NEXT_PUBLIC_PUBLISH === 'true') {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  if (!baseUrl) throw new Error('Falta la URL pública para generar el sitemap.');
+  const escapeXml = (value) => value.replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' })[char]);
+  const urls = indexableUrls(baseUrl).map((url) => `  <url><loc>${escapeXml(url)}</loc></url>`).join('\n');
+  await writeFile(path.join(outputDir, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`);
+}
+
+const pagesToCheck = ['index.html', '404.html', ...routes.map((route) => `${route}.html`)];
 
 for (const page of pagesToCheck) {
   const html = await readFile(path.join(outputDir, page), 'utf8');
@@ -62,3 +74,5 @@ for (const page of pagesToCheck) {
     await access(assetPath);
   }
 }
+
+await checkStaticPublication(outputDir, process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000', process.env.NEXT_PUBLIC_PUBLISH === 'true');

@@ -16,6 +16,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: '/',
     },
-    sitemap: `${siteContent.brand.domain}/sitemap.xml`,
+    sitemap: new URL('sitemap.xml', siteContent.brand.domain).toString(),
   };
 }

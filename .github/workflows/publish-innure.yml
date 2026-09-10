@@ -42,7 +42,11 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: innure-automatizacion-${{ github.sha }}
-          path: dist/client/
+          path: |
+            dist/client/
+            !dist/client/.vite/
+            !dist/client/.assetsignore
+          include-hidden-files: true # Includes the generated subfolder .htaccess.
           if-no-files-found: error
           retention-days: 14
 
