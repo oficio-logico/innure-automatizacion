@@ -25,7 +25,7 @@ export function withBasePath(path: string) {
                   foto y LinkedIn son opcionales hasta que su titular los aporte.
                   No publicar textos de relleno ni atribuir experiencia pendiente.
 
-   3) PUBLICAR    Solo la compilación de Innure habilita indexación. Requiere
+   3) PUBLICAR    Solo la compilación de innure habilita indexación. Requiere
                   dominio, contacto, información legal y un perfil confirmado.
                   Los perfiles que falten no se publican ni se inventan.
 
@@ -50,25 +50,39 @@ const FUNDADORES: Array<{
   nombre: string | null;
   funcion: string | null;
   trayectoria: string | null;
+  aportes: Array<{ titulo: string; texto: string }>;
+  especialidades: string[];
+  muestra: { texto: string; href: string };
   foto: string | null;
+  fotoEscala?: number;
   linkedin: string | null;
 }> = [
   {
     nombre: 'Sergio Herencias Redondo',
-    funcion: 'Fundador · Ingeniería y desarrollo',
-    trayectoria: '8 años de experiencia probando el rendimiento de sistemas críticos. Desarrollo de herramientas propias y automatizaciones para resolver problemas concretos, con foco en la calidad y el uso real.',
-    foto: '/images/sergio-herencias.jpg',
-    linkedin: null,
+    funcion: 'Fundador · Ingeniería full stack y gestión empresarial',
+    trayectoria: 'Head of Performance Engineering en Open Digital Services (ODS). Liderazgo técnico, desarrollo full stack y visión de negocio.',
+    especialidades: ['Desarrollo full stack', 'Rendimiento y escalabilidad', 'Automatización de procesos', 'Liderazgo técnico y calidad', 'Gestión fiscal interna', 'Facturación y operaciones'],
+    aportes: [
+      { titulo: 'Ingeniería con criterio de calidad', texto: 'Desarrollo full stack, automatización y análisis de rendimiento. Del código a las pruebas y la fiabilidad del sistema. Certificado ISTQB CTFL.' },
+      { titulo: 'Tecnología con visión de empresa', texto: 'También lleva la gestión fiscal y la facturación de la empresa. Conoce de primera mano los procesos administrativos que una buena herramienta debe simplificar.' },
+    ],
+    muestra: { texto: 'Ver el Gestor de Certificados', href: '/proyectos/gestor-certificados/' },
+    foto: '/images/sergio-herencias-frontal.webp',
+    linkedin: 'https://www.linkedin.com/in/sergio-herencias/',
   },
   {
-    nombre: 'Santiago Correas',
-    // Texto provisional solicitado por Sergio; Santiago debe sustituirlo por su función real.
-    funcion: 'lqdifnqldknf',
-    // Santiago: completa y propone estos datos en una PR para revisión de Sergio.
-    // Usa solo experiencia comprobable y una foto que autorices a publicar.
-    trayectoria: null,
-    foto: null,
-    linkedin: null,
+    nombre: 'Santiago Correas Carpio',
+    funcion: 'Fundador · Producto, negocio y marketing',
+    trayectoria: 'Director de marketing en Blackworks. Conecta producto, comunicación y las necesidades del negocio.',
+    especialidades: ['Estrategia de producto', 'Desarrollo de apps', 'IA aplicada', 'Marketing de influencers', 'Lanzamiento de productos', 'Gestión de negocio'],
+    aportes: [
+      { titulo: 'Marketing que conoce el terreno', texto: 'Gestión de marketing de influencers para festivales en España y experiencia lanzando negocios propios.' },
+      { titulo: 'De la idea a la App Store', texto: 'Desarrollo íntegro de FORJA, una aplicación de entrenamiento con IA que ya puedes descargar.' },
+    ],
+    muestra: { texto: 'Ver FORJA, desarrollada por Santiago', href: '/proyectos/forja/' },
+    foto: '/images/santiago-correas-sin-logo.webp',
+    fotoEscala: 1.2,
+    linkedin: 'https://www.linkedin.com/in/santiago-correas-carpio-67479a2bb/',
   },
 ];
 
@@ -94,7 +108,7 @@ export const siteContent = {
   brand: {
     displayName: 'innure',
     statusLabel: 'Automatización e IA',
-    finalName: 'Innure',
+    finalName: 'innure',
     parentUrl: 'https://www.innure.es/',
     proposedUrl: 'https://www.innure.es/automatizacion/',
     domain: DOMINIO ?? 'PENDING: CONFIRMAR Y PUBLICAR LA RUTA DE INNURE',
@@ -107,7 +121,7 @@ export const siteContent = {
     emailHref: CORREO,
     bookingUrl: null as string | null,
     // Contrato: POST FormData -> JSON { success: true, submissionId: string }.
-    // El PHP actual de Innure requiere adaptación; no asignar su URL sin ella.
+    // El PHP actual de innure requiere adaptación; no asignar su URL sin ella.
     formEndpoint: process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || null,
     turnstileSiteKey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || null,
     externalFormUrl: 'https://www.innure.es/#contacto',
@@ -120,7 +134,7 @@ export const siteContent = {
   },
 
   legal: {
-    companyName: 'Grupo Empresarial Innure, S.L.',
+    companyName: 'Grupo Empresarial innure, S.L.',
     taxId: 'B09882580',
     registeredAddress: 'Calle de la Bureba, 1, 5.º A — 28915 Leganés (Madrid), España',
     registryDetails: 'Registro Mercantil de Madrid: tomo 43255, folio 43, sección 8, hoja M-764215.',
@@ -138,8 +152,12 @@ export const siteContent = {
     publicLabel: `Fundador/a 0${i + 1}`,
     role: f.funcion ?? 'PENDING: FUNCIÓN EXACTA',
     biography: f.trayectoria,
+    highlights: f.aportes,
+    skills: f.especialidades,
+    project: f.muestra,
     career: f.trayectoria ?? 'PENDING: EMPRESAS, PERIODOS, FUNCIONES Y LOGROS COMPROBABLES',
     photo: f.foto,
+    photoScale: f.fotoEscala ?? 1,
     initials: (f.nombre ?? '').split(/\s+/).map((part) => part[0]).slice(0, 2).join(''),
     linkedin: f.linkedin,
     listo: Boolean(f.nombre && f.funcion),
@@ -153,7 +171,7 @@ export const siteContent = {
   ],
 
   seo: {
-    title: 'Automatización, IA y herramientas a medida para pymes | Innure',
+    title: 'Automatización, IA y herramientas a medida para pymes | innure',
     description:
       'Automatizamos tareas, conectamos tus aplicaciones e integramos IA en tu pequeña empresa. Herramientas a medida para ahorrar tiempo. Cuéntanos tu caso.',
   },

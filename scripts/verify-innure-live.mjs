@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { checkPage, checkNotFound, checkSitemap } from './publication-checks.mjs';
+import { checkPage, checkNotFound, checkSitemap, publicRoutes } from './publication-checks.mjs';
 
 const base = 'https://www.innure.es/automatizacion/';
 async function get(url, options = {}) {
@@ -13,7 +13,7 @@ assert.equal(release.service,'automatizacion-ia');
 if (process.env.SOURCE_SHA) assert.equal(release.commit,process.env.SOURCE_SHA);
 assert.equal(release.form,'/automatizacion/contacto.php');
 const assets = new Set();
-for (const route of ['', 'aviso-legal/', 'privacidad/', 'proyectos/gestor-certificados/']) {
+for (const route of publicRoutes) {
   const response = await get(base+route);
   assert.equal(response.status,200,route);
   assert.match(response.headers.get('content-type') || '',/text\/html/);
@@ -47,4 +47,4 @@ assert.equal((await method.json()).success,false);
 const denied = await get(base+'contacto.php',{method:'POST',headers:{Origin:'https://example.invalid','Content-Type':'application/x-www-form-urlencoded'},body:'service=automatizacion-ia'});
 assert.equal(denied.status,403);
 assert.equal((await denied.json()).success,false);
-console.log(JSON.stringify({version:release,routes:4,assets:assets.size,sitemap:true,branded404:true,metadata:true,methodRejected:true,foreignOriginRejected:true,realEmailTest:'pending'},null,2));
+console.log(JSON.stringify({version:release,routes:publicRoutes.length,assets:assets.size,sitemap:true,branded404:true,metadata:true,methodRejected:true,foreignOriginRejected:true,realEmailTest:'pending'},null,2));

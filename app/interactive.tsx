@@ -173,7 +173,7 @@ export function ContactForm() {
       // cuenta: quien envía es siempre ella.
       if (siteContent.contact.emailHref) {
         const value = (field: string) => String(data.get(field) ?? '').trim();
-        const subject = `Innure · Automatización e IA — ${value('company') || value('name')}`;
+        const subject = `innure · Automatización e IA — ${value('company') || value('name')}`;
         const body = [
           `Nombre: ${value('name')}`,
           `Empresa: ${value('company')}`,
@@ -333,7 +333,7 @@ export function ContactForm() {
               <>
                 <strong>En esta versión, el envío se hace por correo.</strong> Al continuar se
                 abre un borrador para que lo revises y lo envíes. También puedes usar el{' '}
-                <a href={siteContent.contact.externalFormUrl} target="_blank" rel="noreferrer">formulario de Innure</a>.
+                <a href={siteContent.contact.externalFormUrl} target="_blank" rel="noreferrer">formulario de innure</a>.
               </>
             ) : (
               <>

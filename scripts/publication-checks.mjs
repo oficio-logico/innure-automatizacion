@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { indexableUrls } from '../app/indexable-routes.mjs';
+import { indexableUrls, indexableRoutes } from '../app/indexable-routes.mjs';
+import { projectRegistry } from '../app/project-registry.mjs';
 
-export const publicRoutes = ['', 'aviso-legal/', 'privacidad/', 'proyectos/gestor-certificados/'];
+export const publicRoutes = [...indexableRoutes, 'aviso-legal/', 'privacidad/'];
 const productionBase = 'https://www.innure.es/automatizacion/';
 const attribute = (tag, name) => tag.match(new RegExp(`\\b${name}="([^"]*)"`))?.[1];
 const meta = (html, name) => [...html.matchAll(/<meta\b[^>]*>/g)].map(([tag]) => tag).find((tag) => attribute(tag, 'property') === name || attribute(tag, 'name') === name);
@@ -22,7 +23,8 @@ export function checkPage(html, route, baseUrl, published) {
   assert.ok(image && /^https?:\/\//.test(image));
   assert.equal(new URL(image).origin, new URL(baseUrl).origin);
   assert.equal(value(html, 'robots'), published && !legal ? 'index, follow' : legal ? 'noindex, follow' : 'noindex, nofollow');
-  if (route.startsWith('proyectos/')) assert.match(value(html, 'og:title'), /Gestor de Certificados/);
+  const project = projectRegistry.find(item => route === `proyectos/${item.slug}/`);
+  if (project) assert.ok(value(html, 'og:title')?.includes(project.name), `${route}: título propio`);
   if (!route) {
     assert.match(html, /<form\b[^>]*method="post"/);
     assert.match(html, /<fieldset\b[^>]*disabled=""/);

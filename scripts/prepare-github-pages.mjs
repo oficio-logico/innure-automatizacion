@@ -1,12 +1,12 @@
 import { access, copyFile, mkdir, readFile, rename, rmdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { indexableUrls } from '../app/indexable-routes.mjs';
+import { indexableUrls, indexableRoutes } from '../app/indexable-routes.mjs';
 import { checkStaticPublication } from './publication-checks.mjs';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outputDir = path.join(projectRoot, 'dist', 'client');
-const routes = ['aviso-legal', 'privacidad', 'proyectos/gestor-certificados'];
+const routes = ['aviso-legal', 'privacidad', ...indexableRoutes.filter(Boolean).map(route => route.replace(/\/$/, ''))];
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 await access(path.join(outputDir, 'index.html'));
