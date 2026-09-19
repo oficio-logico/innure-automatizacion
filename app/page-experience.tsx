@@ -56,5 +56,5 @@ export function PageExperience() {
     };
   }, []);
 
-  return <aside className="quick-contact" hidden={!showContact} aria-label="Hablar con Innure"><span>¿Lo vemos en tu negocio?</span><a className="button button-small" href="#contacto">Hablemos <Icon name="arrow" /></a></aside>;
+  return <aside className="quick-contact" hidden={!showContact} aria-label="Hablar con innure"><span>¿Lo vemos en tu negocio?</span><a className="button button-small" href="#contacto">Hablemos <Icon name="arrow" /></a></aside>;
 }

@@ -31,6 +31,7 @@ test('los datos opcionales pueden completarse sin publicar marcadores o enlaces 
     if (founder.photo !== null) {
       assert.match(founder.photo, /^\/images\/[A-Za-z0-9/_-]+\.(?:jpg|jpeg|png|webp)$/);
       await access(new URL('../public' + founder.photo, import.meta.url));
+      assert.ok(Number.isFinite(founder.photoScale) && founder.photoScale >= 1 && founder.photoScale <= 2);
     }
     if (founder.linkedin !== null) {
       const url = new URL(founder.linkedin);
@@ -43,4 +44,32 @@ test('los datos opcionales pueden completarse sin publicar marcadores o enlaces 
 
 test('añadir un perfil mínimo no publica por sí solo la vista de revisión', () => {
   assert.equal(publishing.ready, false);
+});
+
+test('ambos aparecen como fundadores con trayectoria resumida y pruebas de su trabajo', async () => {
+  for (const founder of founders) {
+    assert.match(founder.role, /^Fundador · /);
+    assert.ok(founder.biography.length < 200);
+    assert.equal(founder.highlights.length, 2);
+    assert.equal(founder.skills.length, 6);
+    assert.equal(new Set(founder.skills).size, founder.skills.length);
+    for (const skill of founder.skills) assert.ok(skill.length > 3 && skill.length < 40);
+    for (const item of founder.highlights) assert.ok(item.titulo && item.texto);
+    assert.match(founder.project.href, /^\/proyectos\/[a-z-]+\/$/);
+    await access(new URL('../app' + founder.project.href + 'page.tsx', import.meta.url));
+  }
+});
+
+test('el perfil de Sergio combina desarrollo full stack y gestión interna de la empresa', () => {
+  const sergio = founders.find((founder) => founder.name === 'Sergio Herencias Redondo');
+  assert.ok(sergio);
+  assert.match(sergio.role, /full stack.*gestión empresarial/i);
+  assert.ok(sergio.skills.includes('Desarrollo full stack'));
+  assert.ok(sergio.skills.includes('Gestión fiscal interna'));
+  assert.ok(sergio.skills.includes('Facturación y operaciones'));
+  const evidence = sergio.highlights.map((item) => item.texto).join(' ');
+  assert.match(evidence, /gestión fiscal y la facturación de la empresa/);
+  assert.match(evidence, /ISTQB CTFL/);
+  assert.equal(sergio.photo, '/images/sergio-herencias-frontal.webp');
+  assert.equal(sergio.photoScale, 1);
 });

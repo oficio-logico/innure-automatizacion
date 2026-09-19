@@ -4,7 +4,7 @@ import { siteContent, withBasePath } from './site-content';
 
 export const metadata: Metadata = {
   title: 'Página no encontrada',
-  description: 'Vuelve a los servicios y proyectos de Innure Automatización o cuéntanos qué necesitas.',
+  description: 'Vuelve a los servicios y proyectos de innure Automatización o cuéntanos qué necesitas.',
   robots: { index: false, follow: true },
   alternates: { canonical: null }, openGraph: null, twitter: null,
 };
@@ -13,8 +13,8 @@ export default function NotFound() {
   return <>
     <a className="skip-link" href="#contenido">Saltar al contenido</a>
     <header className="site-header project-header"><div className="shell header-inner">
-      <a className="wordmark" href={withBasePath('/')} aria-label="Innure, volver al inicio">
-        <img className="brand-logo" src={withBasePath('/images/innure-logo-white.png')} alt="Innure" width="112" height="28" />
+      <a className="wordmark" href={withBasePath('/')} aria-label="innure, volver al inicio">
+        <img className="brand-logo" src={withBasePath('/images/innure-logo-white.png')} alt="innure" width="112" height="28" />
         <small>Automatización e IA</small>
       </a>
     </div></header>
@@ -22,7 +22,7 @@ export default function NotFound() {
       <p className="eyebrow">Error 404 · Página no encontrada</p>
       <h1>Por aquí no era.</h1>
       <p className="project-lede">Puede que el enlace haya cambiado o que la dirección no esté bien escrita. Te ayudamos a encontrar lo que buscabas.</p>
-      <nav className="hero-actions" aria-label="Continuar en Innure">
+      <nav className="hero-actions" aria-label="Continuar en innure">
         <a className="button" href={withBasePath('/')}>Volver a Automatización</a>
         <a className="text-link" href={withBasePath('/#proyectos')}>Ver proyectos</a>
         <a className="text-link" href={withBasePath('/#contacto')}>Cuéntanos tu caso</a>

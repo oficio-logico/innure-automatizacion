@@ -26,7 +26,9 @@ php scripts/contact.test.php
 
 Las pruebas del receptor usan funciones aisladas; no envían correos externos. La medición se comprueba con un navegador simulado, sin cargar Google.
 
-`app/site-content.ts` centraliza textos, equipo, identidad y opciones públicas. El perfil de Sergio y su foto proceden de la web de Innure. Santiago Correas aparece con su nombre y, por petición de Sergio, el texto provisional «lqdifnqldknf» en su función. Santiago debe sustituirlo por información real; su biografía, foto y LinkedIn quedan a su cargo. Consulta [CONTRIBUTING.md](CONTRIBUTING.md) para completarlos mediante una PR revisada por Sergio.
+`app/site-content.ts` centraliza textos, equipo, identidad y opciones públicas. Sergio Herencias Redondo y Santiago Correas Carpio tienen perfiles completos, especialidades, proyectos y enlaces a LinkedIn, revisados por Sergio. Los retratos y su encuadre están preparados para mantener una presentación coherente. Consulta [CONTRIBUTING.md](CONTRIBUTING.md) para proponer actualizaciones mediante una PR revisada por Sergio.
+
+El portfolio reúne once proyectos en `/proyectos/`, cada uno con su ficha, capturas y estado real. `app/project-catalog.ts` contiene el contenido y `app/project-registry.mjs` mantiene el registro compartido por las rutas, el sitemap y las comprobaciones. [PORTFOLIO.md](PORTFOLIO.md) documenta las fuentes y los límites de las capturas; no son promesas de resultados ni casos de clientes salvo indicación expresa.
 
 ## Compilación de producción
 

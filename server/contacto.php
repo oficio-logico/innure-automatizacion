@@ -10,7 +10,7 @@ function innure_response(int $status, string $message, ?string $id = null): arra
 
 function innure_contact(array $server, array $post, array $config, callable $verify, callable $send, callable $rate): array {
     if (($server['REQUEST_METHOD'] ?? '') !== 'POST') return innure_response(405, 'Método no permitido.');
-    if (($server['HTTP_ORIGIN'] ?? '') !== 'https://www.innure.es') return innure_response(403, 'Envía la consulta desde la web de Innure.');
+    if (($server['HTTP_ORIGIN'] ?? '') !== 'https://www.innure.es') return innure_response(403, 'Envía la consulta desde la web de innure.');
     if (!preg_match('/^[0-9]{1,8}$/', (string) ($server['CONTENT_LENGTH'] ?? ''))) return innure_response(411, 'No se ha podido validar el tamaño del envío.');
     if ((int) $server['CONTENT_LENGTH'] > 32768) return innure_response(413, 'La consulta es demasiado larga.');
     if (!preg_match('~^(multipart/form-data;|application/x-www-form-urlencoded(?:;|$))~i', $server['CONTENT_TYPE'] ?? '')) {
@@ -54,7 +54,7 @@ function innure_contact(array $server, array $post, array $config, callable $ver
             if ($value !== '' && strlen($value) <= 200 && preg_match('/^[a-zA-Z0-9_.~+ -]+$/', $value)) $body .= "{$key}: {$value}\n";
         }
     }
-    if (!$send('[Innure · Automatización] Nueva consulta', $body, $values['email'], $config, $id)) {
+    if (!$send('[innure · Automatización] Nueva consulta', $body, $values['email'], $config, $id)) {
         return innure_response(503, 'No hemos podido enviar tu consulta. Inténtalo más tarde o escríbenos a info@innure.es.');
     }
     return innure_response(200, '', $id);
@@ -154,7 +154,7 @@ function innure_smtp(string $subject, string $body, string $reply, array $config
         foreach ($recipients as $recipient) if ($command('RCPT TO:<' . $recipient . '>', ['250','251','252'])) $accepted[] = $recipient;
         if (!$accepted || !$command('DATA', ['354'])) return false;
         $mime = static fn(string $text): string => '=?UTF-8?B?' . base64_encode($text) . '?=';
-        $headers = 'From: ' . $mime('Innure · Automatización') . ' <' . $from . ">\r\nTo: <" . array_shift($accepted) . ">\r\n";
+        $headers = 'From: ' . $mime('innure · Automatización') . ' <' . $from . ">\r\nTo: <" . array_shift($accepted) . ">\r\n";
         if ($accepted) $headers .= 'Cc: <' . implode('>, <', $accepted) . ">\r\n";
         $headers .= 'Reply-To: <' . $reply . ">\r\nSubject: " . $mime($subject) . "\r\nDate: " . date('r')
             . "\r\nMessage-ID: <automatizacion-{$id}@innure.es>\r\nMIME-Version: 1.0\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n";

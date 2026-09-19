@@ -17,8 +17,8 @@ export default function Home() {
       <a className="skip-link" href="#contenido">Saltar al contenido</a>
       <header className="site-header">
         <div className="shell header-inner">
-          <a className="wordmark" href="#inicio" aria-label="Innure, volver al inicio">
-            <img className="brand-logo" src={withBasePath('/images/innure-logo-white.png')} alt="Innure" width="112" height="28" />
+          <a className="wordmark" href="#inicio" aria-label="innure, volver al inicio">
+            <img className="brand-logo" src={withBasePath('/images/innure-logo-white.png')} alt="innure" width="112" height="28" />
             <small>{brand.statusLabel}</small>
           </a>
           <nav className="desktop-nav" aria-label="Navegación principal">
@@ -96,16 +96,31 @@ export default function Home() {
 
         <section className="innure-section" id="equipo" aria-labelledby="innure-title">
           <div className="shell innure-layout">
-            <div><p className="eyebrow">El equipo detrás</p><h2 id="innure-title">Somos Innure.</h2></div>
+            <div><p className="eyebrow">El equipo detrás</p><h2 id="innure-title">Ingeniería, producto<br />y negocio.</h2></div>
             <div className="innure-description">
-              <p>Esta es nuestra línea de automatización, IA y desarrollo a medida para pequeñas empresas. Hablamos contigo, construimos la solución y te acompañamos al ponerla en marcha.</p>
+              <p>Dos perfiles complementarios y años emprendiendo juntos. Tecnología, producto y negocio en la misma conversación.</p>
               <a className="text-link" href={brand.parentUrl} target="_blank" rel="noreferrer">Conoce también nuestro trabajo en pruebas de rendimiento <span aria-hidden="true">↗</span></a>
             </div>
           </div>
-          {publicFounders.length ? <div className="shell founders">{publicFounders.map((founder) => <article key={founder.number}>
-            {founder.photo ? <img src={withBasePath(founder.photo)} alt={founder.name} width="320" height="320" loading="lazy" /> : <span className="founder-initials" aria-hidden="true">{founder.initials}</span>}
-            <div><h3>{founder.name}</h3><p className="founder-role">{founder.role}</p>{founder.biography ? <p className="founder-biography">{founder.biography}</p> : null}{founder.linkedin ? <a className="text-link founder-link" href={founder.linkedin} target="_blank" rel="noreferrer">Perfil en LinkedIn <span aria-hidden="true">↗</span></a> : null}</div>
+          {publicFounders.length ? <div className="shell founders">{publicFounders.map((founder) => <article className="founder-card" key={founder.number} aria-labelledby={`founder-${founder.number}`}>
+            <div className="founder-heading">
+              {founder.photo ? <span className="founder-photo"><img src={withBasePath(founder.photo)} alt={founder.name} width="320" height="320" loading="lazy" style={{ transform: `scale(${founder.photoScale})` }} /></span> : <span className="founder-initials" aria-hidden="true">{founder.initials}</span>}
+              <div className="founder-identity"><h3 id={`founder-${founder.number}`}>{founder.name}</h3><p className="founder-role">{founder.role}</p></div>
+            </div>
+            {founder.biography ? <p className="founder-biography">{founder.biography}</p> : null}
+            <div className="founder-expertise"><p className="eyebrow">Especialidades</p><ul className="founder-skills" aria-label={`Especialidades de ${founder.name}`}>{founder.skills.map(skill => <li key={skill}>{skill}</li>)}</ul></div>
+            <ul className="founder-highlights">{founder.highlights.map(item => <li key={item.titulo}><Icon name="check" /><div><h4>{item.titulo}</h4><p>{item.texto}</p></div></li>)}</ul>
+            <div className="founder-links"><a className="text-link" href={withBasePath(founder.project.href)}>{founder.project.texto}<Icon name="arrow" /></a>{founder.linkedin ? <a className="text-link founder-link" href={founder.linkedin} target="_blank" rel="noreferrer">LinkedIn <span aria-hidden="true">↗</span></a> : null}</div>
           </article>)}</div> : null}
+          <div className="shell team-story">
+            <div className="team-story-heading"><div><p className="eyebrow">Un camino compartido</p><h3>También hemos estado al otro lado.</h3></div><p>La experiencia no es solo lo que salió bien.</p></div>
+            <ul className="team-experience">
+              <li><span aria-hidden="true">01</span><h4>Hemos emprendido</h4><p>Cofundadores de Ender Hookah y Collapp. Años pasando de la idea a poner negocios en marcha, juntos.</p></li>
+              <li><span aria-hidden="true">02</span><h4>Hemos aprendido</h4><p>Hemos acertado, cometido errores y cambiado de rumbo. Por eso preguntamos antes de construir y priorizamos lo útil.</p></li>
+              <li><span aria-hidden="true">03</span><h4>Conocemos el día a día</h4><p>Emprender en España también es gestionar clientes, proveedores, trámites y presupuestos. La solución tiene que encajar con esa realidad.</p></li>
+            </ul>
+            <div className="team-direct"><p><strong>Trato directo, de principio a fin.</strong> Hablas con quienes van a entender tu problema y construir la solución.</p><a className="text-link" href="#contacto">Cuéntanos tu caso<Icon name="arrow" /></a></div>
+          </div>
         </section>
 
         <section className="faq-section section-space" aria-labelledby="faq-title">
@@ -136,11 +151,11 @@ export default function Home() {
 
       <footer className="site-footer">
         <div className="shell footer-main">
-          <a className="wordmark" href="#inicio"><img className="brand-logo" src={withBasePath('/images/innure-logo-color.png')} alt="Innure" width="112" height="28" /><small>{brand.statusLabel}</small></a>
+          <a className="wordmark" href="#inicio"><img className="brand-logo" src={withBasePath('/images/innure-logo-color.png')} alt="innure" width="112" height="28" /><small>{brand.statusLabel}</small></a>
           <p>{brand.tagline}</p><a className="text-link" href="#contacto">Hablemos <Icon name="arrow" /></a>
         </div>
         <div className="shell footer-bottom">
-          <span>© <CurrentYear fallback={new Date().getFullYear()} /> Innure</span>
+          <span>© <CurrentYear fallback={new Date().getFullYear()} /> innure</span>
           <nav aria-label="Información legal"><a href={withBasePath('/aviso-legal/')}>Aviso legal</a><a href={withBasePath('/privacidad/')}>Privacidad</a>{siteContent.advertising.conversionDestination ? <button type="button" className="measurement-settings" data-automation-measurement>Configurar medición</button> : null}</nav>
           <a href={brand.parentUrl} target="_blank" rel="noreferrer">innure.es ↗</a>
         </div>

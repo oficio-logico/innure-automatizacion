@@ -2,16 +2,17 @@
 
 La web que empezó como Oficio Lógico es ahora la línea de automatización, IA y desarrollo a medida de Innure. La dirección comercial es https://www.innure.es/automatizacion/. Este repositorio no contiene la web de rendimiento ni la configuración privada del correo.
 
-## Completar el perfil de Santi
+## Actualizar el perfil de Santi
 
-En `app/site-content.ts`, busca `nombre: 'Santiago Correas'` dentro de `FUNDADORES`.
+En `app/site-content.ts`, busca `nombre: 'Santiago Correas Carpio'` dentro de `FUNDADORES`. El perfil actual ya está completo y revisado por Sergio; propón los cambios que necesites sobre esos datos.
 
-- El nombre visible es Santiago Correas. Sustituye el texto provisional de `funcion` por tu aportación real.
-- Completa `trayectoria` con 2–4 frases: experiencia comprobable, tu aportación al equipo y los problemas en los que puedes ayudar. No incluir métricas, clientes o credenciales no verificados.
-- Añade una foto autorizada en `public/images/` e indica su ruta en `foto`, por ejemplo `/images/santi-correas.jpg`. Preferible cuadrada, al menos 640 × 640 px, optimizada para web y sin metadatos personales innecesarios.
+- Mantén tu nombre completo y una `funcion` breve que explique tu aportación real.
+- Resume `trayectoria` en menos de 200 caracteres. `especialidades` contiene seis etiquetas y `aportes` dos bloques breves con evidencias de tu trabajo. No incluir métricas, clientes o credenciales no verificados.
+- `muestra` enlaza a un proyecto del portfolio que respalde el perfil.
+- Para cambiar la foto, añade una imagen autorizada en `public/images/` e indica su ruta en `foto`. Preferible cuadrada, al menos 640 × 640 px, optimizada para web y sin metadatos personales innecesarios. `fotoEscala` ajusta solo el encuadre visual desde la parte superior; comprueba el resultado en escritorio y móvil.
 - `linkedin` es opcional: usa la dirección HTTPS de tu perfil, o deja `null`.
 
-Por petición de Sergio, por ahora aparecen el nombre y el texto provisional «lqdifnqldknf»; no representa un cargo ni una vinculación profesional. Debes sustituirlo al completar el perfil. La biografía y el enlace no se muestran hasta completarlos; las iniciales sustituyen a la foto sin inventar un retrato.
+No uses textos de relleno. Si falta una foto autorizada, `foto: null` muestra las iniciales sin inventar un retrato.
 
 ## Proponer y autorizar los cambios
 

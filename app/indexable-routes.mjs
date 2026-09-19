@@ -1,5 +1,6 @@
 // Shared by the framework metadata route and the static publishing step.
-export const indexableRoutes = ['', 'proyectos/gestor-certificados/'];
+import { projectRegistry } from './project-registry.mjs';
+export const indexableRoutes = ['', 'proyectos/', ...projectRegistry.map(project => `proyectos/${project.slug}/`)];
 
 export function indexableUrls(base) {
   const normalizedBase = base.replace(/\/$/, '') + '/';
