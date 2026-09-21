@@ -39,4 +39,6 @@ jobs:
         env:
           INNURE_SOURCE_SHA: ${{ github.sha }}
           INNURE_TARGET: home
+          # Una preview no debe incorporar etiquetas publicitarias.
+          INNURE_MEASUREMENT_ENV: preview
         run: npm run build:innure

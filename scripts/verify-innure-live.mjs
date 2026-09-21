@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict';
 import { checkPage, checkNotFound, checkSitemap, publicRoutes } from './publication-checks.mjs';
+import { automationConversionDestination } from './measurement-config.mjs';
 
 const base = 'https://www.innure.es/';
+const expectedConversion = process.env.EXPECTED_GOOGLE_ADS_CONVERSION || automationConversionDestination;
+assert.equal(expectedConversion,automationConversionDestination,'Destino de conversión esperado no autorizado.');
 async function get(url, options = {}) {
   const response = await fetch(url, { ...options, signal: AbortSignal.timeout(20000) });
   return response;
@@ -19,7 +22,8 @@ const version = await get(base+'release.json');
 assert.equal(version.status,200);
 const release = await version.json();
 assert.equal(release.service,'innure');
-assert.equal(release.advertising,false);
+assert.equal(release.advertising,true);
+assert.equal(release.conversionDestination,expectedConversion);
 if (process.env.SOURCE_SHA) assert.equal(release.commit,process.env.SOURCE_SHA);
 assert.equal(release.form,'/automatizacion/contacto.php');
 const assets = new Set();
@@ -30,11 +34,12 @@ for (const route of publicRoutes) {
   const html = await response.text();
   checkPage(html, route, base, true);
   assert.match(html,/innure/i);
+  const destinations = [...html.matchAll(/\bdata-conversion="([^"]*)"/g)].map((match) => match[1]);
+  assert.deepEqual(destinations,[expectedConversion],`Medición de ${route || '/'} distinta de la autorizada.`);
   if (!route) {
     assert.match(html,/name="robots" content="index, follow"/);
     assert.match(html,/Sergio Herencias Redondo/);
     assert.match(html,/Tecnología, producto y negocio/);
-    assert.doesNotMatch(html,/data-conversion=/);
   }
   for (const match of html.matchAll(/(?:src|href)="([^"#]+)"/g)) {
     const url = new URL(match[1],base+route);
