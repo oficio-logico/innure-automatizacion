@@ -1,8 +1,9 @@
 import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { copyFile, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
+import { copyFile, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { checkHomePackage } from './home-package.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const target = process.env.INNURE_TARGET || 'automation';
@@ -32,7 +33,12 @@ const receiverDir = home ? path.join(output, 'automatizacion') : output;
 await mkdir(receiverDir, { recursive: true });
 await copyFile(path.join(root,'server/contacto.php'),path.join(receiverDir,'contacto.php'));
 await copyFile(path.join(root,'server/automatizacion.htaccess'),path.join(receiverDir,'.htaccess'));
-if (home) await copyFile(path.join(root,'server/home.htaccess'),path.join(output,'.htaccess'));
+if (home) {
+  await copyFile(path.join(root,'server/home.htaccess'),path.join(output,'.htaccess'));
+  // El exportador duplica estas rutas en archivos planos. La web antigua
+  // conserva sus avisos .html; la portada solo publica las rutas de directorio.
+  for (const file of ['aviso-legal.html', 'privacidad.html']) await rm(path.join(output, file));
+}
 const publicFiles = await readdir(path.join(root, 'dist/client'), { recursive: true });
 const generatedHidden = new Set(['.htaccess', '.nojekyll', '.assetsignore', '.vite', path.join('.vite', 'manifest.json'), path.join('automatizacion', '.htaccess')]);
 const unexpectedHidden = publicFiles.filter((file) => file.split(path.sep).some((part) => part.startsWith('.')) && !generatedHidden.has(file));
@@ -40,7 +46,7 @@ if (unexpectedHidden.length) throw new Error('El paquete incluye archivos oculto
 const html = await readFile(path.join(root,'dist/client/index.html'),'utf8');
 if (!html.includes(baseUrl.replace(/\/$/, '')) || !html.includes('index, follow')) throw new Error('No se ha generado la página comercial con su URL definitiva.');
 if (home) {
-  if (publicFiles.some(file => /^(?:assets|rendimiento|gesticert-avisos)(?:\/|$)/.test(file) || /^(?:contacto|config|mail-config)\.php$/.test(file))) throw new Error('El paquete invade archivos de otra publicación.');
+  checkHomePackage(publicFiles);
   if (html.includes('data-conversion=')) throw new Error('La portada no debe activar una conversión publicitaria.');
 }
 await writeFile(path.join(root,'dist/client/release.json'),JSON.stringify({
