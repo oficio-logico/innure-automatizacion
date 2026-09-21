@@ -1,21 +1,21 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { indexableUrls, indexableRoutes } from '../app/indexable-routes.mjs';
+import { sitemapUrls, indexableRoutes } from '../app/indexable-routes.mjs';
 import { projectRegistry } from '../app/project-registry.mjs';
 
 export const publicRoutes = [...indexableRoutes, 'aviso-legal/', 'privacidad/'];
-const productionBase = 'https://www.innure.es/automatizacion/';
+const productionBase = process.env.NEXT_PUBLIC_COMMERCIAL_URL || 'https://www.innure.es/automatizacion/';
 const attribute = (tag, name) => tag.match(new RegExp(`\\b${name}="([^"]*)"`))?.[1];
 const meta = (html, name) => [...html.matchAll(/<meta\b[^>]*>/g)].map(([tag]) => tag).find((tag) => attribute(tag, 'property') === name || attribute(tag, 'name') === name);
 const value = (html, name) => attribute(meta(html, name) || '', 'content');
 
 export function checkPage(html, route, baseUrl, published) {
   const legal = route === 'aviso-legal/' || route === 'privacidad/';
-  const canonical = new URL(route, (legal ? productionBase : baseUrl).replace(/\/$/, '') + '/').toString();
+  const canonical = new URL(route, (legal && !published ? productionBase : baseUrl).replace(/\/$/, '') + '/').toString();
   const canonicalTag = [...html.matchAll(/<link\b[^>]*>/g)].map(([tag]) => tag).find((tag) => attribute(tag, 'rel') === 'canonical');
-  assert.equal(attribute(canonicalTag || '', 'href'), canonical, `${route}: canonical`);
-  assert.equal(value(html, 'og:url'), canonical, `${route}: og:url`);
+  assert.equal(new URL(attribute(canonicalTag || '', 'href')).href, canonical, `${route}: canonical`);
+  assert.equal(new URL(value(html, 'og:url')).href, canonical, `${route}: og:url`);
   assert.equal(value(html, 'og:type'), 'website');
   assert.ok(value(html, 'og:title'));
   assert.ok(value(html, 'og:description'));
@@ -35,14 +35,14 @@ export function checkPage(html, route, baseUrl, published) {
 
 export function checkNotFound(html) {
   assert.match(html, /Por aquí no era\./);
-  assert.match(html, /Volver a Automatización/);
+  assert.match(html, /Volver a (?:innure|Automatización)/);
   assert.match(value(html, 'robots') || '', /noindex/);
   assert.doesNotMatch(html, /<link\b[^>]*rel="canonical"/);
 }
 
 export function checkSitemap(xml, baseUrl) {
   const urls = [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]);
-  assert.deepEqual(urls, indexableUrls(baseUrl));
+  assert.deepEqual(urls, sitemapUrls(baseUrl));
 }
 
 export async function checkStaticPublication(directory, baseUrl, published) {

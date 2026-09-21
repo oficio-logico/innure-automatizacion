@@ -16,13 +16,13 @@ export function projectMetadata(slug?: string): Metadata {
 
 export function ProjectHeader() {
   return <><a className="skip-link" href="#contenido">Saltar al contenido</a><header className="site-header project-header"><div className="shell header-inner">
-    <a className="wordmark" href={withBasePath('/')} aria-label="innure, volver al inicio"><img className="brand-logo" src={withBasePath('/images/innure-logo-white.png')} alt="innure" width="112" height="28" /><small>Automatización e IA</small></a>
+    <a className="wordmark" href={withBasePath('/')} aria-label="innure, volver al inicio"><img className="brand-logo" src={withBasePath('/images/innure-logo-white.png')} alt="innure" width="112" height="28" /><small>{siteContent.brand.statusLabel}</small></a>
     <nav className="project-nav" aria-label="Navegación del portfolio"><a href={withBasePath('/proyectos/')}>Proyectos</a><a href={withBasePath('/#equipo')}>El equipo</a><a className="button button-small header-cta" href={withBasePath('/#contacto')}>Hablemos <Icon name="arrow" /></a></nav>
   </div></header></>;
 }
 
 export function ProjectFooter() {
-  return <footer className="site-footer"><div className="shell footer-bottom"><a href={withBasePath('/')}>innure · Automatización e IA</a><nav aria-label="Información legal"><a href={withBasePath('/aviso-legal/')}>Aviso legal</a><a href={withBasePath('/privacidad/')}>Privacidad</a></nav><a href={'mailto:' + siteContent.contact.emailHref}>{siteContent.contact.email}</a></div></footer>;
+  return <footer className="site-footer"><div className="shell footer-bottom"><a href={withBasePath('/')}>innure · {siteContent.brand.statusLabel}</a><nav aria-label="Información legal"><a href={withBasePath('/aviso-legal/')}>Aviso legal</a><a href={withBasePath('/privacidad/')}>Privacidad</a></nav><a href={'mailto:' + siteContent.contact.emailHref}>{siteContent.contact.email}</a></div></footer>;
 }
 
 export function ProcessPreview({ project }: { project: ProjectCase }) {

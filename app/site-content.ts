@@ -36,8 +36,14 @@ export function withBasePath(path: string) {
 /** Correo comercial publicado en www.innure.es, comprobado el 08-09-2026. */
 const CORREO = 'info@innure.es';
 
-/** Dirección aprobada: misma marca y dominio, una página por servicio. */
-const DOMINIO = 'https://www.innure.es/automatizacion/';
+/**
+ * Dominio comercial aprobado, siempre normalizado con barra final.
+ * El build raíz lo recibe por NEXT_PUBLIC_COMMERCIAL_URL; si la variable no
+ * está definida se conserva la dirección de /automatizacion/ que usan la
+ * preview y ese paquete. Las URLs legales derivan de este valor.
+ */
+const DOMINIO_COMERCIAL = process.env.NEXT_PUBLIC_COMMERCIAL_URL || 'https://www.innure.es/automatizacion/';
+const DOMINIO = DOMINIO_COMERCIAL.endsWith('/') ? DOMINIO_COMERCIAL : `${DOMINIO_COMERCIAL}/`;
 
 /** true = web publicada e indexable. false = vista de revisión con noindex. */
 const PUBLICAR = process.env.NEXT_PUBLIC_PUBLISH === 'true';
@@ -49,6 +55,7 @@ const LEGAL_REVISADO = true;
 const FUNDADORES: Array<{
   nombre: string | null;
   funcion: string | null;
+  resumen: string | null;
   trayectoria: string | null;
   aportes: Array<{ titulo: string; texto: string }>;
   especialidades: string[];
@@ -59,12 +66,15 @@ const FUNDADORES: Array<{
 }> = [
   {
     nombre: 'Sergio Herencias Redondo',
-    funcion: 'Fundador · Ingeniería full stack y gestión empresarial',
-    trayectoria: 'Head of Performance Engineering en Open Digital Services (ODS). Liderazgo técnico, desarrollo full stack y visión de negocio.',
-    especialidades: ['Desarrollo full stack', 'Rendimiento y escalabilidad', 'Automatización de procesos', 'Liderazgo técnico y calidad', 'Gestión fiscal interna', 'Facturación y operaciones'],
+    funcion: 'Cofundador · Tecnología y operaciones',
+    resumen: 'Une liderazgo técnico, desarrollo de aplicaciones y gestión empresarial para convertir necesidades del negocio en soluciones que funcionan.',
+    trayectoria: 'Durante ocho años en NTT DATA trabajó en proyectos de transformación digital para grandes empresas, con especialización en ingeniería de rendimiento. Como Head of Performance Engineering en Open Digital Services, trabaja en el rendimiento y la fiabilidad de sistemas exigentes.\n\nEn innure conecta esa experiencia con los problemas cotidianos del negocio: herramientas que no se entienden, tareas administrativas repetitivas y procesos que necesitan más control. Su enfoque une desarrollo, integración, automatización y comprobación de que la solución funciona.',
+    especialidades: ['Ingeniería y fiabilidad', 'Desarrollo de aplicaciones', 'Integración y automatización', 'Control de gestión'],
     aportes: [
-      { titulo: 'Ingeniería con criterio de calidad', texto: 'Desarrollo full stack, automatización y análisis de rendimiento. Del código a las pruebas y la fiabilidad del sistema. Certificado ISTQB CTFL.' },
-      { titulo: 'Tecnología con visión de empresa', texto: 'También lleva la gestión fiscal y la facturación de la empresa. Conoce de primera mano los procesos administrativos que una buena herramienta debe simplificar.' },
+      { titulo: 'Ingeniería y fiabilidad', texto: 'Rendimiento, escalabilidad, pruebas y calidad del software. Certificado ISTQB CTFL.' },
+      { titulo: 'Desarrollo de aplicaciones', texto: 'Desarrollo full stack de herramientas a medida para las necesidades del negocio.' },
+      { titulo: 'Integración y automatización', texto: 'Conectar aplicaciones y reducir tareas manuales para que la información llegue donde se necesita.' },
+      { titulo: 'Control de gestión', texto: 'Experiencia en la gestión interna de innure: facturación, información financiera y organización administrativa para tomar decisiones con más claridad.' },
     ],
     muestra: { texto: 'Ver el Gestor de Certificados', href: '/proyectos/gestor-certificados/' },
     foto: '/images/sergio-herencias-frontal.webp',
@@ -72,12 +82,15 @@ const FUNDADORES: Array<{
   },
   {
     nombre: 'Santiago Correas Carpio',
-    funcion: 'Fundador · Producto, negocio y marketing',
-    trayectoria: 'Director de marketing en Blackworks. Conecta producto, comunicación y las necesidades del negocio.',
-    especialidades: ['Estrategia de producto', 'Desarrollo de apps', 'IA aplicada', 'Marketing de influencers', 'Lanzamiento de productos', 'Gestión de negocio'],
+    funcion: 'Cofundador · Producto y crecimiento',
+    resumen: 'Combina marketing, desarrollo de producto y experiencia emprendiendo.',
+    trayectoria: 'Como director de marketing en Blackworks, conecta comunicación, audiencias y necesidades de negocio.\n\nFundador de Collapp y cofundador de Ender Hookah, ha trabajado en marketing de influencers para festivales en España y desarrollado íntegramente FORJA, una aplicación de entrenamiento con IA. En innure aporta una visión que une la creación del producto con su lanzamiento y la forma de llegar a sus usuarios.',
+    especialidades: ['Producto digital', 'Desarrollo de aplicaciones', 'Marketing y lanzamiento', 'Emprendimiento'],
     aportes: [
-      { titulo: 'Marketing que conoce el terreno', texto: 'Gestión de marketing de influencers para festivales en España y experiencia lanzando negocios propios.' },
-      { titulo: 'De la idea a la App Store', texto: 'Desarrollo íntegro de FORJA, una aplicación de entrenamiento con IA que ya puedes descargar.' },
+      { titulo: 'Producto digital', texto: 'Convertir una necesidad en una aplicación con una experiencia de uso clara.' },
+      { titulo: 'Desarrollo de aplicaciones', texto: 'Desarrollo íntegro de FORJA, una aplicación de entrenamiento con IA.' },
+      { titulo: 'Marketing y lanzamiento', texto: 'Comunicación, influencers y conexión con audiencias.' },
+      { titulo: 'Fundador de Collapp', texto: 'Experiencia creando negocios propios, también como cofundador de Ender Hookah. Decisiones de producto y negocio desde la práctica.' },
     ],
     muestra: { texto: 'Ver FORJA, desarrollada por Santiago', href: '/proyectos/forja/' },
     foto: '/images/santiago-correas-sin-logo.webp',
@@ -107,13 +120,13 @@ export const siteContent = {
 
   brand: {
     displayName: 'innure',
-    statusLabel: 'Automatización e IA',
+    statusLabel: 'Tecnología para tu negocio',
     finalName: 'innure',
-    parentUrl: 'https://www.innure.es/',
+    parentUrl: 'https://www.innure.es/rendimiento/',
     proposedUrl: 'https://www.innure.es/automatizacion/',
-    domain: DOMINIO ?? 'PENDING: CONFIRMAR Y PUBLICAR LA RUTA DE INNURE',
+    domain: DOMINIO ?? 'PENDING: CONFIRMAR Y PUBLICAR LA RUTA DE innure',
     domainCandidate: 'innure.es/automatizacion/',
-    tagline: 'Tecnología para hacer más fácil el trabajo de cada día.',
+    tagline: 'Aplicaciones, procesos, automatización y captación: tecnología que trabaja para tu negocio.',
   },
 
   contact: {
@@ -121,10 +134,11 @@ export const siteContent = {
     emailHref: CORREO,
     bookingUrl: null as string | null,
     // Contrato: POST FormData -> JSON { success: true, submissionId: string }.
-    // El PHP actual de innure requiere adaptación; no asignar su URL sin ella.
+    // La portada general reutiliza el receptor existente /automatizacion/contacto.php;
+    // su URL llega por NEXT_PUBLIC_CONTACT_ENDPOINT. No asignar otra sin adaptarla.
     formEndpoint: process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || null,
     turnstileSiteKey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || null,
-    externalFormUrl: 'https://www.innure.es/#contacto',
+    externalFormUrl: 'https://www.innure.es/rendimiento/#contacto',
     serviceId: 'automatizacion-ia',
   },
 
@@ -151,7 +165,7 @@ export const siteContent = {
     name: f.nombre ?? `PENDING: NOMBRE DEL FUNDADOR ${i + 1}`,
     publicLabel: `Fundador/a 0${i + 1}`,
     role: f.funcion ?? 'PENDING: FUNCIÓN EXACTA',
-    biography: f.trayectoria,
+    biography: f.resumen,
     highlights: f.aportes,
     skills: f.especialidades,
     project: f.muestra,
@@ -165,57 +179,62 @@ export const siteContent = {
 
   navigation: [
     { label: 'Qué hacemos', href: '#que-hacemos' },
-    { label: 'Proyectos reales', href: '#proyectos' },
+    { label: 'Proyectos', href: '#proyectos' },
     { label: 'Cómo trabajamos', href: '#como-trabajamos' },
     { label: 'Quiénes somos', href: '#equipo' },
   ],
 
   seo: {
-    title: 'Automatización, IA y herramientas a medida para pymes | innure',
+    title: 'Aplicaciones a medida, automatización y captación de clientes | innure',
     description:
-      'Automatizamos tareas, conectamos tus aplicaciones e integramos IA en tu pequeña empresa. Herramientas a medida para ahorrar tiempo. Cuéntanos tu caso.',
+      'Socio de tecnología para pymes: aplicaciones a medida, procesos conectados, automatización e IA y captación con SEO, publicidad y medición. Cuéntanos tu caso.',
   },
 
   hero: {
-    eyebrow: 'Automatización e IA para pequeñas empresas',
-    title: 'Menos tareas manuales.',
-    titleAccent: 'Más tiempo para tu negocio.',
+    eyebrow: 'Tecnología, producto y mejora del negocio',
+    title: 'Hacemos que la tecnología',
+    titleAccent: 'trabaje para tu negocio.',
     description:
-      'Automatizamos tareas, integramos IA y conectamos las aplicaciones que ya usas. También creamos herramientas a medida para que tu negocio funcione mejor.',
-    primaryCta: 'Revisar mi caso',
+      'Detectamos oportunidades de mejora y las convertimos en soluciones: aplicaciones a medida, procesos conectados, automatización, IA y captación de clientes.',
+    primaryCta: 'Cuéntanos tu caso',
     secondaryCta: 'Ver un ejemplo',
     support:
-      'Primera conversación gratuita. Una tarea y un siguiente paso claro.',
+      'Primera conversación gratuita para entender el caso y acordar los siguientes pasos.',
   },
 
   landing: {
     review: {
       eyebrow: 'Primera conversación gratuita · Sin compromiso',
-      title: 'Una tarea. Un primer paso claro.',
-      description: 'Revisamos contigo una tarea que os quite tiempo. No necesitas saber de IA ni tener una solución pensada.',
+      title: 'Empecemos por entender tu negocio.',
+      description: 'Cuéntanos cómo trabajáis y qué os gustaría mejorar. Revisamos el contexto con vosotros, sin que tengas que saber de tecnología ni traer la solución pensada.',
       outcomes: [
-        'Qué se podría simplificar o automatizar.',
-        'Qué necesitamos comprobar en tus herramientas.',
+        'Qué oportunidades de mejora vemos en tu caso.',
+        'Qué herramientas, datos y procesos habría que revisar.',
         'Cuál sería el siguiente paso, si tiene sentido seguir.',
       ],
-      next: 'Nos ponemos en contacto para conocer el caso y acordar esa conversación. Cualquier desarrollo se presupuesta después; enviar la consulta no te compromete a contratar.',
+      next: 'Nos ponemos en contacto para conocer el caso y acordar esa primera conversación. Cualquier propuesta se detalla y se presupuesta después; escribirnos no te compromete a contratar.',
     },
-    benefits: ['Menos copiar y pegar', 'Tus herramientas conectadas', 'Más tiempo para tus clientes'],
+    benefits: ['Aplicaciones a medida', 'Procesos, datos y automatización', 'Captación de clientes'],
     services: [
       {
-        number: '01', icon: 'connect', title: 'Automatizamos y conectamos',
-        description: 'Hacemos que la información pase de una herramienta a otra y que las tareas repetitivas avancen solas.',
-        example: 'Correos, pedidos, facturas, avisos y seguimiento.',
+        number: '01', icon: 'invoice', title: 'Procesos y control de gestión',
+        description: 'Ordenamos herramientas, datos y facturación para que el trabajo diario y las decisiones sean más claros.',
+        example: 'Facturación, seguimiento, informes y control interno.',
       },
       {
-        number: '02', icon: 'spark', title: 'Integramos IA en tu trabajo',
-        description: 'Aplicamos IA para leer documentos, organizar información o preparar respuestas que tu equipo puede revisar.',
-        example: 'Documentos, consultas, propuestas e informes.',
+        number: '02', icon: 'connect', title: 'Aplicaciones e integraciones',
+        description: 'Creamos lo que falta y conectamos lo que ya usáis, para trabajar con las herramientas que el negocio necesita.',
+        example: 'Aplicaciones a medida, portales, integraciones y accesos.',
       },
       {
-        number: '03', icon: 'tool', title: 'Creamos tu propia herramienta',
-        description: 'Desarrollamos una aplicación a medida cuando las que ya existen no encajan con la forma de trabajar de tu empresa.',
-        example: 'Gestión interna, portales y aplicaciones para el equipo.',
+        number: '03', icon: 'spark', title: 'Automatización e IA',
+        description: 'Reducimos tareas repetitivas y aplicamos IA donde aporta valor, con revisión humana donde proceda.',
+        example: 'Correos, documentos, avisos y procesos por lotes.',
+      },
+      {
+        number: '04', icon: 'report', title: 'Captación y crecimiento',
+        description: 'Trabajamos la visibilidad y la demanda: posicionamiento, campañas, email marketing y medición de resultados.',
+        example: 'SEO, SEM/Ads, email y analítica. Redes sociales, con colaboradores.',
       },
     ],
     examples: [
@@ -260,14 +279,13 @@ export const siteContent = {
       },
     ],
     method: [
-      { number: '01', title: 'Nos cuentas el problema', description: 'Vemos qué tarea os complica el día y qué herramientas utilizáis. La primera conversación es gratuita.' },
-      { number: '02', title: 'Te proponemos una solución', description: 'Acordamos qué vamos a resolver, cuánto cuesta y cómo comprobaremos que mejora el trabajo.' },
-      { number: '03', title: 'La construimos y la probamos', description: 'Empezamos por un proceso concreto. Integramos la solución y la probamos con tu equipo.' },
-      { number: '04', title: 'La ponéis a trabajar', description: 'Os enseñamos a utilizarla, medimos el resultado y acordamos el soporte que necesitéis.' },
+      { number: '01', title: 'Diagnóstico y plan de acción', description: 'Revisamos cómo trabajáis, detectamos oportunidades de mejora y acordamos qué merece la pena abordar y en qué orden.' },
+      { number: '02', title: 'Implementación de soluciones', description: 'Construimos o conectamos lo acordado, con un alcance, un presupuesto y unas comprobaciones definidas antes de empezar.' },
+      { number: '03', title: 'Acompañamiento y mejora', description: 'Mantenemos, medimos y mejoramos lo entregado con la dedicación acordada para cada periodo.' },
     ],
     faqs: [
-      { question: '¿También trabajáis con empresas pequeñas?', answer: 'Sí. El servicio está pensado para pequeñas empresas que necesitan resolver un problema concreto: tareas que se repiten, herramientas desconectadas o una gestión que se ha quedado pequeña.' },
-      { question: '¿Tengo que saber de IA o tener la solución pensada?', answer: 'No. Cuéntanos qué te hace perder tiempo o qué te gustaría que funcionara mejor. Nosotros estudiamos cómo resolverlo y te explicamos la propuesta en un lenguaje claro.' },
+      { question: '¿También trabajáis con empresas pequeñas?', answer: 'Sí. Trabajamos con negocios pequeños que necesitan resolver algo concreto: tareas que se repiten, herramientas desconectadas, una gestión que se ha quedado pequeña o clientes que no llegan.' },
+      { question: '¿Tengo que saber de tecnología o tener la solución pensada?', answer: 'No. Cuéntanos qué os hace perder tiempo, qué os falta o qué os gustaría mejorar. Estudiamos por dónde puede venir la mejora —procesos, aplicaciones, automatización o captación— y te explicamos la propuesta en un lenguaje claro.' },
       { question: '¿Hay que cambiar los programas que ya usamos?', answer: 'Primero estudiamos cómo conectar lo que ya utilizáis. Si alguna herramienta no permite integrarse o el cambio no compensa, te lo explicamos antes de presupuestar.' },
       { question: '¿Cuánto cuesta y cuánto tarda?', answer: 'Depende del problema y de las herramientas que haya que conectar o construir. Tras la primera conversación te proponemos un alcance, un presupuesto y un plazo antes de empezar.' },
       { question: '¿Qué recibimos al terminar?', answer: 'La propuesta detalla la solución que se entrega, los accesos, la documentación y la formación de uso que incluye el proyecto. También dejamos por escrito la propiedad del desarrollo y qué depende de licencias o servicios de terceros.' },

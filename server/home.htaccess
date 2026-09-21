@@ -1,0 +1,8 @@
+RewriteEngine On
+
+# Mantener el dominio preferido del alojamiento existente.
+RewriteCond %{HTTP_HOST} ^innure\.es$ [NC]
+RewriteRule ^(.*)$ https://www.innure.es/$1 [R=301,L]
+
+# Las rutas inexistentes conservan su estado HTTP 404.
+ErrorDocument 404 /404.html

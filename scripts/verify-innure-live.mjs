@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { checkPage, checkNotFound, checkSitemap, publicRoutes } from './publication-checks.mjs';
 
-const base = 'https://www.innure.es/automatizacion/';
+const base = 'https://www.innure.es/';
 async function get(url, options = {}) {
   const response = await fetch(url, { ...options, signal: AbortSignal.timeout(20000) });
   return response;
@@ -9,7 +9,8 @@ async function get(url, options = {}) {
 const version = await get(base+'release.json');
 assert.equal(version.status,200);
 const release = await version.json();
-assert.equal(release.service,'automatizacion-ia');
+assert.equal(release.service,'innure');
+assert.equal(release.advertising,false);
 if (process.env.SOURCE_SHA) assert.equal(release.commit,process.env.SOURCE_SHA);
 assert.equal(release.form,'/automatizacion/contacto.php');
 const assets = new Set();
@@ -22,12 +23,13 @@ for (const route of publicRoutes) {
   assert.match(html,/innure/i);
   if (!route) {
     assert.match(html,/name="robots" content="index, follow"/);
-    assert.match(html,/https:\/\/www\.innure\.es\/automatizacion\//);
     assert.match(html,/Sergio Herencias Redondo/);
+    assert.match(html,/Tecnología, producto y negocio/);
+    assert.doesNotMatch(html,/data-conversion=/);
   }
   for (const match of html.matchAll(/(?:src|href)="([^"#]+)"/g)) {
     const url = new URL(match[1],base+route);
-    if (url.origin === new URL(base).origin && url.pathname.startsWith('/automatizacion/') && /\.(js|css|png|jpg|webp|woff2|svg)$/.test(url.pathname)) assets.add(url.toString());
+    if (url.origin === new URL(base).origin && /\.(js|css|png|jpg|webp|woff2|svg)$/.test(url.pathname)) assets.add(url.toString());
   }
 }
 const sitemap = await get(base+'sitemap.xml');
@@ -41,10 +43,28 @@ for (const url of assets) {
   assert.equal(response.status,200,url);
   assert.doesNotMatch(response.headers.get('content-type') || '',/text\/html/,url);
 }
-const method = await get(base+'contacto.php');
+const robots = await get(base+'robots.txt');
+assert.equal(robots.status,200);
+assert.match(await robots.text(), /Sitemap: https:\/\/www\.innure\.es\/sitemap\.xml/);
+for (const route of ['', 'proyectos/', 'privacidad/']) {
+  const moved = await get(base+'automatizacion/'+route,{redirect:'manual'});
+  assert.equal(moved.status,301);
+  assert.equal(new URL(moved.headers.get('location'),base).href,base+route);
+}
+const performance = await get(base+'rendimiento/');
+assert.equal(performance.status,200);
+const performanceHtml = await performance.text();
+assert.match(performanceHtml, /rel="canonical" href="https:\/\/www\.innure\.es\/rendimiento\/"/);
+for (const match of performanceHtml.matchAll(/(?:src|href)="(\/assets\/[^"#]+)"/g)) {
+  const response = await get(new URL(match[1],base),{method:'HEAD'});
+  assert.equal(response.status,200,match[1]);
+  assert.doesNotMatch(response.headers.get('content-type') || '',/text\/html/);
+}
+const receiver = new URL(release.form,base);
+const method = await get(receiver);
 assert.equal(method.status,405);
 assert.equal((await method.json()).success,false);
-const denied = await get(base+'contacto.php',{method:'POST',headers:{Origin:'https://example.invalid','Content-Type':'application/x-www-form-urlencoded'},body:'service=automatizacion-ia'});
+const denied = await get(receiver,{method:'POST',headers:{Origin:'https://example.invalid','Content-Type':'application/x-www-form-urlencoded'},body:'service=automatizacion-ia'});
 assert.equal(denied.status,403);
 assert.equal((await denied.json()).success,false);
-console.log(JSON.stringify({version:release,routes:publicRoutes.length,assets:assets.size,sitemap:true,branded404:true,metadata:true,methodRejected:true,foreignOriginRejected:true,realEmailTest:'pending'},null,2));
+console.log(JSON.stringify({version:release,routes:publicRoutes.length,assets:assets.size,sitemap:true,branded404:true,metadata:true,legacyRedirects:true,performance:true,methodRejected:true,foreignOriginRejected:true,realEmailTest:'not_sent'},null,2));

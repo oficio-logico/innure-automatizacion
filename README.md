@@ -1,12 +1,12 @@
-# Innure · Automatización e IA
+# innure · Tecnología para tu negocio
 
-Landing para pequeñas empresas: automatizar tareas, conectar herramientas e integrar IA o desarrollar aplicaciones a medida.
+Web general de innure: tecnología, aplicaciones a medida, integraciones, automatización, IA y captación de clientes.
 
 ## Direcciones y repositorios
 
-- URL comercial: https://www.innure.es/automatizacion/
-- Rendimiento permanece en https://www.innure.es/.
-- [oficio-logico/innure-automatizacion](https://github.com/oficio-logico/innure-automatizacion) es el repositorio público de esta línea, antes llamado Oficio Lógico. Contiene solo automatización.
+- URL comercial: https://www.innure.es/. Las páginas antiguas de `/automatizacion/` redirigen a las rutas equivalentes; su receptor y recursos siguen disponibles.
+- Rendimiento: https://www.innure.es/rendimiento/.
+- [oficio-logico/innure-automatizacion](https://github.com/oficio-logico/innure-automatizacion) es el repositorio público de la portada general y el portfolio, antes llamado Oficio Lógico.
 - `sh3rencr/innure-web` permanece privado y mantiene la web de rendimiento. El alojamiento es compartido; el código y la publicación son independientes.
 - GitHub Pages conserva una vista de revisión con `noindex`, sin receptor ni etiquetas publicitarias.
 
@@ -33,24 +33,22 @@ El portfolio reúne once proyectos en `/proyectos/`, cada uno con su ficha, capt
 ## Compilación de producción
 
 ```bash
-NEXT_PUBLIC_GOOGLE_ADS_CONVERSION=AW-18410180479/mBarCPixx_EcEP-e1MpE npm run build:innure
+INNURE_TARGET=home npm run build:innure
 ```
 
-La salida pública es `dist/client/`. El script fija `/automatizacion/`, habilita el formulario con la clave pública de Turnstile de Innure y copia `server/contacto.php` exactamente a `dist/client/contacto.php`. Nunca debe subirse este paquete a la raíz del alojamiento.
+La salida pública es `dist/client/`, preparada para la raíz. El script fija el dominio canónico, conserva la clave pública de Turnstile y copia `server/contacto.php` a `dist/client/automatizacion/contacto.php`. No incluye el receptor de rendimiento en `/contacto.php`, sus assets ni configuración privada. La portada no carga conversión publicitaria. `INNURE_TARGET=automation` conserva el formato del paquete antiguo para recuperación; no es el destino habitual.
 
-La exportación también comprueba los metadatos por ruta, genera `sitemap.xml` solo con las páginas indexables y publica un `404.html` de Innure. `server/automatizacion.htaccess` se copia como `.htaccess` dentro de esta subcarpeta para conservar el estado HTTP 404. No modifica el error, robots ni sitemap del dominio raíz. El artefacto admite ese archivo oculto; la compilación rechaza otros archivos ocultos no previstos.
+La exportación comprueba los metadatos por ruta y genera robots, sitemap y un 404 de innure con estado HTTP 404. El sitemap raíz incluye las páginas indexables y `/rendimiento/`. `server/home.htaccess` conserva el dominio preferido; `server/automatizacion.htaccess` redirige únicamente las páginas antiguas. La compilación rechaza archivos ocultos imprevistos y archivos reservados al otro publicador.
 
 La configuración privada NO está en este repositorio. El receptor lee exclusivamente `../config.php` y `../mail-config.php` del alojamiento existente. No ejecuta ni modifica el formulario de rendimiento.
 
 ## Publicación
 
-Al integrar cambios autorizados en `main`, «Publicar Innure Automatización» comprueba código y pruebas, construye, conserva un artefacto y publica exclusivamente en `public/automatizacion/`. Las claves FTP se guardan cifradas en el entorno `innure-production`, limitado a `main`; no se incluyen en el código ni están disponibles en las pruebas de PR. La compilación se ejecuta sin acceso a esas claves. La configuración privada del correo permanece en el alojamiento y el repositorio privado de Innure.
+Al integrar cambios autorizados en `main`, «Publicar innure» comprueba código y pruebas, construye, conserva un artefacto y publica el paquete en `public/`. Solo gestiona los archivos del paquete, con su propio estado `.ftp-deploy-innure-home-state.json`; no adopta el estado antiguo de rendimiento ni borra sus archivos. Las claves FTP siguen cifradas en `innure-production`, limitado a `main`, y no están disponibles durante compilación ni pruebas de PR. La configuración privada del correo permanece en el alojamiento y el repositorio privado.
 
 `main` requiere una revisión de CODEOWNERS, el resultado correcto de `validate` y conversaciones resueltas. Una PR de Santiago requiere la revisión de Sergio y las aprobaciones caducan al cambiar la propuesta. La protección se aplica también a administradores, con una única excepción de revisión para **@sh3rencr**, autorizada para publicar sus propios cambios sin otro revisor; las pruebas siguen siendo obligatorias. GitHub concede esta excepción a la cuenta y no la limita por autor de la PR, por lo que Sergio conserva la aprobación explícita como paso habitual para las propuestas de Santiago. Solo Sergio puede integrar cambios; auto-merge sigue disponible. No activar anuncios al publicar.
 
-La acción manual «Publicar automatización de Innure» del repositorio privado de despliegue se conserva como recuperación: recibe un SHA exacto y el destino de conversión. No ejecutarla en paralelo al despliegue automático. Ambas usan el mismo estado de sincronización de automatización, independiente del de rendimiento.
-
-El despliegue raíz excluye `automatizacion/`. Un cambio exclusivo en los dos ficheros de workflow no publica de nuevo rendimiento; si se quiere aplicar un cambio a su workflow, se ejecuta su acción manual.
+El repositorio privado publica únicamente rendimiento, sus assets y sus receptores mediante un staging separado. Para la migración se publica primero `/rendimiento/` y después esta portada. No ejecutar el publicador antiguo de la raíz ni restaurar un paquete anterior sin revisar qué rutas sobrescribe. La acción manual de recuperación de automatización rechaza paquetes de portada; no es una vía para publicar la web general.
 
 `scripts/verify-innure-live.mjs` comprueba versión, páginas, recursos, rechazo de métodos y origen externo. No genera un lead. La recepción real de un mensaje se valida por separado con una única consulta técnica identificada, sin consentimiento publicitario.
 
@@ -74,7 +72,7 @@ El HTML estático mantiene los campos y el botón desactivados hasta que React i
 
 ## Medición y primera prueba comercial
 
-«Contacto · Automatización» tiene su propio destino; nunca se utiliza la conversión de rendimiento. Se crea como **secundaria** para no cambiar las pujas de las campañas existentes. Al preparar la futura campaña, seleccionar únicamente esta acción mediante un objetivo específico de automatización.
+La portada general no tiene conversión publicitaria activa. La integración anterior de «Contacto · Automatización» se conserva en código y pruebas para una futura configuración explícita; nunca se utiliza la conversión de rendimiento. Publicar no activa campañas ni cambia sus presupuestos u objetivos.
 
 `public/lead-measurement.js`:
 

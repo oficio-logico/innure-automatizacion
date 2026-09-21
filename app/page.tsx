@@ -10,6 +10,7 @@ export const dynamic = 'force-static';
 export default function Home() {
   const { brand, navigation, hero, landing, contact, founders } = siteContent;
   const publicFounders = founders.filter((founder) => founder.listo);
+  const areas = landing.services;
 
   return (
     <>
@@ -42,9 +43,21 @@ export default function Home() {
             <p className="hero-note">{hero.support}</p>
           </div>
           <figure className="hero-visual">
-            <div className="hero-visual-heading"><Icon name="connect" /><span>De tareas sueltas a un proceso conectado.</span></div>
-            <img className="hero-illustration" src={withBasePath('/images/automatizacion-flujo.webp')} srcSet={`${withBasePath('/images/automatizacion-flujo-768.webp')} 768w, ${withBasePath('/images/automatizacion-flujo.webp')} 1536w`} sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 850px) calc(50vw - 40px), (max-width: 1300px) 48vw, 620px" alt="Ilustración de correos y datos que recorren un proceso conectado y se convierten en agenda y tareas organizadas, con un reloj que representa el tiempo liberado." width="1536" height="1024" fetchPriority="high" decoding="async" />
-            <figcaption className="hero-visual-caption"><span>Correos<br />y datos</span><Icon name="arrow" /><span>Proceso<br />automatizado</span><Icon name="arrow" /><span>Trabajo<br />organizado</span></figcaption>
+            <div className="hero-scheme">
+              <p className="hero-scheme-head"><Icon name="tool" />De la oportunidad a la solución</p>
+              <ul className="hero-scheme-list">
+                {areas.map((area) => (
+                  <li key={area.number}>
+                    <Icon name={area.icon} />
+                    <div><strong>{area.title}</strong><span>{area.example}</span></div>
+                  </li>
+                ))}
+              </ul>
+              <p className="hero-scheme-foot">
+                También somos especialistas en rendimiento de aplicaciones.{' '}
+                <a href={brand.parentUrl} target="_blank" rel="noreferrer">Conoce esta especialidad <span aria-hidden="true">↗</span></a>
+              </p>
+            </div>
           </figure>
         </section>
 
@@ -55,11 +68,11 @@ export default function Home() {
         <section className="services section-space" id="que-hacemos" aria-labelledby="services-title">
           <div className="shell">
             <div className="section-heading">
-              <div><p className="eyebrow">Qué hacemos</p><h2 id="services-title">Resolvemos ese «esto debería<br className="desktop-break" /> ser más fácil».</h2></div>
-              <p>Nos cuentas qué falla o qué te quita tiempo. Nosotros nos encargamos de convertirlo en una solución que puedas usar.</p>
+              <div><p className="eyebrow">Qué hacemos</p><h2 id="services-title">Cuatro formas de mejorar<br className="desktop-break" /> tu negocio.</h2></div>
+              <p>Revisamos cómo trabajáis y proponemos mejoras concretas: procesos y control de gestión, aplicaciones conectadas, automatización e IA y captación de clientes.</p>
             </div>
             <div className="services-grid">
-              {landing.services.map((service) => (
+              {areas.map((service) => (
                 <article className="service" key={service.number}>
                   <div className="service-top"><Icon name={service.icon} /><span>{service.number}</span></div>
                   <h3>{service.title}</h3><p>{service.description}</p><p className="service-example">{service.example}</p>
@@ -84,21 +97,22 @@ export default function Home() {
         <section className="method-section section-space" id="como-trabajamos" aria-labelledby="method-title">
           <div className="shell">
             <div className="section-heading">
-              <div><p className="eyebrow">Cómo trabajamos</p><h2 id="method-title">Un problema concreto.<br />Una solución bien hecha.</h2></div>
-              <p>Empezamos por algo que puedas comprobar. Con alcance y presupuesto acordados antes de construir.</p>
+              <div><p className="eyebrow">Cómo trabajamos</p><h2 id="method-title">Tres formas de<br />trabajar juntos.</h2></div>
+              <p>Elige la que encaje con tu momento. En todas acordamos el alcance, el presupuesto y las comprobaciones antes de empezar.</p>
             </div>
             <ol className="method-steps" role="list">
               {landing.method.map((step) => <li key={step.number}><span className="step-number">{step.number}</span><h3>{step.title}</h3><p>{step.description}</p></li>)}
             </ol>
-            <div className="method-assurance"><Icon name="check" /><p>Probamos antes de implantar. Tú mantienes el control de los datos y las decisiones importantes.</p></div>
+            <div className="method-assurance"><Icon name="check" /><p>Probamos antes de dar nada por hecho. Tú mantienes el control de los datos y de las decisiones importantes.</p></div>
           </div>
         </section>
 
         <section className="innure-section" id="equipo" aria-labelledby="innure-title">
           <div className="shell innure-layout">
-            <div><p className="eyebrow">El equipo detrás</p><h2 id="innure-title">Ingeniería, producto<br />y negocio.</h2></div>
+            <p className="eyebrow">El equipo detrás</p>
+            <h2 id="innure-title">Tecnología, producto y negocio, en el mismo equipo.</h2>
             <div className="innure-description">
-              <p>Dos perfiles complementarios y años emprendiendo juntos. Tecnología, producto y negocio en la misma conversación.</p>
+              <p>Combinamos ingeniería, desarrollo de producto, marketing y experiencia empresarial para analizar problemas, construir soluciones y acompañar su evolución.</p>
               <a className="text-link" href={brand.parentUrl} target="_blank" rel="noreferrer">Conoce también nuestro trabajo en pruebas de rendimiento <span aria-hidden="true">↗</span></a>
             </div>
           </div>
@@ -107,7 +121,13 @@ export default function Home() {
               {founder.photo ? <span className="founder-photo"><img src={withBasePath(founder.photo)} alt={founder.name} width="320" height="320" loading="lazy" style={{ transform: `scale(${founder.photoScale})` }} /></span> : <span className="founder-initials" aria-hidden="true">{founder.initials}</span>}
               <div className="founder-identity"><h3 id={`founder-${founder.number}`}>{founder.name}</h3><p className="founder-role">{founder.role}</p></div>
             </div>
-            {founder.biography ? <p className="founder-biography">{founder.biography}</p> : null}
+            <div className="founder-biography">
+              {founder.biography ? <p>{founder.biography}</p> : null}
+              <details className="founder-career">
+                <summary>Ver trayectoria de {founder.name.split(' ')[0]}</summary>
+                {founder.career.split('\n\n').map(paragraph => <p key={paragraph}>{paragraph}</p>)}
+              </details>
+            </div>
             <div className="founder-expertise"><p className="eyebrow">Especialidades</p><ul className="founder-skills" aria-label={`Especialidades de ${founder.name}`}>{founder.skills.map(skill => <li key={skill}>{skill}</li>)}</ul></div>
             <ul className="founder-highlights">{founder.highlights.map(item => <li key={item.titulo}><Icon name="check" /><div><h4>{item.titulo}</h4><p>{item.texto}</p></div></li>)}</ul>
             <div className="founder-links"><a className="text-link" href={withBasePath(founder.project.href)}>{founder.project.texto}<Icon name="arrow" /></a>{founder.linkedin ? <a className="text-link founder-link" href={founder.linkedin} target="_blank" rel="noreferrer">LinkedIn <span aria-hidden="true">↗</span></a> : null}</div>
@@ -157,7 +177,7 @@ export default function Home() {
         <div className="shell footer-bottom">
           <span>© <CurrentYear fallback={new Date().getFullYear()} /> innure</span>
           <nav aria-label="Información legal"><a href={withBasePath('/aviso-legal/')}>Aviso legal</a><a href={withBasePath('/privacidad/')}>Privacidad</a>{siteContent.advertising.conversionDestination ? <button type="button" className="measurement-settings" data-automation-measurement>Configurar medición</button> : null}</nav>
-          <a href={brand.parentUrl} target="_blank" rel="noreferrer">innure.es ↗</a>
+          <a href={brand.parentUrl} target="_blank" rel="noreferrer">Rendimiento <span aria-hidden="true">↗</span></a>
         </div>
       </footer>
     </>
