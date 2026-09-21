@@ -6,6 +6,15 @@ async function get(url, options = {}) {
   const response = await fetch(url, { ...options, signal: AbortSignal.timeout(20000) });
   return response;
 }
+async function checkAsset(url) {
+  let response = await get(url,{method:'HEAD'});
+  // Algunos recursos de Cloudflare solo se sirven con GET. Un HEAD 404/405
+  // no demuestra que fallen en el navegador; comprobar la descarga real.
+  if (response.status === 404 || response.status === 405) response = await get(url);
+  assert.equal(response.status,200,url);
+  assert.doesNotMatch(response.headers.get('content-type') || '',/text\/html/,url);
+  await response.arrayBuffer();
+}
 const version = await get(base+'release.json');
 assert.equal(version.status,200);
 const release = await version.json();
@@ -39,9 +48,7 @@ const missing = await get(base+'revision-ruta-inexistente-publicacion/',{redirec
 assert.equal(missing.status,404);
 checkNotFound(await missing.text());
 for (const url of assets) {
-  const response = await get(url,{method:'HEAD'});
-  assert.equal(response.status,200,url);
-  assert.doesNotMatch(response.headers.get('content-type') || '',/text\/html/,url);
+  await checkAsset(url);
 }
 const robots = await get(base+'robots.txt');
 assert.equal(robots.status,200);
@@ -56,9 +63,7 @@ assert.equal(performance.status,200);
 const performanceHtml = await performance.text();
 assert.match(performanceHtml, /rel="canonical" href="https:\/\/www\.innure\.es\/rendimiento\/"/);
 for (const match of performanceHtml.matchAll(/(?:src|href)="(\/assets\/[^"#]+)"/g)) {
-  const response = await get(new URL(match[1],base),{method:'HEAD'});
-  assert.equal(response.status,200,match[1]);
-  assert.doesNotMatch(response.headers.get('content-type') || '',/text\/html/);
+  await checkAsset(new URL(match[1],base));
 }
 const receiver = new URL(release.form,base);
 const method = await get(receiver);
