@@ -6,6 +6,7 @@
   var key = 'innure_automation_consent_v1';
   var attributionKey = 'innure_automation_attribution_v1';
   var maxAge = 180 * 86400000;
+  var cookiePrefix = 'innure_auto';
   var decision = null;
   var loaded = false;
   var banner;
@@ -14,6 +15,12 @@
   function read(storage, name) { try { return JSON.parse(window[storage].getItem(name) || 'null'); } catch { return null; } }
   function write(storage, name, value) { try { window[storage].setItem(name, JSON.stringify(value)); } catch { /* la elección sigue funcionando sin almacenamiento */ } }
   function clearAttribution() { try { sessionStorage.removeItem(attributionKey); } catch { /* sin almacenamiento */ } }
+  function clearCookies(pattern, cookiePath) {
+    document.cookie.split(';').forEach(function (cookie) {
+      var name = cookie.split('=')[0].trim();
+      if (pattern.test(name)) document.cookie = name + '=; Max-Age=0; Path=' + cookiePath + '; Domain=www.innure.es; Secure; SameSite=Lax';
+    });
+  }
   function validFields(source) {
     var clean = {};
     fields.forEach(function (field) { var value = source && source[field]; if (typeof value === 'string' && /^[a-zA-Z0-9_.~+ -]{1,200}$/.test(value)) clean[field] = value; });
@@ -46,7 +53,7 @@
     fields.forEach(function (field) { if (attribution[field]) safeUrl.searchParams.set(field,attribution[field]); });
     window.gtag('config',destination.split('/')[0],{
       send_page_view:false,allow_google_signals:false,allow_ad_personalization_signals:false,
-      page_location:safeUrl.toString(),page_referrer:'',cookie_path:'/automatizacion/',cookie_domain:'www.innure.es',
+      page_location:safeUrl.toString(),page_referrer:'',cookie_prefix:cookiePrefix,cookie_path:'/',cookie_domain:'www.innure.es',
     });
     var tag = document.createElement('script');
     tag.async = true; tag.src = 'https://www.googletagmanager.com/gtag/js?id=' + destination.split('/')[0];
@@ -59,11 +66,11 @@
     else {
       clearAttribution();
       if (loaded) {
-        // Solo cookies del subdirectorio de esta línea; no borra las de rendimiento.
-        document.cookie.split(';').forEach(function (cookie) {
-          var name = cookie.split('=')[0].trim();
-          if (/^_gcl_/.test(name)) document.cookie = name + '=; Max-Age=0; Path=/automatizacion/; Domain=www.innure.es; Secure; SameSite=Lax';
-        });
+        // El prefijo propio separa las cookies nuevas de rendimiento en la raíz.
+        clearCookies(new RegExp('^' + cookiePrefix + '_gcl_'),'/');
+        // Si aún se ejecuta bajo la ruta antigua, borra solo su cookie heredada.
+        // Path=/automatizacion/ no afecta a rendimiento en /.
+        if (location.pathname.startsWith('/automatizacion/')) clearCookies(/^_gcl_/,'/automatizacion/');
         location.reload(); // descarga las etiquetas cargadas tras el consentimiento anterior
       }
     }
@@ -73,7 +80,7 @@
       banner = document.createElement('section');
       banner.className = 'measurement-banner';
       banner.setAttribute('aria-label','Preferencias de medición publicitaria');
-      banner.innerHTML = '<div><h2>¿Nos ayudas a saber si los anuncios funcionan?</h2><p>Solo si aceptas, Google Ads relacionará tu visita con una consulta enviada. No compartimos los datos que escribas en el formulario ni usamos remarketing. <a href="/automatizacion/privacidad/#medicion">Privacidad y cookies</a>.</p></div><div class="measurement-actions"><button type="button" data-choice="rejected">Rechazar</button><button type="button" data-choice="accepted">Aceptar medición</button></div>';
+      banner.innerHTML = '<div><h2>¿Nos ayudas a saber si los anuncios funcionan?</h2><p>Solo si aceptas, Google Ads relacionará tu visita con una consulta enviada. No compartimos los datos que escribas en el formulario ni usamos remarketing. <a href="/privacidad/#medicion">Privacidad y cookies</a>.</p></div><div class="measurement-actions"><button type="button" data-choice="rejected">Rechazar</button><button type="button" data-choice="accepted">Aceptar medición</button></div>';
       banner.querySelectorAll('[data-choice]').forEach(function (button) { button.addEventListener('click',function () { choose(button.getAttribute('data-choice')); }); });
       document.body.appendChild(banner);
     }

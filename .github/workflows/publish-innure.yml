@@ -38,6 +38,9 @@ jobs:
         env:
           INNURE_SOURCE_SHA: ${{ github.sha }}
           INNURE_TARGET: home
+          # Identificador público: activar esta etiqueta no publica anuncios ni modifica gasto.
+          INNURE_MEASUREMENT_ENV: production
+          NEXT_PUBLIC_GOOGLE_ADS_CONVERSION: AW-18410180479/mBarCPixx_EcEP-e1MpE
         run: npm run build:innure
       - uses: actions/upload-artifact@v4
         with:
@@ -103,4 +106,5 @@ jobs:
       - name: Verificar versión, recursos y rechazo de envíos no válidos
         env:
           SOURCE_SHA: ${{ github.sha }}
+          EXPECTED_GOOGLE_ADS_CONVERSION: AW-18410180479/mBarCPixx_EcEP-e1MpE
         run: node scripts/verify-innure-live.mjs

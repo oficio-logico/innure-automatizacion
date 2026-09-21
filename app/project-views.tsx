@@ -22,7 +22,7 @@ export function ProjectHeader() {
 }
 
 export function ProjectFooter() {
-  return <footer className="site-footer"><div className="shell footer-bottom"><a href={withBasePath('/')}>innure · {siteContent.brand.statusLabel}</a><nav aria-label="Información legal"><a href={withBasePath('/aviso-legal/')}>Aviso legal</a><a href={withBasePath('/privacidad/')}>Privacidad</a></nav><a href={'mailto:' + siteContent.contact.emailHref}>{siteContent.contact.email}</a></div></footer>;
+  return <footer className="site-footer"><div className="shell footer-bottom"><a href={withBasePath('/')}>innure · {siteContent.brand.statusLabel}</a><nav aria-label="Información legal"><a href={withBasePath('/aviso-legal/')}>Aviso legal</a><a href={withBasePath('/privacidad/')}>Privacidad</a>{siteContent.advertising.conversionDestination ? <button type="button" className="measurement-settings" data-automation-measurement>Configurar medición</button> : null}</nav><a href={'mailto:' + siteContent.contact.emailHref}>{siteContent.contact.email}</a></div></footer>;
 }
 
 export function ProcessPreview({ project }: { project: ProjectCase }) {

@@ -4,6 +4,8 @@ import assert from 'node:assert/strict';
 import { solutionCatalog, solutionSlugs, getSolution } from '../app/solution-catalog.mjs';
 
 const EXPECTED_SLUGS = [
+  'consultoria-ia-empresas',
+  'automatizacion-procesos',
   'fisioterapia',
   'centros-estetica',
   'gestorias',
@@ -47,7 +49,7 @@ const deepText = (value) => {
   return '';
 };
 
-test('la colección expone los siete slugs esperados, únicos y derivados', () => {
+test('la colección expone los nueve slugs esperados, únicos y derivados', () => {
   assert.deepEqual(
     solutionCatalog.map((solution) => solution.slug),
     EXPECTED_SLUGS,

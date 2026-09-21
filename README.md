@@ -38,7 +38,7 @@ El piloto `/soluciones/` añade siete páginas y un índice (8 páginas en total
 INNURE_TARGET=home npm run build:innure
 ```
 
-La salida pública es `dist/client/`, preparada para la raíz. El script fija el dominio canónico, conserva la clave pública de Turnstile y copia `server/contacto.php` a `dist/client/automatizacion/contacto.php`. No incluye el receptor de rendimiento en `/contacto.php`, sus assets ni configuración privada. La portada no carga conversión publicitaria. `INNURE_TARGET=automation` conserva el formato del paquete antiguo para recuperación; no es el destino habitual.
+La salida pública es `dist/client/`, preparada para la raíz. El script fija el dominio canónico, conserva la clave pública de Turnstile y copia `server/contacto.php` a `dist/client/automatizacion/contacto.php`. No incluye el receptor de rendimiento en `/contacto.php`, sus assets ni configuración privada. Las compilaciones locales y las previews no cargan conversión publicitaria. Solo la publicación de producción habilita explícitamente la conversión de IA `AW-18410180479/mBarCPixx_EcEP-e1MpE`; el script rechaza destinos inválidos y la conversión de rendimiento. `INNURE_TARGET=automation` conserva el formato del paquete antiguo para recuperación; no es el destino habitual.
 
 La exportación comprueba los metadatos por ruta y genera robots, sitemap y un 404 de innure con estado HTTP 404. El sitemap raíz incluye las páginas indexables y `/rendimiento/`. `server/home.htaccess` conserva el dominio preferido; `server/automatizacion.htaccess` redirige únicamente las páginas antiguas. La compilación rechaza archivos ocultos imprevistos y archivos reservados al otro publicador.
 
@@ -74,7 +74,7 @@ El HTML estático mantiene los campos y el botón desactivados hasta que React i
 
 ## Medición y primera prueba comercial
 
-La portada general no tiene conversión publicitaria activa. La integración anterior de «Contacto · Automatización» se conserva en código y pruebas para una futura configuración explícita; nunca se utiliza la conversión de rendimiento. Publicar no activa campañas ni cambia sus presupuestos u objetivos.
+La medición de «Contacto · Automatización» se incorpora únicamente al artefacto de producción mediante `INNURE_MEASUREMENT_ENV=production` y el destino público autorizado `AW-18410180479/mBarCPixx_EcEP-e1MpE`. Las previews y cualquier compilación sin esa señal quedan sin etiqueta. Nunca se utiliza la conversión de rendimiento. Publicar no activa campañas ni cambia sus presupuestos u objetivos.
 
 `public/lead-measurement.js`:
 
@@ -82,6 +82,7 @@ La portada general no tiene conversión publicitaria activa. La integración ant
 - permite rechazo y retirada desde el pie;
 - no comparte el contenido del formulario;
 - atribución de campaña solo consentida, acotada a sesión/24 horas;
+- usa el prefijo propio `innure_auto` y cookies de esta línea en `/`, separadas de rendimiento; al retirar el consentimiento elimina únicamente esas cookies y, si aún es visible, la ruta heredada `/automatizacion/`;
 - deduplica por referencia del servidor y utiliza una conversión por clic;
 - se desactiva fuera de `https://www.innure.es`.
 

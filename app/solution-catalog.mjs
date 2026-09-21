@@ -112,6 +112,207 @@ const gestoriasSolution = {
 
 export const solutionCatalog = [
   {
+    slug: 'consultoria-ia-empresas',
+    group: 'IA y automatización',
+    navTitle: 'Consultoría de IA para empresas',
+    title: 'Consultoría de IA para empresas',
+    description:
+      'Cómo identificar un proceso concreto donde la IA pueda ayudar, probarlo con datos y revisión humana, y decidir si merece implantarse.',
+    eyebrow: 'IA y automatización',
+    headline: 'Consultoría de IA para el trabajo real de tu empresa',
+    intro:
+      'Te ayudamos a identificar dónde aplicar IA y a ponerla en marcha: clasificar solicitudes, consultar documentación o preparar borradores. Empezamos por una tarea concreta, aprovechamos tus herramientas y probamos el resultado con tu equipo antes de ampliar.',
+    audience:
+      'Dirección y responsables de operaciones que quieren valorar IA en un proceso de empresa, con un caso acotado antes de cambiar herramientas o extender su uso al equipo.',
+    problem: {
+      title: 'Introducir IA sin saber qué tarea debe mejorar',
+      text: 'Cuando se parte de una herramienta de moda en lugar de un proceso, aparecen pruebas dispersas, datos sin criterio y resultados difíciles de revisar. El equipo pierde tiempo comparando respuestas sin una decisión clara sobre qué usar, quién lo valida y cuándo detenerse.',
+    },
+    decisions: [
+      {
+        title: 'Diagnosticar el proceso antes de elegir IA',
+        text: 'Se observa cómo se hace hoy la tarea, qué entradas necesita, qué resultado entrega y dónde se producen esperas o repeticiones. Si el problema es un dato incompleto, un permiso o una regla sin definir, se resuelve primero esa base.',
+      },
+      {
+        title: 'Aprovechar las herramientas existentes cuando encajan',
+        text: 'Antes de añadir un proveedor, se revisan las funciones ya disponibles en las herramientas del equipo y sus condiciones reales. Si una capacidad nativa cubre el caso, se prueba con el mismo control que una integración nueva.',
+      },
+      {
+        title: 'Definir una revisión humana y un criterio de parada',
+        text: 'La persona responsable sabe qué comprobar antes de usar una salida y qué incidencias deben detener el piloto. La IA puede preparar una propuesta; no autoriza pagos, contratos, respuestas vinculantes ni cambios sobre datos sin una validación acordada.',
+      },
+    ],
+    workflow: [
+      {
+        title: 'Mapear una tarea repetitiva y su resultado esperado',
+        text: 'Se documenta un único proceso: quién inicia la tarea, qué información consulta, qué entrega y cuánto trabajo de revisión exige. Se descartan casos que no tengan un resultado que alguien pueda contrastar.',
+      },
+      {
+        title: 'Preparar un piloto con datos y acceso controlados',
+        text: 'Se seleccionan ejemplos permitidos, se limitan los accesos y se define qué información no entra en el piloto. Si intervienen herramientas distintas, se comprueba la integración documentada, los permisos y el propietario de cada dato.',
+      },
+      {
+        title: 'Medir y decidir con una revisión del equipo',
+        text: 'El equipo compara las salidas con el proceso actual, registra errores y decide si ajustar, mantener manual o implantar. Un piloto sirve para aprender sobre ese caso; no anticipa resultados para otros procesos ni un retorno económico.',
+      },
+    ],
+    example: {
+      title: 'Preparar un borrador para revisar',
+      text: 'Ejemplo hipotético: un equipo recibe solicitudes repetidas y tarda en identificar la documentación que debe pedir. Durante un piloto, la IA prepara un borrador de lista a partir de una guía interna aprobada. Una persona comprueba cada borrador antes de enviarlo y anota los errores para decidir si el proceso es suficientemente fiable.',
+    },
+    requirements: [
+      {
+        title: 'Proceso, responsable y resultado definidos',
+        text: 'El piloto necesita una tarea concreta, una persona que responda por ella y un resultado que se pueda revisar. Sin esos tres elementos, no hay una base útil para evaluar la IA.',
+      },
+      {
+        title: 'Datos permitidos y herramientas revisadas',
+        text: 'Se aclara qué datos puede usar cada herramienta, dónde se almacenan, qué permisos requiere el equipo y qué información queda fuera. Una cuenta, plan o integración se valida en el entorno de la empresa antes de depender de ella.',
+      },
+      {
+        title: 'Criterios de calidad y control humano',
+        text: 'Antes de probar se acuerda qué debe acertar la salida, quién la revisa y cómo se registran fallos. Las decisiones con impacto en clientes, personal, pagos o compromisos requieren el control que corresponda al caso.',
+      },
+    ],
+    limits:
+      'No vendemos una IA que decida por la empresa ni prometemos ahorro, retorno o precisión universal. La compatibilidad, los permisos, el tratamiento de datos, los costes y las obligaciones aplicables se comprueban en cada implantación. Un piloto acotado no equivale a cumplimiento normativo ni a una autorización para extender el uso a otros procesos.',
+    firstStep:
+      'Elegir una tarea, revisar sus datos y definir qué resultado debe mejorar. Con esa base acordamos el alcance y el presupuesto del piloto.',
+    questions: [
+      '¿Qué tarea concreta queréis revisar y cómo se resuelve hoy de principio a fin?',
+      '¿Qué herramientas y datos intervienen, y qué información no debería entrar en un piloto?',
+      '¿Quién validaría el resultado y qué fallo obligaría a detener o replantear la prueba?',
+    ],
+    faqs: [
+      {
+        question: '¿Podéis implantar IA en cualquier departamento?',
+        answer:
+          'Primero hay que entender el proceso, los datos, los accesos y el impacto de un error. Si no existe un caso acotado y revisable, no tiene sentido empezar una implantación por la herramienta.',
+      },
+      {
+        question: '¿La IA tomará decisiones o enviará respuestas por sí sola?',
+        answer:
+          'No se presupone. Puede preparar borradores o clasificaciones dentro de un flujo definido, pero la revisión humana y los límites de actuación se acuerdan antes. No sustituye la responsabilidad de quien decide en la empresa.',
+      },
+    ],
+    related: ['automatizacion-procesos', 'aplicaciones-a-medida', 'seguimiento-presupuestos'],
+    evidence: {
+      href: '/proyectos/forja/',
+      label: 'Ver FORJA',
+      text: 'FORJA es un producto propio que incorpora un asistente de IA dentro de una aplicación. No es un caso de empresa cliente ni demuestra que el enfoque, los datos o los resultados se puedan trasladar a otro proceso.',
+    },
+    sources: [
+      {
+        title: 'AEPD: innovación y tecnología',
+        url: 'https://www.aepd.es/areas-de-actuacion/innovacion-y-tecnologia',
+        note: 'La AEPD reúne guías y notas sobre IA y protección de datos. Sirve para recordar que los datos y riesgos deben revisarse en cada caso; no sustituye el análisis jurídico o técnico de una implantación concreta.',
+      },
+      {
+        title: 'NIST: AI Risk Management Framework',
+        url: 'https://www.nist.gov/itl/ai-risk-management-framework',
+        note: 'Marco voluntario para gestionar riesgos de sistemas de IA. Orienta la necesidad de definir y revisar el caso de uso, sin certificar una solución ni imponer un estándar a la empresa.',
+      },
+    ],
+    ctaLabel: 'Revisar un caso de IA',
+    alternatives: [],
+    reviewedOn,
+  },
+  {
+    slug: 'automatizacion-procesos',
+    group: 'IA y automatización',
+    navTitle: 'Automatización de procesos',
+    title: 'Automatización de procesos administrativos',
+    description:
+      'Cómo ordenar y automatizar un proceso administrativo con las herramientas existentes, integraciones revisadas y control humano sobre las excepciones.',
+    eyebrow: 'IA y automatización',
+    headline: 'Automatización de procesos para quitar trabajo repetitivo',
+    intro:
+      'Un proceso administrativo suele atascarse al copiar datos entre correos, hojas y programas, o al perseguir tareas que nadie ve. Antes de automatizar, identificamos el recorrido actual, la fuente de cada dato y las excepciones que el equipo debe seguir resolviendo.',
+    audience:
+      'Empresas con tareas administrativas repetitivas entre herramientas, que necesitan ordenar responsables y estados antes de conectar sistemas o crear una automatización.',
+    problem: {
+      title: 'Copiar, comprobar y reclamar la misma información una y otra vez',
+      text: 'Un alta, una solicitud o un documento puede pasar por correo, una hoja y varios programas. Si cada paso se transcribe a mano, nadie sabe qué sistema manda, dónde falta información o quién debe revisar una incidencia antes de continuar.',
+    },
+    decisions: [
+      {
+        title: 'Describir el proceso real y sus excepciones',
+        text: 'Se revisa qué activa el trabajo, qué datos se leen o escriben, quién decide cada cambio y qué ocurre cuando falta información. Automatizar solo el camino ideal deja al equipo sin respuesta ante los casos normales que se salen de él.',
+      },
+      {
+        title: 'Configurar primero las funciones existentes',
+        text: 'Antes de comprar o desarrollar, se comprueba si el software actual ya permite formularios, estados, tareas, avisos o exportaciones. Una configuración clara puede resolver más que añadir otra capa de herramientas.',
+      },
+      {
+        title: 'Conectar datos solo con acceso y trazabilidad suficientes',
+        text: 'Una integración se plantea cuando cada sistema ofrece una vía documentada, permisos adecuados y una forma de revisar qué ha ocurrido. Si no se puede comprobar el cambio o recuperar una incidencia, se mantiene un paso manual controlado.',
+      },
+    ],
+    workflow: [
+      {
+        title: 'Dibujar el recorrido actual',
+        text: 'Se sigue una tarea desde que entra hasta que se cierra: datos, responsables, herramientas, esperas y excepciones. El objetivo es encontrar una fuente de referencia para cada estado, no automatizar sobre copias contradictorias.',
+      },
+      {
+        title: 'Probar una mejora en un tramo acotado',
+        text: 'Se selecciona una parte repetitiva, como crear una tarea o trasladar un estado, y se prueba con responsables definidos. Se documentan los permisos, los datos que se mueven y el modo de corregir errores.',
+      },
+      {
+        title: 'Revisar incidencias y mantener el control humano',
+        text: 'Las excepciones, duplicados y cambios inesperados llegan a una cola visible para que alguien los resuelva. El equipo valida que el proceso funciona antes de ampliar el alcance a más pasos o departamentos.',
+      },
+    ],
+    example: {
+      title: 'Una solicitud interna que llega por correo',
+      text: 'Ejemplo hipotético: un equipo recibe solicitudes de compra por correo y después copia los datos a una hoja y a su herramienta de gestión. El piloto crea una tarea con los campos disponibles y marca las solicitudes incompletas para revisión. La persona responsable valida el pedido y corrige los casos que no encajan antes de continuar.',
+    },
+    requirements: [
+      {
+        title: 'Fuente de referencia y estados claros',
+        text: 'Debe quedar claro qué sistema guarda el estado final de la tarea y qué significa cada paso. Sin una fuente de referencia, la integración puede multiplicar duplicados y confusión.',
+      },
+      {
+        title: 'Accesos, datos e integraciones comprobados',
+        text: 'Se validan la vía de conexión, el plan contratado, los permisos y los datos realmente necesarios. Una integración disponible en la documentación no garantiza que esté habilitada en la cuenta de la empresa.',
+      },
+      {
+        title: 'Responsable de excepciones y mantenimiento',
+        text: 'Alguien debe revisar los casos que el flujo no puede resolver, cambiar reglas cuando varía el proceso y saber cómo pausar o corregir la automatización. Esa responsabilidad forma parte de la implantación.',
+      },
+    ],
+    limits:
+      'Automatizar no sustituye la decisión administrativa, fiscal, comercial o contractual de la empresa. No prometemos eliminar todo el trabajo manual ni cuantificamos ahorro o retorno antes de medir el proceso real. La compatibilidad, los permisos, los costes y el tratamiento de datos se confirman con las herramientas y condiciones de cada negocio.',
+    firstStep:
+      'Revisar una tarea con quien la realiza, identificar qué se copia entre herramientas y acordar una primera mejora con alcance y presupuesto.',
+    questions: [
+      '¿Qué tarea administrativa se repite y entre qué herramientas se mueve hoy la información?',
+      '¿Cuál es la fuente de referencia de cada estado y quién resuelve un dato incompleto o duplicado?',
+      '¿Qué permisos, datos y cambios tendría que poder revisar el equipo antes de automatizar?',
+    ],
+    faqs: [
+      {
+        question: '¿Hay que cambiar todas nuestras herramientas?',
+        answer:
+          'No. Primero se revisa qué permite cada herramienta actual y si existe una configuración o conexión razonable. Cambiar software solo se plantea cuando el proceso y sus límites lo justifican.',
+      },
+      {
+        question: '¿La automatización seguirá funcionando si un caso es distinto?',
+        answer:
+          'Los casos que se salen de las reglas deben llegar a una persona para revisión. Definimos cómo detectar, pausar y corregir incidencias antes de ampliar el proceso, en lugar de ocultarlas detrás de una automatización.',
+      },
+    ],
+    related: ['consultoria-ia-empresas', 'reservas-facturacion', 'aplicaciones-a-medida'],
+    evidence: {
+      href: '/proyectos/automatizacion-musical/',
+      label: 'Ver automatización musical',
+      text: 'Muestra herramientas propias que preparan archivos por lotes, revisan resultados y conservan los originales. Es un flujo musical distinto y no demuestra integración ni resultados en procesos administrativos de clientes.',
+    },
+    sources: [],
+    ctaLabel: 'Revisar un proceso administrativo',
+    alternatives: [],
+    reviewedOn,
+  },
+  {
     slug: 'fisioterapia',
     group: 'Sectores',
     navTitle: 'Clínicas de fisioterapia',
