@@ -946,6 +946,63 @@ export const solutionCatalog = [
   },
 ];
 
+solutionCatalog.push({
+  slug: 'instalaciones-mantenimiento',
+  group: 'Sectores',
+  navTitle: 'Instalaciones y mantenimiento',
+  title: 'Presupuestos y partes de trabajo para empresas de instalaciones',
+  description: 'Conecta solicitudes, presupuestos, partes de trabajo y facturación en tu empresa de instalaciones o mantenimiento. Empezamos por un proceso concreto.',
+  eyebrow: 'Instalaciones y mantenimiento · Madrid y trabajo en remoto',
+  headline: 'Del presupuesto al trabajo terminado. Sin perder el hilo.',
+  intro: 'Una solicitud en el correo, el presupuesto en una hoja y el parte en el móvil del técnico. Te ayudamos a conectar esos pasos para saber qué está pendiente, quién se encarga y qué falta para facturar.',
+  audience: 'Empresas de instalaciones, reformas y mantenimiento con trabajo de oficina y técnicos en campo. Especialmente cuando la misma información se copia varias veces.',
+  problem: {
+    title: 'El trabajo está hecho. La información todavía no ha llegado.',
+    text: 'Administración persigue el parte, el técnico busca el presupuesto y el cliente pregunta cuándo vuelve alguien. No falta otra pantalla: falta un recorrido compartido entre la solicitud, la visita y el cierre del trabajo.',
+  },
+  decisions: [
+    { title: 'Partimos de tus programas', text: 'Primero comprobamos si vuestro programa ya permite gestionar avisos, partes y facturas. Configurarlo puede ser suficiente; conectar o desarrollar solo tiene sentido si queda una necesidad sin resolver.' },
+    { title: 'Un primer flujo, no toda la empresa', text: 'Elegimos juntos el atasco inicial: seguimiento de presupuestos, recogida de partes o preparación de la facturación. La propuesta fija el alcance y cómo comprobar si mejora el trabajo.' },
+    { title: 'IA solo cuando aporta', text: 'Puede ayudar a preparar un borrador desde documentos o notas. Estados, importes y autorizaciones necesitan reglas claras y revisión, no respuestas inventadas.' },
+  ],
+  workflow: [
+    { title: 'Solicitud y presupuesto', text: 'La petición queda asociada a un cliente, un responsable y una próxima acción. El equipo revisa el presupuesto antes de enviarlo.' },
+    { title: 'Visita y parte', text: 'El técnico consulta lo acordado y registra trabajo, materiales y pendientes. Oficina revisa la información antes de dar el trabajo por cerrado.' },
+    { title: 'Revisión y facturación', text: 'Los datos acordados se preparan para el programa de facturación. Una persona comprueba importes y documentación antes de emitir la factura.' },
+  ],
+  example: {
+    title: 'Una reparación, de la llamada al parte revisado',
+    text: 'Ejemplo hipotético: una empresa de mantenimiento recibe un aviso, prepara el presupuesto y asigna la visita. Al terminar, el técnico completa el parte desde el móvil. Administración ve lo que falta, revisa los materiales y prepara la facturación. Es un flujo propuesto, no una implantación realizada por innure en este sector.',
+  },
+  requirements: [
+    { title: 'Qué información necesita cada persona', text: 'Acordamos los campos mínimos del aviso, el presupuesto y el parte, quién puede verlos y quién valida cada cambio.' },
+    { title: 'Qué permiten las herramientas', text: 'Revisamos plan, permisos e interfaces documentadas. No prometemos conectar cualquier programa ni reemplazar vuestro sistema de facturación.' },
+    { title: 'Cómo mediremos la prueba', text: 'Antes de construir registramos el tiempo de la tarea, las veces que se copia un dato o los partes incompletos. Comparamos con la prueba; no prometemos un porcentaje de ahorro por adelantado.' },
+  ],
+  limits: 'La propuesta se valida con vuestro proceso. No incluye asesoramiento fiscal, emisión autónoma de facturas ni certificación de instalaciones. Las decisiones técnicas, los importes y la conformidad del trabajo siguen en manos de las personas responsables. Integraciones, costes de terceros y mantenimiento se acuerdan antes de empezar.',
+  firstStep: 'Una primera conversación gratuita sobre una tarea y los programas que usáis. Si encaja, os proponemos un diagnóstico o una primera implantación acotada, con presupuesto. El diagnóstico detallado se presupuesta por separado.',
+  questions: [
+    '¿Dónde se pierde más tiempo: presupuestos, partes de trabajo o preparar las facturas?',
+    '¿Qué programas utiliza oficina y cómo envían los técnicos la información?',
+    '¿Cuántas veces se repite la tarea y quién podría comprobar el resultado de una prueba?',
+  ],
+  faqs: [
+    { question: '¿Tenemos que cambiar nuestro programa de facturación?', answer: 'No es el punto de partida. Comprobamos qué resuelve ya y si admite una conexión documentada. Si no, puede ser más útil mejorar la recogida y revisión de datos antes de llegar a facturación.' },
+    { question: '¿Habéis implantado este recorrido en otra instaladora?', answer: 'Esta página plantea una solución que estudiar, no un caso de cliente del sector. Puedes revisar nuestros proyectos propios para conocer cómo trabajamos y qué hemos desarrollado.' },
+    { question: '¿Qué recibiríamos en el primer proyecto?', answer: 'Lo fija la propuesta: un flujo delimitado, las comprobaciones de aceptación, los accesos acordados y la documentación y formación necesarias para ese alcance. Se separan el coste inicial, las herramientas de terceros y el soporte posterior.' },
+  ],
+  related: ['seguimiento-presupuestos', 'reservas-facturacion', 'aplicaciones-a-medida'],
+  evidence: {
+    href: '/proyectos/gestor-certificados/',
+    label: 'Conoce una herramienta propia de gestión',
+    text: 'Gesticert reúne búsquedas, fichas y caducidades en una aplicación de Windows en validación privada. Permite ver nuestro trabajo de desarrollo; no demuestra una implantación en instalaciones ni compatibilidad con tu software.',
+  },
+  sources: [],
+  ctaLabel: 'Revisar una tarea de mi empresa',
+  alternatives: [],
+  reviewedOn,
+});
+
 export const solutionSlugs = solutionCatalog.map((solution) => solution.slug);
 
 export const getSolution = (slug) =>

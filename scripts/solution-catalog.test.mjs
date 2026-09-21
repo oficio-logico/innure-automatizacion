@@ -13,6 +13,7 @@ const EXPECTED_SLUGS = [
   'reservas-facturacion',
   'seguimiento-presupuestos',
   'aplicaciones-a-medida',
+  'instalaciones-mantenimiento',
 ];
 
 const REQUIRED_KEYS = [
@@ -49,7 +50,7 @@ const deepText = (value) => {
   return '';
 };
 
-test('la colección expone los nueve slugs esperados, únicos y derivados', () => {
+test('la colección expone los slugs esperados, únicos y derivados', () => {
   assert.deepEqual(
     solutionCatalog.map((solution) => solution.slug),
     EXPECTED_SLUGS,
@@ -161,4 +162,11 @@ test('el ejemplo se marca explícitamente como hipotético en el texto', () => {
 test('la marca innure no aparece en mayúsculas', () => {
   const text = solutionCatalog.map(deepText).join(' ');
   assert.ok(!/\bInnure\b|\bINNURE\b/.test(text));
+});
+
+test('la propuesta para instalaciones no se presenta como una implantación realizada', () => {
+  const solution = getSolution('instalaciones-mantenimiento');
+  assert.match(solution.example.text, /flujo propuesto, no una implantación realizada/);
+  assert.match(solution.firstStep, /diagnóstico detallado se presupuesta por separado/);
+  assert.match(solution.limits, /emisión autónoma de facturas/);
 });

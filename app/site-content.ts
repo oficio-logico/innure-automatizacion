@@ -200,20 +200,20 @@ export const siteContent = {
     primaryCta: 'Cuéntanos tu caso',
     secondaryCta: 'Ver un ejemplo',
     support:
-      'Primera conversación gratuita para entender el caso y acordar los siguientes pasos.',
+      'Primera conversación gratuita para entender el caso y acordar los siguientes pasos. No sustituye un diagnóstico detallado.',
   },
 
   landing: {
     review: {
       eyebrow: 'Primera conversación gratuita · Sin compromiso',
       title: 'Empecemos por entender tu negocio.',
-      description: 'Cuéntanos cómo trabajáis y qué os gustaría mejorar. Revisamos el contexto con vosotros, sin que tengas que saber de tecnología ni traer la solución pensada.',
+      description: 'Cuéntanos cómo trabajáis y qué os gustaría mejorar. Revisamos el contexto con vosotros, sin que tengas que saber de tecnología ni traer la solución pensada. Esta conversación sirve para situar el caso; el diagnóstico detallado se acuerda aparte.',
       outcomes: [
-        'Qué oportunidades de mejora vemos en tu caso.',
-        'Qué herramientas, datos y procesos habría que revisar.',
+        'Qué necesidad conviene aclarar primero.',
+        'Qué herramientas, datos y procesos habría que revisar después.',
         'Cuál sería el siguiente paso, si tiene sentido seguir.',
       ],
-      next: 'Nos ponemos en contacto para conocer el caso y acordar esa primera conversación. Cualquier propuesta se detalla y se presupuesta después; escribirnos no te compromete a contratar.',
+      next: 'Nos ponemos en contacto para conocer el caso y acordar esa primera conversación. El alcance, el presupuesto y cualquier plazo se concretan solo después, en una propuesta; escribirnos no te compromete a contratar.',
     },
     benefits: ['Aplicaciones a medida', 'Procesos, datos y automatización', 'Captación de clientes'],
     services: [
@@ -280,19 +280,19 @@ export const siteContent = {
       },
     ],
     method: [
-      { number: '01', title: 'Diagnóstico y plan de acción', description: 'Revisamos cómo trabajáis, detectamos oportunidades de mejora y acordamos qué merece la pena abordar y en qué orden.' },
-      { number: '02', title: 'Implementación de soluciones', description: 'Construimos o conectamos lo acordado, con un alcance, un presupuesto y unas comprobaciones definidas antes de empezar.' },
-      { number: '03', title: 'Acompañamiento y mejora', description: 'Mantenemos, medimos y mejoramos lo entregado con la dedicación acordada para cada periodo.' },
+      { number: '01', title: 'Diagnóstico', description: 'Entender dónde se atasca el trabajo y decidir por dónde empezar.', deliverables: ['Mapa del proceso actual', 'Oportunidades ordenadas por prioridad', 'Alcance propuesto para el primer proyecto'] },
+      { number: '02', title: 'Primer proyecto acotado', description: 'Resolver una tarea concreta y comprobar juntos que funciona.', deliverables: ['Un flujo o herramienta funcional', 'Pruebas de aceptación acordadas', 'Formación para empezar a utilizarlo'] },
+      { number: '03', title: 'Mantenimiento acordado', description: 'Cuidar lo entregado con una dedicación definida para cada periodo.', deliverables: ['Supervisión e incidencias según el plan', 'Pequeñas mejoras dentro del alcance', 'Ampliaciones presupuestadas aparte'] },
     ],
     faqs: [
       { question: '¿También trabajáis con empresas pequeñas?', answer: 'Sí. Trabajamos con negocios pequeños que necesitan resolver algo concreto: tareas que se repiten, herramientas desconectadas, una gestión que se ha quedado pequeña o clientes que no llegan.' },
       { question: '¿Tengo que saber de tecnología o tener la solución pensada?', answer: 'No. Cuéntanos qué os hace perder tiempo, qué os falta o qué os gustaría mejorar. Estudiamos por dónde puede venir la mejora —procesos, aplicaciones, automatización o captación— y te explicamos la propuesta en un lenguaje claro.' },
       { question: '¿Hay que cambiar los programas que ya usamos?', answer: 'Primero estudiamos cómo conectar lo que ya utilizáis. Si alguna herramienta no permite integrarse o el cambio no compensa, te lo explicamos antes de presupuestar.' },
-      { question: '¿Cuánto cuesta y cuánto tarda?', answer: 'Depende del problema y de las herramientas que haya que conectar o construir. Tras la primera conversación te proponemos un alcance, un presupuesto y un plazo antes de empezar.' },
-      { question: '¿Qué recibimos al terminar?', answer: 'La propuesta detalla la solución que se entrega, los accesos, la documentación y la formación de uso que incluye el proyecto. También dejamos por escrito la propiedad del desarrollo y qué depende de licencias o servicios de terceros.' },
+      { question: '¿Cuánto cuesta y cuánto tarda?', answer: 'No fijamos importes ni plazos sin conocer el problema, las herramientas y las comprobaciones necesarias. Si tiene sentido avanzar, la propuesta concreta alcance, presupuesto y plazo antes de empezar.' },
+      { question: '¿Qué recibimos al terminar?', answer: 'La propuesta concreta qué documentación, formación y accesos incluye el proyecto. También deja por escrito la propiedad del desarrollo, la continuidad acordada y qué depende de licencias o servicios de terceros.' },
       { question: '¿Habrá costes mensuales?', answer: 'Puede haber costes de herramientas, alojamiento, consumo de IA o mantenimiento. Antes de empezar los separamos del coste de implantación y explicamos cuáles son necesarios y cuáles opcionales. No prometemos una solución sin cuotas si depende de servicios que las cobran.' },
       { question: '¿Qué pasa con los datos y las decisiones importantes?', answer: 'Antes de construir acordamos qué datos necesita la solución, dónde se tratarán y quién tendrá acceso. Dejamos revisión humana en las tareas que requieren criterio o autorización.' },
-      { question: '¿Y después de ponerlo en marcha?', answer: 'Te enseñamos a usar la solución y dejamos acordadas la documentación, el mantenimiento y las posibles mejoras. Si la primera prueba no compensa, revisamos el enfoque antes de ampliar el proyecto.' },
+      { question: '¿Y después de ponerlo en marcha?', answer: 'Te enseñamos a usar la solución y dejamos acordadas la documentación, el mantenimiento y las posibles mejoras. Las incidencias y mejoras pequeñas se atienden según la dedicación contratada; cualquier ampliación se valora aparte.' },
     ],
   },
 
