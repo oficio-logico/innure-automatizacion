@@ -4,7 +4,7 @@ import { createContext, FormEvent, ReactNode, useContext, useRef, useState, useS
 import { siteContent, withBasePath } from './site-content';
 import { Icon } from './icons';
 import { Turnstile } from './turnstile';
-import { contactDetailLimit, prepareContactProcess, resolveContactNeed } from './contact-intent';
+import { contactDetailLimit, prepareContactProcess, resolveContactNeed, type ContactSource } from './contact-intent';
 
 declare global {
   interface Window { innureAutomationAttribution?: () => Record<string, string> }
@@ -132,7 +132,7 @@ type FormStatus =
   | { kind: 'error'; message: string }
   | { kind: 'local'; message: string };
 
-export function ContactForm() {
+export function ContactForm({ source }: { source?: ContactSource } = {}) {
   // The static document stays inert until React can handle submission safely.
   const isHydrated = useSyncExternalStore(neverChanges, () => true, () => false);
   const { needId, selectNeed } = useContext(ContactIntentContext);
@@ -158,13 +158,13 @@ export function ContactForm() {
       processInput.current?.focus();
       return;
     }
-    if (detail.length > contactDetailLimit(selectedNeed)) {
-      setStatus({ kind: 'error', message: `Acorta el detalle a ${contactDetailLimit(selectedNeed)} caracteres para incluir la tarea elegida. Tu texto se ha conservado.` });
+    if (detail.length > contactDetailLimit(selectedNeed, source)) {
+      setStatus({ kind: 'error', message: `Acorta el detalle a ${contactDetailLimit(selectedNeed, source)} caracteres para incluir el contexto de la consulta. Tu texto se ha conservado.` });
       processInput.current?.focus();
       return;
     }
     // The optional context travels only with the consultation, never with analytics.
-    data.set('process', prepareContactProcess(detail, selectedNeed));
+    data.set('process', prepareContactProcess(detail, selectedNeed, source));
 
     if (!siteContent.contact.formEndpoint) {
       // Sin servicio de recepción todavía. Si hay un correo publicado, no
@@ -258,6 +258,7 @@ export function ContactForm() {
   return (
     <form className="contact-form" method="post" action={siteContent.contact.formEndpoint || undefined} onSubmit={handleSubmit} noValidate={false} aria-labelledby="contact-form-title">
       <h3 className="form-heading" id="contact-form-title" tabIndex={-1}>Cuéntanos por dónde empezar</h3>
+      {source ? <p className="solution-form-context">Consulta sobre <strong>{source.label}</strong>. Incluiremos la referencia a esta página en tu mensaje.</p> : null}
       <noscript><p className="local-notice">El formulario necesita JavaScript para enviar tu consulta de forma segura. Puedes escribirnos a <a href={'mailto:' + siteContent.contact.emailHref}>{siteContent.contact.email}</a>.</p></noscript>
       <fieldset className="contact-fields" disabled={!isHydrated} aria-labelledby="contact-form-title">
       <div className="form-interest" hidden={!selectedNeed}>
@@ -304,8 +305,8 @@ export function ContactForm() {
           name="process"
           rows={4}
           minLength={20}
-          maxLength={contactDetailLimit(selectedNeed)}
-          placeholder={selectedNeed?.contactPrompt || 'Cuéntanos a qué se dedica tu negocio, qué os gustaría mejorar y qué herramientas utilizáis.'}
+          maxLength={contactDetailLimit(selectedNeed, source)}
+          placeholder={selectedNeed?.contactPrompt || source?.prompt || 'Cuéntanos a qué se dedica tu negocio, qué os gustaría mejorar y qué herramientas utilizáis.'}
           required
           aria-describedby="process-help"
         />

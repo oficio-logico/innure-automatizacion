@@ -138,7 +138,7 @@ export const siteContent = {
     // su URL llega por NEXT_PUBLIC_CONTACT_ENDPOINT. No asignar otra sin adaptarla.
     formEndpoint: process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || null,
     turnstileSiteKey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || null,
-    externalFormUrl: 'https://www.innure.es/rendimiento/#contacto',
+    externalFormUrl: `${DOMINIO}#contacto`,
     serviceId: 'automatizacion-ia',
   },
 

@@ -4,6 +4,7 @@ import { Icon } from './icons';
 import { Portfolio } from './portfolio';
 import { PageExperience } from './page-experience';
 import { siteContent, withBasePath } from './site-content';
+import { SolutionLinks } from './solution-views';
 
 export const dynamic = 'force-static';
 
@@ -91,6 +92,12 @@ export default function Home() {
             <ProcessExamples />
           </div>
         </section>
+
+        <section className="home-solutions" id="soluciones" aria-labelledby="solutions-title"><div className="shell">
+          <div className="section-heading"><div><p className="eyebrow">Por dónde empezar</p><h2 id="solutions-title">Soluciones para<br />problemas concretos.</h2></div><p>Explora qué podemos revisar en tu negocio, qué permiten las herramientas y qué habría que comprobar antes de empezar.</p></div>
+          <SolutionLinks compact />
+          <a className="text-link" href={withBasePath('/soluciones/')}>Ver todas las soluciones <Icon name="arrow" /></a>
+        </div></section>
 
         <Portfolio />
 
