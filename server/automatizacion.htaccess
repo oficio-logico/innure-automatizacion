@@ -1,3 +1,6 @@
 # This file is deployed only inside public/automatizacion/.
-# A local ErrorDocument preserves the original HTTP 404 status.
-ErrorDocument 404 /automatizacion/404.html
+# Trasladar solo las páginas HTML; conservar el receptor y los recursos antiguos.
+RewriteEngine On
+RewriteRule ^(?:index\.html)?$ / [R=301,L]
+RewriteRule ^(proyectos(?:/.*)?|aviso-legal/?|privacidad/?)$ /$1 [R=301,L]
+ErrorDocument 404 /404.html

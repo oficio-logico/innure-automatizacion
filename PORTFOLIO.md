@@ -1,5 +1,15 @@
 # Portfolio — revisión del 19 de septiembre de 2026
 
+Actualización local del 21/09/2026: perfiles de Sergio y Santiago adaptados al
+posicionamiento aprobado de tecnología/operaciones y producto/crecimiento.
+Resumen, cuatro especialidades y trayectoria desplegable. Se conservan las fuentes
+de experiencia y los proyectos; esta actualización aún no está publicada.
+
+Segunda revisión local del 21/09/2026: Sergio aporta ocho años de trayectoria en
+NTT DATA; se incorpora ese periodo con el foco de ingeniería de rendimiento que
+ya constaba en sus antecedentes. Santiago aparece expresamente como fundador de
+Collapp, según la indicación transmitida por Sergio. La marca se escribe «innure».
+
 ## Edición
 
 - Catálogo y textos: `app/project-catalog.ts`.

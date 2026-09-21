@@ -4,7 +4,7 @@ import { siteContent, withBasePath } from './site-content';
 
 export const metadata: Metadata = {
   title: 'Página no encontrada',
-  description: 'Vuelve a los servicios y proyectos de innure Automatización o cuéntanos qué necesitas.',
+  description: 'Vuelve a los servicios y proyectos de innure o cuéntanos qué necesita tu negocio.',
   robots: { index: false, follow: true },
   alternates: { canonical: null }, openGraph: null, twitter: null,
 };
@@ -15,7 +15,7 @@ export default function NotFound() {
     <header className="site-header project-header"><div className="shell header-inner">
       <a className="wordmark" href={withBasePath('/')} aria-label="innure, volver al inicio">
         <img className="brand-logo" src={withBasePath('/images/innure-logo-white.png')} alt="innure" width="112" height="28" />
-        <small>Automatización e IA</small>
+        <small>{siteContent.brand.statusLabel}</small>
       </a>
     </div></header>
     <main className="shell not-found-page" id="contenido" tabIndex={-1}>
@@ -23,7 +23,8 @@ export default function NotFound() {
       <h1>Por aquí no era.</h1>
       <p className="project-lede">Puede que el enlace haya cambiado o que la dirección no esté bien escrita. Te ayudamos a encontrar lo que buscabas.</p>
       <nav className="hero-actions" aria-label="Continuar en innure">
-        <a className="button" href={withBasePath('/')}>Volver a Automatización</a>
+        <a className="button" href={withBasePath('/')}>Volver a innure</a>
+        <a className="text-link" href={withBasePath('/#que-hacemos')}>Qué hacemos</a>
         <a className="text-link" href={withBasePath('/#proyectos')}>Ver proyectos</a>
         <a className="text-link" href={withBasePath('/#contacto')}>Cuéntanos tu caso</a>
       </nav>

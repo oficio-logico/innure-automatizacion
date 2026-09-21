@@ -48,10 +48,12 @@ test('añadir un perfil mínimo no publica por sí solo la vista de revisión', 
 
 test('ambos aparecen como fundadores con trayectoria resumida y pruebas de su trabajo', async () => {
   for (const founder of founders) {
-    assert.match(founder.role, /^Fundador · /);
+    assert.match(founder.role, /^Cofundador · /);
     assert.ok(founder.biography.length < 200);
-    assert.equal(founder.highlights.length, 2);
-    assert.equal(founder.skills.length, 6);
+    assert.ok(founder.career.trim().length > founder.biography.length);
+    assert.doesNotMatch(founder.career, /PENDING/);
+    assert.equal(founder.highlights.length, 4);
+    assert.equal(founder.skills.length, 4);
     assert.equal(new Set(founder.skills).size, founder.skills.length);
     for (const skill of founder.skills) assert.ok(skill.length > 3 && skill.length < 40);
     for (const item of founder.highlights) assert.ok(item.titulo && item.texto);
@@ -60,15 +62,15 @@ test('ambos aparecen como fundadores con trayectoria resumida y pruebas de su tr
   }
 });
 
-test('el perfil de Sergio combina desarrollo full stack y gestión interna de la empresa', () => {
+test('el perfil de Sergio conserva la evidencia técnica y delimita la experiencia de gestión', () => {
   const sergio = founders.find((founder) => founder.name === 'Sergio Herencias Redondo');
   assert.ok(sergio);
-  assert.match(sergio.role, /full stack.*gestión empresarial/i);
-  assert.ok(sergio.skills.includes('Desarrollo full stack'));
-  assert.ok(sergio.skills.includes('Gestión fiscal interna'));
-  assert.ok(sergio.skills.includes('Facturación y operaciones'));
+  assert.match(sergio.role, /Tecnología y operaciones/i);
+  assert.ok(!sergio.skills.includes('Gestión fiscal interna'));
+  assert.ok(sergio.skills.includes('Control de gestión'));
   const evidence = sergio.highlights.map((item) => item.texto).join(' ');
-  assert.match(evidence, /gestión fiscal y la facturación de la empresa/);
+  assert.match(evidence, /full stack/);
+  assert.match(evidence, /gestión interna de innure/);
   assert.match(evidence, /ISTQB CTFL/);
   assert.equal(sergio.photo, '/images/sergio-herencias-frontal.webp');
   assert.equal(sergio.photoScale, 1);

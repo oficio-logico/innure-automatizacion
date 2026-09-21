@@ -173,7 +173,7 @@ export function ContactForm() {
       // cuenta: quien envía es siempre ella.
       if (siteContent.contact.emailHref) {
         const value = (field: string) => String(data.get(field) ?? '').trim();
-        const subject = `innure · Automatización e IA — ${value('company') || value('name')}`;
+        const subject = `innure · Consulta sobre mi negocio — ${value('company') || value('name')}`;
         const body = [
           `Nombre: ${value('name')}`,
           `Empresa: ${value('company')}`,
@@ -297,7 +297,7 @@ export function ContactForm() {
       </div>
 
       <div className="field field-wide">
-        <label htmlFor="process">{selectedNeed ? '¿Cómo os ocurre en vuestra empresa?' : '¿Qué tarea os quita tiempo?'}</label>
+        <label htmlFor="process">{selectedNeed ? '¿Cómo os ocurre en vuestra empresa?' : '¿Qué os gustaría mejorar?'}</label>
         <textarea
           ref={processInput}
           id="process"
@@ -305,7 +305,7 @@ export function ContactForm() {
           rows={4}
           minLength={20}
           maxLength={contactDetailLimit(selectedNeed)}
-          placeholder={selectedNeed?.contactPrompt || 'Cuéntanos qué hacéis a mano, qué programas usáis y con qué frecuencia se repite.'}
+          placeholder={selectedNeed?.contactPrompt || 'Cuéntanos a qué se dedica tu negocio, qué os gustaría mejorar y qué herramientas utilizáis.'}
           required
           aria-describedby="process-help"
         />

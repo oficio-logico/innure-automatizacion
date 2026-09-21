@@ -1,7 +1,7 @@
 import { access, copyFile, mkdir, readFile, rename, rmdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { indexableUrls, indexableRoutes } from '../app/indexable-routes.mjs';
+import { sitemapUrls, indexableRoutes } from '../app/indexable-routes.mjs';
 import { checkStaticPublication } from './publication-checks.mjs';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -35,7 +35,7 @@ for (const route of routes) {
 
 await writeFile(
   path.join(outputDir, 'robots.txt'),
-  process.env.NEXT_PUBLIC_PUBLISH === 'true' ? `User-agent: *\nAllow: ${basePath}/\n` : `User-agent: *\nDisallow: ${basePath ? `${basePath}/` : '/'}\n`,
+  `User-agent: *\nAllow: ${basePath}/\n` + (process.env.NEXT_PUBLIC_PUBLISH === 'true' ? `Sitemap: ${new URL('sitemap.xml', process.env.NEXT_PUBLIC_SITE_URL).href}\n` : ''),
   'utf8',
 );
 
@@ -45,7 +45,7 @@ if (process.env.NEXT_PUBLIC_PUBLISH === 'true') {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
   if (!baseUrl) throw new Error('Falta la URL pública para generar el sitemap.');
   const escapeXml = (value) => value.replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' })[char]);
-  const urls = indexableUrls(baseUrl).map((url) => `  <url><loc>${escapeXml(url)}</loc></url>`).join('\n');
+  const urls = sitemapUrls(baseUrl).map((url) => `  <url><loc>${escapeXml(url)}</loc></url>`).join('\n');
   await writeFile(path.join(outputDir, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`);
 }
 

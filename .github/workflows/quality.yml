@@ -38,5 +38,5 @@ jobs:
       - name: Construir la versión comercial
         env:
           INNURE_SOURCE_SHA: ${{ github.sha }}
-          NEXT_PUBLIC_GOOGLE_ADS_CONVERSION: AW-18410180479/mBarCPixx_EcEP-e1MpE
+          INNURE_TARGET: home
         run: npm run build:innure
