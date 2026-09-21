@@ -30,7 +30,7 @@ Las pruebas del receptor usan funciones aisladas; no envían correos externos. L
 
 El portfolio reúne once proyectos en `/proyectos/`, cada uno con su ficha, capturas y estado real. `app/project-catalog.ts` contiene el contenido y `app/project-registry.mjs` mantiene el registro compartido por las rutas, el sitemap y las comprobaciones. [PORTFOLIO.md](PORTFOLIO.md) documenta las fuentes y los límites de las capturas; no son promesas de resultados ni casos de clientes salvo indicación expresa.
 
-El piloto `/soluciones/` añade siete páginas y un índice (8 páginas en total), con una plantilla común y contenido específico por necesidad. [SEO_PILOTO.md](SEO_PILOTO.md) documenta la selección, fuentes, viabilidad, medición y mantenimiento. El contenido está en `app/solution-catalog.mjs`; las rutas explícitas siguen el exportador existente. Los formularios de estas páginas incluyen su ruta en la consulta, sin atribuir por ello el origen del tráfico. Su publicación requiere aprobación expresa.
+El piloto `/soluciones/` tiene diez fichas publicadas y un índice (11 páginas en total), con una plantilla común y contenido específico por necesidad. Incluye los destinos de consultoría de IA, automatización de procesos e instalaciones y mantenimiento. [SEO_PILOTO.md](SEO_PILOTO.md) documenta la selección, fuentes, viabilidad, medición y mantenimiento. El contenido está en `app/solution-catalog.mjs`; las rutas explícitas siguen el exportador existente. Los formularios de estas páginas incluyen su ruta en la consulta, sin atribuir por ello el origen del tráfico. Las futuras ampliaciones siguen el proceso de revisión y publicación de [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Compilación de producción
 

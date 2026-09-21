@@ -8,12 +8,31 @@
   var maxAge = 180 * 86400000;
   var cookiePrefix = 'innure_auto';
   var decision = null;
+  var consentSnapshot;
   var loaded = false;
   var banner;
   var completed = new Set();
   var fields = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','gclid','gbraid','wbraid'];
   function read(storage, name) { try { return JSON.parse(window[storage].getItem(name) || 'null'); } catch { return null; } }
-  function write(storage, name, value) { try { window[storage].setItem(name, JSON.stringify(value)); } catch { /* la elección sigue funcionando sin almacenamiento */ } }
+  function write(storage, name, value) { try { window[storage].setItem(name, JSON.stringify(value)); return true; } catch { return false; } }
+  function parseConsent(raw) {
+    try {
+      var saved = JSON.parse(raw || 'null');
+      if (saved && ['accepted','rejected'].includes(saved.value) && Number.isFinite(saved.at) && Date.now()-saved.at >= 0 && Date.now()-saved.at < maxAge) return saved.value;
+    } catch { /* un valor inválido no autoriza medición */ }
+    return null;
+  }
+  function syncConsent() {
+    var raw;
+    try { raw = window.localStorage.getItem(key); } catch { return decision === 'accepted'; }
+    // Consultar el valor vigente también antes de atribuir o convertir cubre
+    // el intervalo anterior a recibir el evento storage de otra pestaña.
+    if (raw !== consentSnapshot) {
+      consentSnapshot = raw;
+      applyDecision(parseConsent(raw));
+    }
+    return decision === 'accepted';
+  }
   function clearAttribution() { try { sessionStorage.removeItem(attributionKey); } catch { /* sin almacenamiento */ } }
   function clearCookies(pattern, cookiePath) {
     document.cookie.split(';').forEach(function (cookie) {
@@ -33,7 +52,7 @@
     if (Object.keys(incoming).length) write('sessionStorage', attributionKey, { fields: incoming, at: Date.now() });
   }
   window.innureAutomationAttribution = function () {
-    if (decision !== 'accepted') return {};
+    if (!syncConsent()) return {};
     var saved = read('sessionStorage', attributionKey);
     return Object.assign({ measurement_consent: 'accepted' }, saved && Date.now()-saved.at < 86400000 ? validFields(saved.fields) : {});
   };
@@ -50,6 +69,7 @@
     window.gtag('js',new Date());
     var safeUrl = new URL(location.origin + location.pathname);
     var attribution = window.innureAutomationAttribution();
+    if (decision !== 'accepted') return;
     fields.forEach(function (field) { if (attribution[field]) safeUrl.searchParams.set(field,attribution[field]); });
     window.gtag('config',destination.split('/')[0],{
       send_page_view:false,allow_google_signals:false,allow_ad_personalization_signals:false,
@@ -59,21 +79,44 @@
     tag.async = true; tag.src = 'https://www.googletagmanager.com/gtag/js?id=' + destination.split('/')[0];
     document.head.appendChild(tag);
   }
-  function choose(value) {
-    decision = value; write('localStorage',key,{value:value,at:Date.now()});
+  function applyDecision(value, canReload) {
+    var changed = decision !== value;
+    decision = value;
     if (banner) banner.hidden = true;
     if (value === 'accepted') loadTag();
     else {
       clearAttribution();
-      if (loaded) {
+      if (loaded && changed) {
+        window.gtag('consent','update',{ad_storage:'denied',analytics_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});
         // El prefijo propio separa las cookies nuevas de rendimiento en la raíz.
         clearCookies(new RegExp('^' + cookiePrefix + '_gcl_'),'/');
         // Si aún se ejecuta bajo la ruta antigua, borra solo su cookie heredada.
         // Path=/automatizacion/ no afecta a rendimiento en /.
         if (location.pathname.startsWith('/automatizacion/')) clearCookies(/^_gcl_/,'/automatizacion/');
-        location.reload(); // descarga las etiquetas cargadas tras el consentimiento anterior
+        // No recargar si aún queda una aceptación que no hemos podido borrar:
+        // el documento nuevo restauraría esa decisión y volvería a medir.
+        if (canReload !== false) location.reload();
       }
+      if (!value) show();
     }
+  }
+  function choose(value) {
+    var saved = {value:value,at:Date.now()};
+    var canReload = true;
+    // Si guardar falla, conservar la elección explícita de esta pestaña hasta
+    // que cambie el valor compartido; no restaurar una decisión antigua.
+    if (write('localStorage',key,saved)) consentSnapshot = JSON.stringify(saved);
+    else {
+      if (value === 'rejected') {
+        canReload = false;
+        try { window.localStorage.removeItem(key); } catch { /* conservar el rechazo en memoria */ }
+      }
+      try {
+        consentSnapshot = window.localStorage.getItem(key);
+        if (value === 'rejected') canReload = parseConsent(consentSnapshot) !== 'accepted';
+      } catch { /* no recargar sin comprobar que la aceptación anterior ya no está */ }
+    }
+    applyDecision(value, canReload);
   }
   function show() {
     if (!banner || !banner.isConnected) {
@@ -88,7 +131,7 @@
   }
   window.addEventListener('innure:lead-received',function (event) {
     var detail = event.detail || {};
-    if (decision !== 'accepted' || detail.service !== 'automatizacion-ia' || !/^[a-f0-9]{32}$/.test(detail.submissionId || '')) return;
+    if (!syncConsent() || detail.service !== 'automatizacion-ia' || !/^[a-f0-9]{32}$/.test(detail.submissionId || '')) return;
     var id = detail.submissionId;
     if (completed.has(id) || read('sessionStorage','innure_auto_sent_'+id)) return;
     completed.add(id); write('sessionStorage','innure_auto_sent_'+id,true);
@@ -101,11 +144,14 @@
       var target = event.target;
       if (target && typeof target.closest === 'function' && target.closest('[data-automation-measurement]')) show();
     });
-    var saved = read('localStorage',key);
-    if (saved && ['accepted','rejected'].includes(saved.value) && Number.isFinite(saved.at) && Date.now()-saved.at >= 0 && Date.now()-saved.at < maxAge) decision = saved.value;
-    if (decision === 'accepted') loadTag();
-    else if (!decision) show();
-    else clearAttribution();
+    window.addEventListener('storage',function (event) {
+      if (event.key !== key && event.key !== null) return;
+      try { if (event.storageArea !== window.localStorage) return; } catch { return; }
+      // No escribir de nuevo: evitar propagar el mismo cambio entre pestañas.
+      syncConsent();
+    });
+    syncConsent();
+    if (!decision) show();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded',init); else init();
 })();
