@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { sitemapUrls, indexableRoutes } from '../app/indexable-routes.mjs';
 import { projectRegistry } from '../app/project-registry.mjs';
+import { solutionCatalog } from '../app/solution-catalog.mjs';
 
 export const publicRoutes = [...indexableRoutes, 'aviso-legal/', 'privacidad/'];
 const productionBase = process.env.NEXT_PUBLIC_COMMERCIAL_URL || 'https://www.innure.es/automatizacion/';
@@ -25,7 +26,14 @@ export function checkPage(html, route, baseUrl, published) {
   assert.equal(value(html, 'robots'), published && !legal ? 'index, follow' : legal ? 'noindex, follow' : 'noindex, nofollow');
   const project = projectRegistry.find(item => route === `proyectos/${item.slug}/`);
   if (project) assert.ok(value(html, 'og:title')?.includes(project.name), `${route}: título propio`);
-  if (!route) {
+  const solution = solutionCatalog.find(item => route === `soluciones/${item.slug}/`);
+  if (solution) {
+    assert.equal(value(html, 'description'), solution.description, `${route}: descripción propia`);
+    assert.equal(value(html, 'og:title'), `${solution.title} | innure`, `${route}: título social propio`);
+    assert.equal(value(html, 'og:description'), solution.description, `${route}: descripción social propia`);
+    assert.equal([...html.matchAll(/<h1\b/g)].length, 1, `${route}: un único h1`);
+  }
+  if (!route || solution) {
     assert.match(html, /<form\b[^>]*method="post"/);
     assert.match(html, /<fieldset\b[^>]*disabled=""/);
     assert.match(html, /<noscript>/);

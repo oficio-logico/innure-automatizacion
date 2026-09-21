@@ -44,7 +44,7 @@ function one(tree, predicate) {
 
 // Exercise the actual handlers with in-memory React state and a fake receiver.
 // This is not a browser test and never sends mail or loads third-party services.
-function setup({ receiver = false, accepted = true, hydrated = true } = {}) {
+function setup({ receiver = false, accepted = true, hydrated = true, source } = {}) {
   const hookSlots = new Map();
   const contexts = [];
   const state = { fetches: [], events: [], focus: [], resetCount: 0 };
@@ -119,6 +119,7 @@ function setup({ receiver = false, accepted = true, hydrated = true } = {}) {
   });
 
   function render(name, props = {}) {
+    if (name === 'ContactForm') props = { source, ...props };
     if (!hookSlots.has(name)) hookSlots.set(name, []);
     activeSlots = hookSlots.get(name);
     cursor = 0;
@@ -299,4 +300,37 @@ test('la etiqueta del ejemplo no permite enviar una explicación vacía o demasi
     assert.equal(app.state.events.length, 0);
     assert.ok(one(tree, (node) => node.props?.className === 'form-status form-status-error').props.children.includes('20 caracteres'));
   }
+});
+
+test('la página de consulta acompaña al mensaje sin atribuir una fuente de tráfico ni enviarse a medición', async () => {
+  const source = { path: '/soluciones/reservas-whatsapp/', label: 'Reservas y WhatsApp', prompt: 'Describe tu agenda actual.' };
+  const app = setup({ receiver: true, source });
+  const detail = app.form.fields.process;
+  const form = app.render('ContactForm');
+  assert.ok(nodes(form, node => node.props?.className === 'solution-form-context').length);
+  const textarea = one(form, node => node.type === 'textarea');
+  assert.equal(textarea.props.maxLength, contactDetailLimit(null, source));
+  await app.submit();
+  assert.equal(app.state.fetches[0].options.body.get('process'), prepareContactProcess(detail, null, source));
+  assert.equal(Object.keys(app.state.events[0].detail).sort().join(','), 'service,submissionId');
+});
+
+test('el contexto de página respeta el límite del receptor, conserva errores y llega al borrador local', async () => {
+  const source = { path: '/soluciones/fisioterapia/', label: 'Fisioterapia', prompt: 'Describe la gestión de citas.' };
+  const limit = contactDetailLimit(null, source);
+  assert.equal(prepareContactProcess('x'.repeat(limit), null, source).length, 3000);
+  const tooLong = setup({ receiver: true, source });
+  tooLong.form.fields.process = 'x'.repeat(limit + 1);
+  await tooLong.submit();
+  assert.equal(tooLong.state.fetches.length, 0);
+  assert.equal(tooLong.form.fields.process.length, limit + 1);
+  const failed = setup({ receiver: true, accepted: false, source });
+  const detail = failed.form.fields.process;
+  await failed.submit();
+  assert.equal(failed.form.fields.process, detail);
+  assert.equal(failed.state.events.length, 0);
+  const local = setup({ source });
+  await local.submit();
+  assert.ok(decodeURIComponent(local.window.location.href).includes(source.path));
+  assert.equal(local.state.fetches.length, 0);
 });
