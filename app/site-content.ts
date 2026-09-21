@@ -182,6 +182,7 @@ export const siteContent = {
     { label: 'Proyectos', href: '#proyectos' },
     { label: 'Cómo trabajamos', href: '#como-trabajamos' },
     { label: 'Quiénes somos', href: '#equipo' },
+    { label: 'Rendimiento', href: 'https://www.innure.es/rendimiento/' },
   ],
 
   seo: {
