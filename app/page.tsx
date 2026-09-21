@@ -105,12 +105,15 @@ export default function Home() {
           <div className="shell">
             <div className="section-heading">
               <div><p className="eyebrow">Cómo trabajamos</p><h2 id="method-title">Tres formas de<br />trabajar juntos.</h2></div>
-              <p>Elige la que encaje con tu momento. En todas acordamos el alcance, el presupuesto y las comprobaciones antes de empezar.</p>
+              <p>Empezamos por el nivel de definición que necesita el caso. En cada propuesta dejamos por escrito el alcance, las comprobaciones y lo que corresponde a cada parte.</p>
             </div>
             <ol className="method-steps" role="list">
-              {landing.method.map((step) => <li key={step.number}><span className="step-number">{step.number}</span><h3>{step.title}</h3><p>{step.description}</p></li>)}
+              {landing.method.map((step) => <li key={step.number}><span className="step-number">{step.number}</span><h3>{step.title}</h3><p>{step.description}</p><ul className="method-deliverables">{step.deliverables.map((item) => <li key={item}><Icon name="check" />{item}</li>)}</ul></li>)}
             </ol>
-            <div className="method-assurance"><Icon name="check" /><p>Probamos antes de dar nada por hecho. Tú mantienes el control de los datos y de las decisiones importantes.</p></div>
+            <div className="method-closing">
+              <div className="method-assurance"><Icon name="check" /><p>Probamos antes de dar nada por hecho. Tú mantienes el control de los datos y de las decisiones importantes.</p></div>
+              <aside className="method-handover" aria-labelledby="handover-title"><p className="eyebrow">Qué queda en tus manos</p><h3 id="handover-title">Una solución que puedas continuar.</h3><ul><li><strong>Uso:</strong> documentación y formación acordadas.</li><li><strong>Control:</strong> accesos y propiedad definidos por escrito.</li><li><strong>Continuidad:</strong> costes de terceros y soporte separados.</li></ul><p>Todo concretado en la propuesta antes de empezar.</p></aside>
+            </div>
           </div>
         </section>
 

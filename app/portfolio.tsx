@@ -1,4 +1,5 @@
 import { Icon } from './icons';
+import { BusinessProof } from './business-proof';
 import { projectCatalog } from './project-catalog';
 import { withBasePath } from './site-content';
 import { PortfolioExplorer, type PortfolioGroup } from './portfolio-explorer';
@@ -39,11 +40,20 @@ function ProposedDemo() {
 }
 
 export function Portfolio() {
+  // Estas dos referencias se muestran arriba con su contexto. Siguen estando
+  // disponibles en sus filtros, pero no se repiten en la selección inicial.
+  const projectsForExplorer = projectCatalog.map((project) => (
+    project.slug === 'gestor-certificados' || project.slug === 'sienta'
+      ? { ...project, featured: false }
+      : project
+  ));
+
   return <section className="portfolio-section section-space" id="proyectos" aria-labelledby="portfolio-title"><div className="shell">
-    <div className="section-heading"><div><p className="eyebrow">Trabajo que puedes ver</p><h2 id="portfolio-title">No nos quedamos<br />en la idea.</h2></div><p>Aplicaciones, integraciones y procesos con su recorrido y su estado actual. Elige un tipo de solución para ver qué hemos construido.</p></div>
+    <div className="section-heading"><div><p className="eyebrow">Trabajo que puedes ver</p><h2 id="portfolio-title">No nos quedamos<br />en la idea.</h2></div><p>Aplicaciones, integraciones y procesos con su recorrido y su estado actual. Empieza por dos referencias propias o explora el catálogo por tipo de solución.</p></div>
+    <BusinessProof />
     <PortfolioExplorer
       groups={groups}
-      projects={projectCatalog}
+      projects={projectsForExplorer}
       catalogHref={withBasePath('/proyectos/')}
       proposedCard={<ProposedDemo />}
     />
