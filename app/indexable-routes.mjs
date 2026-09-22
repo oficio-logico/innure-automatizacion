@@ -1,7 +1,7 @@
 // Shared by the framework metadata route and the static publishing step.
 import { projectRegistry } from './project-registry.mjs';
 import { solutionSlugs } from './solution-catalog.mjs';
-export const indexableRoutes = ['', 'proyectos/', ...projectRegistry.map(project => `proyectos/${project.slug}/`), 'soluciones/', ...solutionSlugs.map(slug => `soluciones/${slug}/`)];
+export const indexableRoutes = ['', 'proyectos/', ...projectRegistry.map(project => `proyectos/${project.slug}/`), 'soluciones/', ...solutionSlugs.map(slug => `soluciones/${slug}/`), 'guias/seguimiento-presupuestos/'];
 
 export function indexableUrls(base) {
   const normalizedBase = base.replace(/\/$/, '') + '/';
