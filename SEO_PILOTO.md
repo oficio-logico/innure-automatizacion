@@ -1,6 +1,6 @@
 # Piloto de soluciones de innure
 
-Actualizado el 21 de septiembre de 2026. El piloto inicial de siete fichas y el índice ya está publicado. La preparación de SEO/SEM para IA y automatización añade dos destinos de servicio: nueve fichas y un índice en total, enlazados desde la portada. No se envían formularios reales de prueba ni se activa gasto publicitario.
+Actualizado el 21 de septiembre de 2026. El piloto inicial de siete fichas y el índice ya está publicado. Los destinos de consultoría de IA y automatización de procesos, junto con la ficha de instalaciones y mantenimiento, amplían el catálogo a diez fichas y un índice en total, enlazados desde la portada. No se envían formularios reales de prueba ni se activa gasto publicitario.
 
 ## Selección y arquitectura
 
@@ -17,6 +17,7 @@ Las oportunidades se seleccionan por encaje con los servicios, intención comerc
 | `/soluciones/reservas-facturacion/` | Administración; duplicados y estados de reserva, asistencia, pago y documento mezclados. Conectar agenda y facturación. | Identificadores estables, avisos repetidos, anticipos, cancelación y reglas revisadas con gestoría. Se agrupan reserva, cobro y factura como un mismo proceso. | Revisar reservas y facturación. Enlaza estética, WhatsApp, decisión tecnológica y gestor de certificados como herramienta administrativa distinta. |
 | `/soluciones/seguimiento-presupuestos/` | Equipos comerciales; propuestas sin responsable ni siguiente acción. Configurar o automatizar seguimiento comercial. | Oportunidad y versión de propuesta, tareas, revisión de borradores y parada por respuesta. Amplía el ejemplo breve de la portada con requisitos y límites. | Revisar el seguimiento comercial. Enlaza decisión tecnológica, facturación y una muestra de automatización propia. |
 | `/soluciones/aplicaciones-a-medida/` | Dirección y operaciones; decidir qué contratar. Comparar desarrollo propio, configuración e integración. | Tabla de las tres opciones, coste durante el uso, prueba de un proceso, mantenimiento y salida. Agrupa aplicación/software a medida frente a adaptar herramientas. | Hablar de tu decisión técnica. Enlaza seguimiento, facturación, fisioterapia y el portfolio completo. |
+| `/soluciones/instalaciones-mantenimiento/` | Empresas de instalaciones y mantenimiento; coordinación de avisos, presupuestos y trabajo técnico. | Describe una propuesta con un ejemplo explícitamente hipotético, sin presentarla como una implantación realizada ni como un resultado de cliente. | Revisar el caso con el formulario y conservar la página de consulta como contexto. |
 
 `/soluciones/` permite elegir por necesidad; las dos nuevas páginas se separan por la decisión de usar IA en un caso acotado o automatizar un recorrido administrativo. La portada conserva la oferta general y su ejemplo de seguimiento; el portfolio conserva el papel de mostrar trabajo real. Las nuevas páginas explican servicios posibles, no convierten los proyectos propios en casos sectoriales ni en resultados de clientes.
 
@@ -62,7 +63,7 @@ La preparación SEM reutiliza la conversión existente de automatización con co
 
 Seguimiento de las páginas publicadas:
 
-1. Registrar fecha, versión publicada y nueve URL (más el índice `/soluciones/`). Verificar el sitemap servido, inspección de URLs y exclusión de preview. El sitemap principal ya está dado de alta en Search Console; revisar su lectura sin crear otra propiedad ni cambiar permisos.
+1. Registrar fecha, versión publicada y diez URL (más el índice `/soluciones/`). Verificar el sitemap servido, inspección de URLs y exclusión de preview. El sitemap principal ya está dado de alta en Search Console; revisar su lectura sin crear otra propiedad ni cambiar permisos.
 2. En Search Console, filtrar host `www.innure.es` y páginas `/soluciones/`, tipo Web; separar consultas de marca y no marca, dispositivo y país. Medir impresiones, clics, CTR y consultas con intención relevante. No mezclar el subdominio de certificados ni la especialidad de rendimiento. Las consultas ocultas y el retraso del informe impiden un desglose exhaustivo.
 3. Registrar en un soporte privado ya disponible, fuera de este repositorio, referencia del mensaje, fecha, página de consulta, procedencia declarada, necesidad, herramientas, cualificación y siguiente paso. Un contacto cualificado representa una empresa con un problema de nuestro alcance, interlocutor válido y disposición a concretarlo. Una oportunidad añade un siguiente paso comercial acordado. Un formulario aceptado no es automáticamente un contacto cualificado ni una entrega confirmada en buzón.
 4. Revisar a las 2 semanas el descubrimiento y los errores; a los 30 días consultas y claridad del mensaje; a los 60–90 días la relación entre páginas, contactos y oportunidades. Son ventanas de revisión, no plazos prometidos de resultados. Con pocas impresiones, prolongar la observación y conservar valores absolutos.
