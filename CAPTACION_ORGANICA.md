@@ -1,10 +1,10 @@
 # Piloto de captación orgánica · innure
 
-Iniciado el 23 de septiembre de 2026. Objetivo: recibir consultas de pequeñas empresas de servicios sobre el seguimiento de presupuestos, con 0 EUR de gasto publicitario. Esta ficha registra tres propuestas editoriales enviadas; todavía no acredita aceptación, publicación, tráfico ni contactos comerciales.
+Iniciado el 23 de septiembre de 2026. Objetivo: recibir consultas de pequeñas empresas de servicios sobre el seguimiento de presupuestos, con 0 EUR de gasto publicitario. Esta ficha registra tres propuestas editoriales enviadas; la aceptación, el tráfico y los contactos comerciales quedan por medir.
 
 ## Destino y material
 
-Guía propia preparada en `/guias/seguimiento-presupuestos/`, enlazada desde `/soluciones/seguimiento-presupuestos/`. La guía explica cinco comprobaciones antes de automatizar, ofrece un ejemplo hipotético y termina en el formulario existente. Su URL pública solo se podrá usar después de publicar y verificar la ruta. La página de solución actual sirve de destino mientras tanto: https://www.innure.es/soluciones/seguimiento-presupuestos/.
+Guía propia preparada en `/guias/seguimiento-presupuestos/`, enlazada desde `/soluciones/seguimiento-presupuestos/`. La guía explica cinco comprobaciones antes de automatizar, ofrece un ejemplo hipotético y termina en el formulario existente. Antes de distribuir su URL pública hay que comprobar que la publicación se completó y que la ruta funciona. La página de solución sigue siendo un destino alternativo: https://www.innure.es/soluciones/seguimiento-presupuestos/.
 
 Comprador propuesto: gerente o responsable comercial de una pequeña empresa de servicios que envía presupuestos y no tiene claro el siguiente paso de cada uno. Hipótesis por validar con conversaciones reales. Oferta: primera conversación para entender el proceso y sus herramientas; no se promete un resultado de ventas ni una auditoría completa gratis.
 
@@ -18,7 +18,7 @@ La identidad, el canal y la dirección anteriores proceden de páginas de cada e
 
 ## Mensajes enviados
 
-Enviados el 23/09/2026 desde `info@innure.es`, tras comprobar la entrega del formulario en el buzón. Los tres constan en «Enviados» de esa cuenta, con remitente y destinatario revisados. Eso acredita la salida desde innure, no la entrega en destino ni la lectura o aceptación editorial. No se incluyó la URL de la guía porque aún no está publicada.
+Enviados el 23/09/2026 desde `info@innure.es`, tras comprobar la entrega del formulario en el buzón. Los tres constan en «Enviados» de esa cuenta, con remitente y destinatario revisados. Eso acredita la salida desde innure, no la entrega en destino ni la lectura o aceptación editorial. No se incluyó la URL de la guía porque aún no estaba publicada al enviarlos.
 
 - Pymes y Autónomos: `contacto@pymesyautonomos.com`, correo general publicado en su [página de contacto](https://www.pymesyautonomos.com/contacto). Se usó en lugar del formulario editorial, que mostró una barrera de consentimiento para acceder. Asunto y texto a continuación.
 - CEIM: `comunicacion@ceim.es`. Asunto y texto a continuación.
@@ -76,4 +76,4 @@ La campaña de Google Ads sigue fuera de este piloto: en pausa, con 100 EUR tota
 
 La guía se creó como ruta estática con metadatos propios, canónica, Open Graph, sitemap, enlace desde la solución existente y formulario con contexto de página. Se reutilizaron componentes y estilos del proyecto. Lint, TypeScript, 66 pruebas JavaScript y compilación comercial pasaron en esta rama basada en `main`; la compilación generó la guía y comprobó su HTML. La revisión visible a 1280 px y 390 px confirmó jerarquía, CTA y formulario, sin desbordamiento horizontal en móvil. La validación PHP local no pudo ejecutarse porque `php` no estaba instalado; [CI la ejecutó y pasó](https://github.com/oficio-logico/innure-automatizacion/actions/runs/35793316345).
 
-El PR [#12](https://github.com/oficio-logico/innure-automatizacion/pull/12) está aprobado por el usuario y configurado para fusión automática, pero GitHub exige una revisión formal del propietario del código. No se ha saltado esa protección ni se ha publicado la guía. Pendientes: revisión, fusión y despliegue; después, comprobar HTTP 200, canónica, sitemap y CTA en producción. Vigilar respuestas a los tres mensajes antes de preparar contenido adicional o acordar un coste. La documentación de continuidad existente en otro checkout se conservó sin incorporarla al commit porque estaba sin seguimiento Git al iniciar el encargo. Esta sección deja el traspaso versionado con los archivos del piloto.
+El usuario aprobó la publicación del PR [#12](https://github.com/oficio-logico/innure-automatizacion/pull/12). La protección de `main` conserva la validación obligatoria y permite a `@sh3rencr` integrar sus propios cambios mediante la excepción de revisión ya configurada; no hace falta una aprobación de Santicorreas para esta PR. Tras el despliegue, comprobar HTTP 200, canónica, sitemap y CTA en producción. Vigilar respuestas a los tres mensajes antes de preparar contenido adicional o acordar un coste. La documentación de continuidad existente en otro checkout se conservó sin incorporarla al commit porque estaba sin seguimiento Git al iniciar el encargo. Esta sección deja el traspaso versionado con los archivos del piloto.
