@@ -44,6 +44,14 @@
 .solution-related { padding-block: 3rem; }
 .solution-related h2 { font-size: 1.5rem; }
 .solution-related > div { display: flex; flex-wrap: wrap; gap: 1rem 2rem; margin-top: 1.3rem; }
+.guide-hero { padding-block: 2rem 4rem; }
+.guide-hero h1 { max-width: 22ch; }
+.guide-body { padding-bottom: 4rem; }
+.guide-body ol { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--line); }
+.guide-body li { display: grid; grid-template-columns: 3rem minmax(0, 1fr); gap: 1.5rem; padding-block: 2rem; border-bottom: 1px solid var(--line); }
+.guide-step-number { color: var(--accent); font-size: .85rem; padding-top: .35rem; }
+.guide-body h2 { font-size: clamp(1.4rem, 2.5vw, 2rem); }
+.guide-body p { max-width: 72ch; margin-top: .8rem; color: var(--muted); }
 .solution-sources { border-top: 1px solid var(--line); padding-block: 2rem; font-size: .85rem; color: var(--muted); }
 .solution-sources ul { display: grid; gap: .8rem; margin-block: 1rem; padding-left: 1.2rem; }
 .solution-sources a { text-decoration: underline; text-underline-offset: .2em; }
@@ -88,6 +96,9 @@
   .solution-links { gap: 0; }
   .solution-workflow, .solution-problem, .solution-contact, .solution-index-guide { padding-block: 2.7rem; }
   .solution-boundary { grid-template-columns: 1fr; gap: .75rem; }
+  .guide-hero { padding-bottom: 2.7rem; }
+  .guide-body { padding-bottom: 2.7rem; }
+  .guide-body li { grid-template-columns: 2rem minmax(0, 1fr); gap: .8rem; padding-block: 1.5rem; }
   .solution-evidence { padding-block: 2.5rem; }
   .solution-related > div { flex-direction: column; align-items: start; }
   .solution-comparison td, .solution-comparison th { padding: .8rem; }
