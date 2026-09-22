@@ -57,7 +57,10 @@ for (const url of assets) {
 }
 const robots = await get(base+'robots.txt');
 assert.equal(robots.status,200);
-assert.match(await robots.text(), /Sitemap: https:\/\/www\.innure\.es\/sitemap\.xml/);
+const robotsText = await robots.text();
+assert.match(robotsText, /Sitemap: https:\/\/www\.innure\.es\/sitemap\.xml/);
+assert.match(robotsText, /Disallow: \/automatizacion\/contacto\.php/);
+assert.doesNotMatch(robotsText, /config/i);
 for (const route of ['', 'proyectos/', 'privacidad/']) {
   const moved = await get(base+'automatizacion/'+route,{redirect:'manual'});
   assert.equal(moved.status,301);

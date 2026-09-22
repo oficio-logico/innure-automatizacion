@@ -33,9 +33,12 @@ for (const route of routes) {
   await copyFile(source, path.join(destinationDir, 'index.html'));
 }
 
+// En producción, los receptores de formularios (solo POST) quedan fuera del
+// rastreo. Este contenido distinto también obliga a volver a subir el fichero:
+// el publicado seguía siendo el antiguo de rendimiento, que citaba config.php.
 await writeFile(
   path.join(outputDir, 'robots.txt'),
-  `User-agent: *\nAllow: ${basePath}/\n` + (process.env.NEXT_PUBLIC_PUBLISH === 'true' ? `Sitemap: ${new URL('sitemap.xml', process.env.NEXT_PUBLIC_SITE_URL).href}\n` : ''),
+  `User-agent: *\nAllow: ${basePath}/\n` + (process.env.NEXT_PUBLIC_PUBLISH === 'true' ? `Disallow: /contacto.php\nDisallow: /automatizacion/contacto.php\nSitemap: ${new URL('sitemap.xml', process.env.NEXT_PUBLIC_SITE_URL).href}\n` : ''),
   'utf8',
 );
 
