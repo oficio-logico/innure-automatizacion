@@ -87,3 +87,35 @@ confirmación.
 
 **Pendiente de decisión:** consentimiento único, páginas legales únicas, JSON-LD de
 organización, franja de logos del equipo y casos al final de la portada.
+
+## Sesión 2026-09-23 (2) · confianza, legales y consentimiento únicos (Claude)
+
+**Encargo autorizado:** «como tú consideres mejor» sobre la revisión: logos del equipo
+(descarga autorizada de los de Santiago), datos estructurados, imagen social,
+consentimiento y legales únicos para todo innure.es y cabeceras seguras. Sin publicar.
+
+**Rama `codex/portada-revision-20260923`** (incluye el commit de robots):
+- Franja «Nuestro equipo ha trabajado en proyectos para» tras la cabecera, en dos
+  grupos: ingeniería y rendimiento (Sergio, 25) y marketing de influencers (Santiago,
+  14). Logos en `public/images/experiencia/` (WebP recortado a 240×80, ~180 KB en
+  total, carga diferida). Dreambeach, Jowke y Quinto Elemento van como texto: no
+  publican un logo aprovechable en su web. Los de Santiago salen de sus webs oficiales.
+- JSON-LD `Organization` + `Person` (cofundadores con LinkedIn) en la portada.
+- Imagen social JPG 1200×630 (`innure-social.jpg`).
+- Consentimiento común `innure_consent_v1` con /rendimiento/: hereda solo rechazos de las
+  claves antiguas, borra al rechazar `innure_auto_gcl_*` y `_gcl_*` y avisa en el banner
+  de que la elección vale para todo el dominio.
+- `/privacidad/` y `/aviso-legal/` pasan a ser las únicas: incorporan lo propio de
+  rendimiento (datos técnicos del envío, Web Analytics, señales auxiliares, borrador del
+  formulario, logos de terceros). `.htaccess` redirige las `.html` antiguas y añade
+  nosniff, Referrer-Policy y X-Frame-Options si existe mod_headers.
+- Certificación ISTQB Performance Testing indicada «en trámite».
+
+**Comprobado en local:** lint, tsc, 69/69 pruebas y compilación normal y con la
+configuración de medición de producción; revisión visual a 1440 y 375 px.
+**No verificado:** redirecciones y cabeceras en el alojamiento real (se comprueban tras
+publicar; `verify-innure-live.mjs` exige las redirecciones y avisa si falta nosniff).
+
+**Publicación:** integrar junto con la rama de rendimiento
+`codex/rendimiento-revision-20260923`; si solo se publica esta, /rendimiento/ volvería a
+pedir la elección una vez porque aún usa su clave antigua.

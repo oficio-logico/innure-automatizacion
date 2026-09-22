@@ -3,7 +3,11 @@
   var script = document.currentScript;
   var destination = script && script.getAttribute('data-conversion');
   if (!/^AW-\d+\/[A-Za-z0-9_-]+$/.test(destination || '') || location.origin !== 'https://www.innure.es') return;
-  var key = 'innure_automation_consent_v1';
+  // Una sola decisión para todo innure.es, compartida con /rendimiento/.
+  var key = 'innure_consent_v1';
+  // De las claves anteriores solo se hereda un rechazo: las aceptaciones se
+  // dieron con un texto que no cubría todo el dominio.
+  var legacyKeys = ['innure_automation_consent_v1','innure_ads_consent_v1'];
   var attributionKey = 'innure_automation_attribution_v1';
   var maxAge = 180 * 86400000;
   var cookiePrefix = 'innure_auto';
@@ -18,7 +22,8 @@
   function parseConsent(raw) {
     try {
       var saved = JSON.parse(raw || 'null');
-      if (saved && ['accepted','rejected'].includes(saved.value) && Number.isFinite(saved.at) && Date.now()-saved.at >= 0 && Date.now()-saved.at < maxAge) return saved.value;
+      var at = saved && (Number.isFinite(saved.at) ? saved.at : saved.savedAt);
+      if (saved && ['accepted','rejected'].includes(saved.value) && Number.isFinite(at) && Date.now()-at >= 0 && Date.now()-at < maxAge) return saved.value;
     } catch { /* un valor inválido no autoriza medición */ }
     return null;
   }
@@ -34,11 +39,31 @@
     return decision === 'accepted';
   }
   function clearAttribution() { try { sessionStorage.removeItem(attributionKey); } catch { /* sin almacenamiento */ } }
+  function migrateLegacyConsent() {
+    try {
+      var storage = window.localStorage;
+      if (storage.getItem(key) === null && legacyKeys.some(function (name) { return parseConsent(storage.getItem(name)) === 'rejected'; })) {
+        storage.setItem(key, JSON.stringify({value:'rejected',at:Date.now()}));
+      }
+      legacyKeys.forEach(function (name) { storage.removeItem(name); });
+    } catch { /* sin almacenamiento se vuelve a preguntar */ }
+  }
   function clearCookies(pattern, cookiePath) {
     document.cookie.split(';').forEach(function (cookie) {
       var name = cookie.split('=')[0].trim();
-      if (pattern.test(name)) document.cookie = name + '=; Max-Age=0; Path=' + cookiePath + '; Domain=www.innure.es; Secure; SameSite=Lax';
+      if (!pattern.test(name)) return;
+      // La portada fija Domain=www.innure.es; la etiqueta de rendimiento usa el dominio raíz.
+      ['; Domain=www.innure.es','; Domain=innure.es',''].forEach(function (domain) {
+        document.cookie = name + '=; Max-Age=0; Path=' + cookiePath + domain + '; Secure; SameSite=Lax';
+      });
     });
+  }
+  function clearAttributionCookies() {
+    // La decisión es común: se borran las cookies de la portada (innure_auto_gcl_*)
+    // y las de rendimiento (_gcl_*) en la raíz.
+    clearCookies(new RegExp('^(?:' + cookiePrefix + ')?_gcl_'),'/');
+    // Si aún se ejecuta bajo la ruta antigua, borra también su cookie heredada.
+    if (location.pathname.startsWith('/automatizacion/')) clearCookies(/^_gcl_/,'/automatizacion/');
   }
   function validFields(source) {
     var clean = {};
@@ -86,13 +111,9 @@
     if (value === 'accepted') loadTag();
     else {
       clearAttribution();
+      if (value === 'rejected' || (loaded && changed)) clearAttributionCookies();
       if (loaded && changed) {
         window.gtag('consent','update',{ad_storage:'denied',analytics_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});
-        // El prefijo propio separa las cookies nuevas de rendimiento en la raíz.
-        clearCookies(new RegExp('^' + cookiePrefix + '_gcl_'),'/');
-        // Si aún se ejecuta bajo la ruta antigua, borra solo su cookie heredada.
-        // Path=/automatizacion/ no afecta a rendimiento en /.
-        if (location.pathname.startsWith('/automatizacion/')) clearCookies(/^_gcl_/,'/automatizacion/');
         // No recargar si aún queda una aceptación que no hemos podido borrar:
         // el documento nuevo restauraría esa decisión y volvería a medir.
         if (canReload !== false) location.reload();
@@ -123,7 +144,7 @@
       banner = document.createElement('section');
       banner.className = 'measurement-banner';
       banner.setAttribute('aria-label','Preferencias de medición publicitaria');
-      banner.innerHTML = '<div><h2>¿Nos ayudas a saber si los anuncios funcionan?</h2><p>Solo si aceptas, Google Ads relacionará tu visita con una consulta enviada. No compartimos los datos que escribas en el formulario ni usamos remarketing. <a href="/privacidad/#medicion">Privacidad y cookies</a>.</p></div><div class="measurement-actions"><button type="button" data-choice="rejected">Rechazar</button><button type="button" data-choice="accepted">Aceptar medición</button></div>';
+      banner.innerHTML = '<div><h2>¿Nos ayudas a saber si los anuncios funcionan?</h2><p>Solo si aceptas, Google Ads relacionará tu visita con una consulta enviada. Tu elección se aplica en todo innure.es. No compartimos los datos que escribas en el formulario ni usamos remarketing. <a href="/privacidad/#medicion">Privacidad y cookies</a>.</p></div><div class="measurement-actions"><button type="button" data-choice="rejected">Rechazar</button><button type="button" data-choice="accepted">Aceptar medición</button></div>';
       banner.querySelectorAll('[data-choice]').forEach(function (button) { button.addEventListener('click',function () { choose(button.getAttribute('data-choice')); }); });
       document.body.appendChild(banner);
     }
@@ -150,6 +171,7 @@
       // No escribir de nuevo: evitar propagar el mismo cambio entre pestañas.
       syncConsent();
     });
+    migrateLegacyConsent();
     syncConsent();
     if (!decision) show();
   }
