@@ -33,7 +33,12 @@ export function checkPage(html, route, baseUrl, published) {
     assert.equal(value(html, 'og:description'), solution.description, `${route}: descripción social propia`);
     assert.equal([...html.matchAll(/<h1\b/g)].length, 1, `${route}: un único h1`);
   }
-  if (!route || solution) {
+  if (route === 'guias/seguimiento-presupuestos/') {
+    assert.equal(value(html, 'description'), 'Cinco comprobaciones prácticas para que cada presupuesto pendiente tenga un estado, una persona responsable y una próxima acción.');
+    assert.equal([...html.matchAll(/<h1\b/g)].length, 1, `${route}: un único h1`);
+    assert.match(html, /Antes de automatizar el seguimiento de presupuestos/);
+  }
+  if (!route || solution || route === 'guias/seguimiento-presupuestos/') {
     assert.match(html, /<form\b[^>]*method="post"/);
     assert.match(html, /<fieldset\b[^>]*disabled=""/);
     assert.match(html, /<noscript>/);
