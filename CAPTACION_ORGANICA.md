@@ -1,6 +1,6 @@
 # Piloto de captación orgánica · innure
 
-Preparado el 23 de septiembre de 2026. Objetivo: recibir consultas de pequeñas empresas de servicios sobre el seguimiento de presupuestos, con 0 EUR de gasto publicitario. Esta ficha contiene candidatos y mensajes para revisión; no acredita envíos, aceptación editorial, tráfico ni contactos.
+Iniciado el 23 de septiembre de 2026. Objetivo: recibir consultas de pequeñas empresas de servicios sobre el seguimiento de presupuestos, con 0 EUR de gasto publicitario. Esta ficha registra tres propuestas editoriales enviadas; todavía no acredita aceptación, publicación, tráfico ni contactos comerciales.
 
 ## Destino y material
 
@@ -16,9 +16,15 @@ Comprador propuesto: gerente o responsable comercial de una pequeña empresa de 
 
 La identidad, el canal y la dirección anteriores proceden de páginas de cada entidad consultadas el 23/09/2026. El tamaño de audiencia, la proporción de compradores, las condiciones de colaboración y el coste no están verificados. No se han usado contactos privados.
 
-## Mensajes preparados, sin enviar
+## Mensajes enviados
 
-### Pymes y Autónomos · formulario «Contactar con los editores»
+Enviados el 23/09/2026 desde `info@innure.es`, tras comprobar la entrega del formulario en el buzón. Los tres constan en «Enviados» de esa cuenta, con remitente y destinatario revisados. Eso acredita la salida desde innure, no la entrega en destino ni la lectura o aceptación editorial. No se incluyó la URL de la guía porque aún no está publicada.
+
+- Pymes y Autónomos: `contacto@pymesyautonomos.com`, correo general publicado en su [página de contacto](https://www.pymesyautonomos.com/contacto). Se usó en lugar del formulario editorial, que mostró una barrera de consentimiento para acceder. Asunto y texto a continuación.
+- CEIM: `comunicacion@ceim.es`. Asunto y texto a continuación.
+- Emprendedores: `info@emprendedores.es`. Asunto y texto a continuación.
+
+### Pymes y Autónomos · correo general
 
 **Asunto:** Guía práctica para ordenar presupuestos pendientes en una pyme
 
@@ -57,12 +63,12 @@ En innure hemos redactado una guía para responsables de pequeñas empresas de s
 Gracias,
 innure
 
-## Comprobaciones antes de distribuir
+## Comprobaciones y seguimiento
 
 - Verificar que la guía responde 200, tiene canónica, figura en sitemap y que el CTA llega al formulario correcto tras la publicación autorizada.
-- Verificar la recepción real del formulario con una prueba identificada como técnica y en un buzón autorizado. Una respuesta SMTP aceptada o una prueba local no prueba llegada a la bandeja de entrada. No se ha realizado ese envío.
-- Confirmar destinatario, texto, canal y ausencia de coste antes de enviar cada propuesta. No crear una secuencia automática ni publicar en el sitio del colaborador sin aceptación.
-- Medir durante 14 días desde la primera distribución comprobada: envíos, respuestas, publicación efectiva, consultas, consultas cualificadas, conversaciones y propuestas. Registrar datos personales solo en un soporte privado autorizado. Si no hay exposición comprobada, no atribuir la ausencia de consultas al mensaje.
+- El 23/09/2026 se envió una prueba identificada como técnica desde el formulario público con `info@innure.es`. La web mostró «Solicitud enviada» y el mensaje apareció en la bandeja de entrada de `info@innure.es`, con copia en el buzón de comprobación. La prueba valida la recepción observada entonces; no garantiza cada envío futuro.
+- Los tres destinatarios, textos y canales se comprobaron antes de enviar. No se ha creado una secuencia automática ni publicado contenido en los sitios de los colaboradores.
+- Registrar durante 14 días desde el 23/09/2026: tres envíos iniciales, respuestas, publicación efectiva, consultas, consultas cualificadas, conversaciones y propuestas. Registrar datos personales solo en un soporte privado autorizado. Si no hay exposición pública comprobada, no atribuir la ausencia de consultas al mensaje.
 
 La campaña de Google Ads sigue fuera de este piloto: en pausa, con 100 EUR totales configurados. No se cambia presupuesto, facturación ni calendario.
 
@@ -70,4 +76,4 @@ La campaña de Google Ads sigue fuera de este piloto: en pausa, con 100 EUR tota
 
 La guía se creó como ruta estática con metadatos propios, canónica, Open Graph, sitemap, enlace desde la solución existente y formulario con contexto de página. Se reutilizaron componentes y estilos del proyecto. Lint, TypeScript, 66 pruebas JavaScript y compilación comercial pasaron en esta rama basada en `main`; la compilación generó la guía y comprobó su HTML. La revisión visible a 1280 px y 390 px confirmó jerarquía, CTA y formulario, sin desbordamiento horizontal en móvil. La validación PHP local no pudo ejecutarse porque `php` no estaba instalado; [CI la ejecutó y pasó](https://github.com/oficio-logico/innure-automatizacion/actions/runs/35793316345).
 
-Pendientes: publicación solo tras integrar el cambio autorizado, comprobación HTTP pública y entrega real del correo, y aceptación de cualquier propuesta editorial. La documentación de continuidad existente en otro checkout se conservó sin incorporarla al commit porque estaba sin seguimiento Git al iniciar el encargo. Esta sección deja el traspaso versionado con los archivos del piloto.
+El PR [#12](https://github.com/oficio-logico/innure-automatizacion/pull/12) está aprobado por el usuario y configurado para fusión automática, pero GitHub exige una revisión formal del propietario del código. No se ha saltado esa protección ni se ha publicado la guía. Pendientes: revisión, fusión y despliegue; después, comprobar HTTP 200, canónica, sitemap y CTA en producción. Vigilar respuestas a los tres mensajes antes de preparar contenido adicional o acordar un coste. La documentación de continuidad existente en otro checkout se conservó sin incorporarla al commit porque estaba sin seguimiento Git al iniciar el encargo. Esta sección deja el traspaso versionado con los archivos del piloto.
