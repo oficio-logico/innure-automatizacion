@@ -1,5 +1,11 @@
 # Continuidad · IA empresas innure
 
+## 2026-09-24 · Logotipo negro en el pie
+
+- Objetivo: mostrar en negro el logotipo del pie de la portada, manteniendo el de la cabecera y los archivos originales sin cambios.
+- Cambio: filtro negro limitado a `.footer-main .brand-logo` sobre el fondo blanco existente.
+- Comprobaciones locales: logo negro legible en escritorio y móvil, cabecera blanca intacta; lint, TypeScript, 72 pruebas Node y compilación estática correctos. Pendiente de verificar la publicación en la web pública; no se tocan otros contenidos, formularios ni publicidad.
+
 ## 2026-09-24 · Carga de logos en la banda móvil
 
 - Problema: algunos logos aparecían tarde o dejaban huecos blancos mientras la banda seguía moviéndose, especialmente cuando el navegador integrado no tenía el ratón encima.

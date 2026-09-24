@@ -488,6 +488,7 @@ span.media-project-icon { display: grid; place-items: center; background: var(--
 .honeypot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 .site-footer { background: #fff; }
 .footer-main { display: flex; align-items: center; gap: 3rem; padding-block: 2.7rem; }
+.footer-main .brand-logo { filter: brightness(0); }
 .footer-main .wordmark b { color: var(--accent); }
 .footer-main > p { font-size: .875rem; color: var(--muted); max-width: 22rem; margin-left: auto; }
 .footer-main > .text-link { margin-left: auto; }
