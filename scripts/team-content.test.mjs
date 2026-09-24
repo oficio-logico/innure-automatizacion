@@ -32,6 +32,12 @@ test('la franja reúne las marcas solicitadas y no muestra las retiradas', async
   }
 });
 
+test('la banda no difiere la carga de logos que entran durante la animación', async () => {
+  const marquee = await readFile(new URL('../app/experience-marquee.tsx', import.meta.url), 'utf8');
+  assert.match(marquee, /loading="eager"/);
+  assert.doesNotMatch(marquee, /loading="lazy"/);
+});
+
 test('los dos perfiles del equipo tienen nombre y función configurados', () => {
   assert.equal(founders.filter((founder) => founder.listo).length, 2);
   for (const founder of founders) {

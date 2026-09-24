@@ -1,5 +1,12 @@
 # Continuidad · IA empresas innure
 
+## 2026-09-24 · Carga de logos en la banda móvil
+
+- Problema: algunos logos aparecían tarde o dejaban huecos blancos mientras la banda seguía moviéndose, especialmente cuando el navegador integrado no tenía el ratón encima.
+- Evidencia en producción antes del cambio: los 41 `img` únicos de la primera vuelta tenían `loading="lazy"`; siete seguían sin estar cargados aunque la página estaba visible y la animación continuaba. Los archivos de la franja suman alrededor de 184 KB en el repositorio.
+- Cambio: las imágenes de la banda se cargan desde el principio (`loading="eager"`) y se deja al navegador decidir la decodificación. La misma URL repetida en la segunda vuelta reutiliza el recurso. No se alteran otros elementos ni la velocidad del movimiento.
+- Comprobaciones locales: lint, TypeScript, 72 pruebas Node y compilación estática de portada correctos. En la vista local, 41/41 imágenes únicas figuran como carga inmediata y ninguna quedaba incompleta tras abrir la página. Pendiente de integrar y comprobar el mismo dato en producción; no se ha enviado ningún formulario.
+
 ## 2026-09-24 · Mensaje de portada y banda de experiencia
 
 - Objetivo: explicar antes el valor de automatización, IA y desarrollo a medida y mostrar las marcas del equipo en una única banda continua.
