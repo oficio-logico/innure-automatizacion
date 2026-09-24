@@ -9,12 +9,32 @@ import { SolutionLinks } from './solution-views';
 export const dynamic = 'force-static';
 
 export default function Home() {
-  const { brand, navigation, hero, landing, contact, founders } = siteContent;
+  const { brand, navigation, hero, landing, contact, founders, experience } = siteContent;
   const publicFounders = founders.filter((founder) => founder.listo);
   const areas = landing.services;
+  const siteUrl = brand.domain.replace(/\/$/, '') + '/';
+  // Ficha de la empresa y de sus cofundadores para que los buscadores distingan
+  // la marca de otras con el mismo nombre.
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization', '@id': `${siteUrl}#organizacion`, name: 'innure', legalName: siteContent.legal.companyName,
+        url: siteUrl, logo: `${siteUrl}images/innure-logo-white.png`, email: 'info@innure.es',
+        address: { '@type': 'PostalAddress', addressLocality: 'Leganés', addressRegion: 'Madrid', postalCode: '28915', addressCountry: 'ES' },
+        founder: publicFounders.map((founder) => ({ '@id': `${siteUrl}#${founder.name.split(' ')[0].toLowerCase()}` })),
+      },
+      ...publicFounders.map((founder) => ({
+        '@type': 'Person', '@id': `${siteUrl}#${founder.name.split(' ')[0].toLowerCase()}`, name: founder.name,
+        jobTitle: founder.role, worksFor: { '@id': `${siteUrl}#organizacion` },
+        ...(founder.linkedin ? { sameAs: [founder.linkedin] } : {}),
+      })),
+    ],
+  };
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema).replace(/</g, '\\u003c') }} />
       <PageExperience />
       <a className="skip-link" href="#contenido">Saltar al contenido</a>
       <header className="site-header">
@@ -65,6 +85,18 @@ export default function Home() {
         <div className="shell benefit-strip" aria-label="Lo que buscamos para tu negocio">
           {landing.benefits.map((benefit) => <p key={benefit}><Icon name="check" />{benefit}</p>)}
         </div>
+
+        <section className="shell experience-strip" aria-labelledby="experience-title">
+          <p className="eyebrow" id="experience-title">{experience.title}</p>
+          {experience.groups.map((group) => <div className="experience-group" key={group.label}>
+            <p className="experience-label">{group.label}</p>
+            <ul className="experience-logos" aria-label={`${experience.title}: ${group.label.toLowerCase()}`}>
+              {group.items.map((item) => <li key={item.name}>{item.logo
+                ? <img className={item.tone === 'color' ? 'is-color' : undefined} src={withBasePath(item.logo)} alt={item.name} width="120" height="40" loading="lazy" decoding="async" />
+                : <span>{item.name}</span>}</li>)}
+            </ul>
+          </div>)}
+        </section>
 
         <section className="services section-space" id="que-hacemos" aria-labelledby="services-title">
           <div className="shell">

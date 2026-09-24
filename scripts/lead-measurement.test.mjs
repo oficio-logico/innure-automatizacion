@@ -6,7 +6,7 @@ import vm from 'node:vm';
 const code = readFileSync(new URL('../public/lead-measurement.js',import.meta.url),'utf8');
 function setup({ consent, origin = 'https://www.innure.es', destination = 'AW-123456/AutomationOnly', search = '', pathname = '/', cookies = [], local = new Map() } = {}) {
   const session = new Map(); const events = new Map(); const documentEvents = new Map(); const tags = []; const buttons = new Map(); const cookieWrites = []; let banner; let reloads = 0;
-  if (consent) local.set('innure_automation_consent_v1', JSON.stringify({value:consent,at:Date.now()}));
+  if (consent) local.set('innure_consent_v1', JSON.stringify({value:consent,at:Date.now()}));
   const storage = map => ({getItem:key=>map.get(key)??null,setItem:(key,value)=>map.set(key,value),removeItem:key=>map.delete(key)});
   const context = {
     location:{origin,pathname,search,reload:()=>{reloads++;}},
@@ -28,7 +28,7 @@ function setup({ consent, origin = 'https://www.innure.es', destination = 'AW-12
   context.window=context;
   vm.runInNewContext(code,context);
   return {context,tags,session,buttons,cookieWrites,banner:()=>banner,emit:detail=>events.get('innure:lead-received')?.({detail}),reloads:()=>reloads,
-    storageEvent:(overrides={})=>events.get('storage')?.({key:'innure_automation_consent_v1',storageArea:context.localStorage,...overrides}),
+    storageEvent:(overrides={})=>events.get('storage')?.({key:'innure_consent_v1',storageArea:context.localStorage,...overrides}),
     settingsClick:()=>documentEvents.get('click')?.({target:{closest:selector=>selector==='[data-automation-measurement]'?{}:null}}),
     unrelatedClick:()=>documentEvents.get('click')?.({target:{closest:()=>null}})};
 }
@@ -60,19 +60,19 @@ test('solo lead aceptado de automatización, una vez y sin PII',()=>{
   assert.equal(events.length,1); assert.equal(events[0][2].send_to,'AW-123456/AutomationOnly');
   assert.deepEqual(Object.keys(events[0][2]),['send_to','transaction_id','value','currency']);
 });
-test('retirar consentimiento borra solo cookies propias de raíz, atribución y etiquetas',()=>{
+test('retirar consentimiento borra las cookies de las dos líneas, atribución y etiquetas',()=>{
   const result=setup({search:'?utm_campaign=auto',cookies:['innure_auto_gcl_au=own','_gcl_au=performance']}); result.buttons.get('accepted')(); result.buttons.get('rejected')();
   assert.equal(result.reloads(),1); assert.equal(result.session.has('innure_automation_attribution_v1'),false);
-  assert.ok(result.cookieWrites.some(value=>value.startsWith('innure_auto_gcl_au=;') && value.includes('Path=/')));
-  assert.ok(!result.cookieWrites.some(value=>value.startsWith('_gcl_au=;') && value.includes('Path=/')));
+  assert.ok(result.cookieWrites.some(value=>value.startsWith('innure_auto_gcl_au=;') && value.includes('Path=/; Domain=www.innure.es')));
+  assert.ok(result.cookieWrites.some(value=>value.startsWith('_gcl_au=;') && value.includes('Path=/; Domain=innure.es')));
   result.emit({service:'automatizacion-ia',submissionId:'a'.repeat(32)});
   assert.equal(result.context.dataLayer.map(args=>Array.from(args)).filter(c=>c[0]==='event').length,0);
 });
-test('al revocar desde la ruta antigua limpia solo su cookie heredada',()=>{
+test('al revocar desde la ruta antigua limpia también su cookie heredada',()=>{
   const result=setup({pathname:'/automatizacion/',cookies:['_gcl_au=legacy','innure_auto_gcl_au=own']});
   result.buttons.get('accepted')(); result.buttons.get('rejected')();
   assert.ok(result.cookieWrites.some(value=>value.startsWith('_gcl_au=;') && value.includes('Path=/automatizacion/')));
-  assert.ok(!result.cookieWrites.some(value=>value.startsWith('_gcl_au=;') && value.includes('Path=/;')));
+  assert.ok(result.cookieWrites.some(value=>value.startsWith('_gcl_au=;') && value.includes('Path=/;')));
 });
 test('desactivado fuera del dominio o con destino inválido',()=>{
   assert.equal(setup({origin:'http://localhost:3000',consent:'accepted'}).tags.length,0);
@@ -96,7 +96,7 @@ test('revocar en otra pestaña detiene la medición sin reescribir su decisión'
   const first=setup({consent:'accepted',local});
   const second=setup({local,search:'?utm_campaign=auto',cookies:['innure_auto_gcl_au=own','_gcl_au=performance']});
   first.settingsClick(); first.buttons.get('rejected')();
-  const saved=local.get('innure_automation_consent_v1');
+  const saved=local.get('innure_consent_v1');
   second.storageEvent();
   assert.equal(second.reloads(),1);
   assert.equal(second.session.has('innure_automation_attribution_v1'),false);
@@ -106,13 +106,13 @@ test('revocar en otra pestaña detiene la medición sin reescribir su decisión'
   assert.equal(commands.filter(c=>c[0]==='event').length,0);
   assert.equal(commands.filter(c=>c[0]==='consent'&&c[1]==='update').at(-1)[2].ad_storage,'denied');
   assert.ok(second.cookieWrites.some(value=>value.startsWith('innure_auto_gcl_au=;')));
-  assert.ok(!second.cookieWrites.some(value=>value.startsWith('_gcl_au=;')));
-  assert.equal(local.get('innure_automation_consent_v1'),saved);
+  assert.ok(second.cookieWrites.some(value=>value.startsWith('_gcl_au=;')));
+  assert.equal(local.get('innure_consent_v1'),saved);
   second.storageEvent(); assert.equal(second.reloads(),1);
 });
 for (const action of ['attribution','conversion']) test(`revocación pendiente de evento storage bloquea ${action}`,()=>{
   const local=new Map(); const result=setup({consent:'accepted',local,search:'?gclid=synthetic'});
-  local.set('innure_automation_consent_v1',JSON.stringify({value:'rejected',at:Date.now()}));
+  local.set('innure_consent_v1',JSON.stringify({value:'rejected',at:Date.now()}));
   if (action==='attribution') assert.deepEqual(Object.keys(result.context.innureAutomationAttribution()),[]);
   else {
     result.emit({service:'automatizacion-ia',submissionId:'c'.repeat(32)});
@@ -130,7 +130,7 @@ test('aceptar en otra pestaña habilita una sola etiqueta y conserva las restric
 });
 test('ignora cambios de otras claves y sessionStorage',()=>{
   const local=new Map(); const result=setup({consent:'accepted',local});
-  local.set('innure_automation_consent_v1',JSON.stringify({value:'rejected',at:Date.now()}));
+  local.set('innure_consent_v1',JSON.stringify({value:'rejected',at:Date.now()}));
   result.storageEvent({storageArea:result.context.sessionStorage});
   result.storageEvent({key:'unrelated'});
   assert.equal(result.reloads(),0);
@@ -139,8 +139,8 @@ test('ignora cambios de otras claves y sessionStorage',()=>{
 for (const [label,invalid] of [['borrado',null],['JSON malformado','invalid-json'],['valor desconocido',JSON.stringify({value:'unknown',at:Date.now()})],['caducado',JSON.stringify({value:'accepted',at:0})],['fecha futura',JSON.stringify({value:'accepted',at:Date.now()+86400000})]]) {
   test(`borrado o consentimiento inválido retira la medición: ${label}`,()=>{
     const local=new Map(); const result=setup({consent:'accepted',local,search:'?utm_campaign=auto'});
-    if (invalid===null) local.clear(); else local.set('innure_automation_consent_v1',invalid);
-    result.storageEvent({key:invalid===null?null:'innure_automation_consent_v1'});
+    if (invalid===null) local.clear(); else local.set('innure_consent_v1',invalid);
+    result.storageEvent({key:invalid===null?null:'innure_consent_v1'});
     assert.equal(result.reloads(),1); assert.equal(result.banner().hidden,false);
     assert.equal(result.session.has('innure_automation_attribution_v1'),false);
     assert.deepEqual(Object.keys(result.context.innureAutomationAttribution()),[]);
@@ -169,7 +169,7 @@ test('si falla guardar el rechazo se elimina la aceptación anterior antes de re
   first.context.localStorage.setItem=()=>{throw new Error('Storage write blocked');};
   first.settingsClick(); first.buttons.get('rejected')();
   assert.equal(first.reloads(),1);
-  assert.equal(local.has('innure_automation_consent_v1'),false);
+  assert.equal(local.has('innure_consent_v1'),false);
   assert.deepEqual(Object.keys(first.context.innureAutomationAttribution()),[]);
   const afterReload=setup({local});
   assert.equal(afterReload.tags.length,0);
@@ -181,11 +181,30 @@ for (const removal of ['throws','ineffective']) test(`si el rechazo no puede per
   result.context.localStorage.removeItem=()=>{if(removal==='throws')throw new Error('Storage removal blocked');};
   result.settingsClick(); result.buttons.get('rejected')();
   assert.equal(result.reloads(),0);
-  assert.equal(JSON.parse(local.get('innure_automation_consent_v1')).value,'accepted');
+  assert.equal(JSON.parse(local.get('innure_consent_v1')).value,'accepted');
   assert.deepEqual(Object.keys(result.context.innureAutomationAttribution()),[]);
   result.emit({service:'automatizacion-ia',submissionId:'e'.repeat(32)});
   const commands=result.context.dataLayer.map(args=>Array.from(args));
   assert.equal(commands.filter(c=>c[0]==='event').length,0);
   assert.equal(commands.filter(c=>c[0]==='consent'&&c[1]==='update').at(-1)[2].ad_storage,'denied');
   assert.equal(result.session.has('innure_automation_attribution_v1'),false);
+});
+test('hereda un rechazo anterior de cualquiera de las dos líneas y retira las claves antiguas',()=>{
+  for (const [name,saved] of [['innure_automation_consent_v1',{value:'rejected',at:Date.now()}],['innure_ads_consent_v1',{value:'rejected',savedAt:Date.now()}]]) {
+    const local=new Map([[name,JSON.stringify(saved)]]); const result=setup({local});
+    assert.equal(result.banner(),undefined,name); assert.equal(result.tags.length,0,name);
+    assert.equal(JSON.parse(local.get('innure_consent_v1')).value,'rejected',name);
+    assert.equal(local.has(name),false,name);
+  }
+});
+test('una aceptación anterior no se hereda: se vuelve a preguntar',()=>{
+  const local=new Map([['innure_ads_consent_v1',JSON.stringify({value:'accepted',savedAt:Date.now()})]]); const result=setup({local});
+  assert.equal(result.banner().hidden,false); assert.equal(result.tags.length,0);
+  assert.equal(local.has('innure_consent_v1'),false);
+});
+test('el rechazo guardado borra al cargar las cookies de atribución que queden',()=>{
+  const result=setup({consent:'rejected',cookies:['_gcl_au=performance','innure_auto_gcl_au=own']});
+  assert.ok(result.cookieWrites.some(value=>value.startsWith('_gcl_au=;')));
+  assert.ok(result.cookieWrites.some(value=>value.startsWith('innure_auto_gcl_au=;')));
+  assert.equal(result.reloads(),0);
 });

@@ -4,5 +4,19 @@ RewriteEngine On
 RewriteCond %{HTTP_HOST} ^innure\.es$ [NC]
 RewriteRule ^(.*)$ https://www.innure.es/$1 [R=301,L]
 
+# Una sola versión de las páginas legales para todo innure.es. Las antiguas de
+# rendimiento siguen en el alojamiento, pero redirigen a las comunes.
+RewriteRule ^privacidad\.html$ /privacidad/ [R=301,L]
+RewriteRule ^aviso-legal\.html$ /aviso-legal/ [R=301,L]
+RewriteRule ^cookies\.html$ /privacidad/#medicion [R=301,L,NE]
+
+# Cabeceras de seguridad que no afectan a Turnstile ni a Google Ads. No se
+# añade una CSP completa: podría bloquear esos servicios si no se prueba antes.
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+
 # Las rutas inexistentes conservan su estado HTTP 404.
 ErrorDocument 404 /404.html

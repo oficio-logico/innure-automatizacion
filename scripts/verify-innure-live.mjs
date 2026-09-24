@@ -57,7 +57,18 @@ for (const url of assets) {
 }
 const robots = await get(base+'robots.txt');
 assert.equal(robots.status,200);
-assert.match(await robots.text(), /Sitemap: https:\/\/www\.innure\.es\/sitemap\.xml/);
+const robotsText = await robots.text();
+assert.match(robotsText, /Sitemap: https:\/\/www\.innure\.es\/sitemap\.xml/);
+assert.match(robotsText, /Disallow: \/automatizacion\/contacto\.php/);
+assert.doesNotMatch(robotsText, /config/i);
+for (const [legacy, target] of [['privacidad.html','privacidad/'],['aviso-legal.html','aviso-legal/'],['cookies.html','privacidad/#medicion']]) {
+  const moved = await get(base+legacy,{redirect:'manual'});
+  assert.equal(moved.status,301,legacy);
+  assert.equal(new URL(moved.headers.get('location'),base).href,base+target,legacy);
+}
+// Las cabeceras dependen de mod_headers en el alojamiento: se avisa sin bloquear.
+const home = await get(base);
+if (home.headers.get('x-content-type-options') !== 'nosniff') console.warn('Aviso: la portada no devuelve X-Content-Type-Options: nosniff');
 for (const route of ['', 'proyectos/', 'privacidad/']) {
   const moved = await get(base+'automatizacion/'+route,{redirect:'manual'});
   assert.equal(moved.status,301);
