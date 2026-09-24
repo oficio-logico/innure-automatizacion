@@ -3,6 +3,7 @@ import { ContactForm, ContactJourney, CurrentYear, MobileNavigation, ProcessExam
 import { Icon } from './icons';
 import { Portfolio } from './portfolio';
 import { PageExperience } from './page-experience';
+import { ExperienceMarquee } from './experience-marquee';
 import { siteContent, withBasePath } from './site-content';
 import { SolutionLinks } from './solution-views';
 
@@ -12,6 +13,8 @@ export default function Home() {
   const { brand, navigation, hero, landing, contact, founders, experience } = siteContent;
   const publicFounders = founders.filter((founder) => founder.listo);
   const areas = landing.services;
+  const experienceItems = Array.from({ length: Math.max(...experience.groups.map((group) => group.items.length)) }, (_, index) =>
+    experience.groups.flatMap((group) => group.items[index] ? [group.items[index]] : [])).flat();
   const siteUrl = brand.domain.replace(/\/$/, '') + '/';
   // Ficha de la empresa y de sus cofundadores para que los buscadores distingan
   // la marca de otras con el mismo nombre.
@@ -86,17 +89,7 @@ export default function Home() {
           {landing.benefits.map((benefit) => <p key={benefit}><Icon name="check" />{benefit}</p>)}
         </div>
 
-        <section className="shell experience-strip" aria-labelledby="experience-title">
-          <p className="eyebrow" id="experience-title">{experience.title}</p>
-          {experience.groups.map((group) => <div className="experience-group" key={group.label}>
-            <p className="experience-label">{group.label}</p>
-            <ul className="experience-logos" aria-label={`${experience.title}: ${group.label.toLowerCase()}`}>
-              {group.items.map((item) => <li key={item.name}>{item.logo
-                ? <img className={item.tone === 'color' ? 'is-color' : undefined} src={withBasePath(item.logo)} alt={item.name} width="120" height="40" loading="lazy" decoding="async" />
-                : <span>{item.name}</span>}</li>)}
-            </ul>
-          </div>)}
-        </section>
+        <ExperienceMarquee title={experience.title} items={experienceItems} />
 
         <section className="services section-space" id="que-hacemos" aria-labelledby="services-title">
           <div className="shell">

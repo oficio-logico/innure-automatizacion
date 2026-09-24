@@ -1,5 +1,13 @@
 # Continuidad · IA empresas innure
 
+## 2026-09-24 · Mensaje de portada y banda de experiencia
+
+- Objetivo: explicar antes el valor de automatización, IA y desarrollo a medida y mostrar las marcas del equipo en una única banda continua.
+- Cambios: portada con titular y entradilla más concretos; grupos de logos mezclados en una banda lenta con pausa manual y presentación estática cuando se prefiere movimiento reducido. Retirados elrow y Love the Twenties; añadidos SHARK, Bresh, La Riviera, Oh My Club, Reggaeton Beach Festival, WAH, Copérnico y Autocine Madrid. Se usan marcas verificadas en origen para cinco entradas y el nombre tipográfico para las otras tres, sin inventar un logotipo.
+- Comprobaciones: lint, TypeScript, 71 pruebas Node y compilación estática `INNURE_TARGET=home INNURE_MEASUREMENT_ENV=preview` correctos; revisión visual local en escritorio y móvil, incluida la pausa. No se ha enviado el formulario ni activado publicidad.
+- Límite: esta rama se entrega para revisión; integrarla en `main` publicaría tanto la portada comercial como GitHub Pages. Propuesta aparte, aún no implementada: caso ilustrativo de seguimiento de solicitudes y presupuestos para empresas de instalaciones.
+- Siguiente paso: revisar la banda y el titular, decidir si sustituir los tres nombres tipográficos por archivos de marca facilitados por sus titulares y autorizar la integración/publicación si convencen.
+
 ## 2026-09-24 · Retirada del logotipo de Agencia Tributaria
 
 - Objetivo: retirar de la web de automatización el logotipo independiente de Agencia Tributaria.

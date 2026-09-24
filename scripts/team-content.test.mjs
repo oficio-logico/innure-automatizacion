@@ -18,6 +18,20 @@ test('la franja de experiencia no incluye Agencia Tributaria', async () => {
   await assert.rejects(access(new URL('../public/images/experiencia/agencia-tributaria.webp', import.meta.url)));
 });
 
+test('la franja reúne las marcas solicitadas y no muestra las retiradas', async () => {
+  const items = experience.groups.flatMap((group) => group.items);
+  const names = items.map((item) => item.name);
+  for (const name of ['SHARK', 'Bresh', 'La Riviera', 'Oh My Club', 'Reggaeton Beach Festival', 'WAH', 'Copérnico', 'Autocine Madrid']) {
+    assert.ok(names.includes(name), `Falta ${name}`);
+  }
+  assert.ok(!names.includes('elrow'));
+  assert.ok(!names.includes('Love the Twenties'));
+  assert.equal(new Set(names).size, names.length);
+  for (const item of items) {
+    if (item.logo) await access(new URL('../public' + item.logo, import.meta.url));
+  }
+});
+
 test('los dos perfiles del equipo tienen nombre y función configurados', () => {
   assert.equal(founders.filter((founder) => founder.listo).length, 2);
   for (const founder of founders) {
