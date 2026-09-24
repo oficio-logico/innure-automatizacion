@@ -86,3 +86,11 @@ circulares. No copiar secretos, historiales completos ni documentación privada.
 **Comprobaciones:** lint y tipos correctos; 50 pruebas Node correctas; compilación `INNURE_TARGET=home INNURE_MEASUREMENT_ENV=preview` correcta; los cuatro archivos devuelven HTTP 200 en la vista local. Se inspeccionó la composición renderizada en escritorio y móvil. No se ejecutaron las pruebas PHP porque `php` no está instalado en este entorno; no hay cambios en PHP. No se ha publicado en producción.
 
 **Siguiente paso:** revisión visual del usuario en `http://localhost:3000/#ejemplos`. Si la aprueba, integrar mediante PR a `main` para activar la publicación existente, sin tocar la campaña.
+
+## 2026-09-24 · Foto del grupo de WhatsApp
+
+**Objetivo y cambio autorizado:** establecer la imagen de marca en el grupo de WhatsApp de innure. Se reutilizó `public/innure-favicon.png` (512 × 512), con el símbolo «in» sobre el degradado azul y violeta, sin modificar el archivo original.
+
+**Decisión visual y comprobaciones:** la versión cuadrada conserva la legibilidad en miniatura. Se inspeccionó el recorte circular antes de guardarlo y la ficha del grupo después: la imagen quedó aplicada, centrada y sin cortar el símbolo.
+
+**Límites y siguiente paso:** no se modificaron la web ni otros ajustes del grupo. No quedan pasos pendientes para este encargo. El único cambio en el repositorio es esta anotación de continuidad; las pruebas de código no aplican.
