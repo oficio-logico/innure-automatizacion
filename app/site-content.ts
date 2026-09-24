@@ -230,7 +230,7 @@ export const siteContent = {
         { name: 'Boombastic', logo: '/images/experiencia/boombastic.webp', tone: 'color' },
         { name: 'elrow', logo: '/images/experiencia/elrow.svg' },
         { name: 'A Summer Story', logo: '/images/experiencia/a-summer-story.webp', tone: 'color' },
-        { name: 'Dreambeach' },
+        { name: 'Dreambeach', logo: '/images/experiencia/dreambeach.webp' },
         { name: 'Fabrik', logo: '/images/experiencia/fabrik.webp', tone: 'color' },
         { name: 'Teatro Kapital', logo: '/images/experiencia/teatro-kapital.webp' },
         { name: 'Teatro Barceló', logo: '/images/experiencia/teatro-barcelo.webp' },
