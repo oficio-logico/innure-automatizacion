@@ -210,7 +210,6 @@ export const siteContent = {
         { name: 'MAPFRE', logo: '/images/experiencia/mapfre.webp' },
         { name: 'Sareb', logo: '/images/experiencia/sareb.webp' },
         { name: 'SegurCaixa', logo: '/images/experiencia/segurcaixa.webp' },
-        { name: 'Agencia Tributaria', logo: '/images/experiencia/agencia-tributaria.webp' },
         { name: 'Ferrovial', logo: '/images/experiencia/ferrovial.webp' },
         { name: 'Renfe', logo: '/images/experiencia/renfe.webp' },
         { name: 'Telefónica', logo: '/images/experiencia/telefonica.webp' },
