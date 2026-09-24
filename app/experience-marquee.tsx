@@ -14,7 +14,7 @@ export function ExperienceMarquee({ title, items }: { title: string; items: Expe
       {items.map((item) => <li key={item.name}>
         {item.logo && <img className={item.tone === 'color' ? 'is-color' : undefined}
           src={withBasePath(item.logo)} alt={item.markOnly ? '' : item.name}
-          width="120" height="40" loading="lazy" decoding="async" />}
+          width="120" height="40" loading="eager" />}
         {(!item.logo || item.markOnly) && <span>{item.name}</span>}
       </li>)}
     </ul>
