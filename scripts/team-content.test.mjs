@@ -10,7 +10,13 @@ const { outputText } = ts.transpileModule(source, {
 });
 const exports = {};
 vm.runInNewContext(outputText, { exports, process: { env: {} } });
-const { founders, publishing } = exports.siteContent;
+const { founders, publishing, experience } = exports.siteContent;
+
+test('la franja de experiencia no incluye Agencia Tributaria', async () => {
+  const names = experience.groups.flatMap((group) => group.items.map((item) => item.name));
+  assert.ok(!names.includes('Agencia Tributaria'));
+  await assert.rejects(access(new URL('../public/images/experiencia/agencia-tributaria.webp', import.meta.url)));
+});
 
 test('los dos perfiles del equipo tienen nombre y función configurados', () => {
   assert.equal(founders.filter((founder) => founder.listo).length, 2);

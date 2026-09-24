@@ -1,5 +1,13 @@
 # Continuidad · IA empresas innure
 
+## 2026-09-24 · Retirada del logotipo de Agencia Tributaria
+
+- Objetivo: retirar de la web de automatización el logotipo independiente de Agencia Tributaria.
+- Cambio: eliminada su entrada de la franja de experiencia y el archivo de imagen correspondiente. Las capturas del Gestor de Certificados, que muestran la interfaz real del producto, permanecen intactas.
+- Comprobaciones locales: `npm run lint`, `npx tsc --noEmit`, `node --test scripts/*.test.mjs` (70 pruebas) y `INNURE_TARGET=home INNURE_MEASUREMENT_ENV=preview npm run build:innure`, correctos. El HTML exportado ya no menciona la marca ni el archivo; la franja se revisó visualmente en escritorio sin hueco.
+- Límites: no se han modificado el formulario, PHP, las campañas ni otros proyectos. Falta comprobar el despliegue público tras integrar la rama.
+- Siguiente paso: integrar en `main`, verificar el workflow de publicación y confirmar en `www.innure.es` que desapareció la entrada.
+
 Actualizada: 2026-09-22. Alcance: traspaso documental a otra herramienta, sin cambios
 funcionales ni revalidación de producción. Las comprobaciones históricas que se
 mencionan son las registradas en las fuentes, no pruebas repetidas en este encargo.
