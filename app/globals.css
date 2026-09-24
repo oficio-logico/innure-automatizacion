@@ -306,6 +306,12 @@ span.media-project-icon { display: grid; place-items: center; background: var(--
 .examples .process-flow li:nth-child(3) .flow-icon { animation-delay: 320ms; }
 .examples .process-flow li:nth-child(4) .flow-icon { animation-delay: 480ms; }
 .examples .process-flow { margin-top: 1.75rem; padding-top: 1.75rem; }
+.example-video { margin: 1.75rem 0 0; padding-top: 1.75rem; border-top: 1px solid #40505d; }
+.example-video-heading { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: .85rem; font-size: .875rem; font-weight: 650; color: var(--cyan); }
+.example-video-heading span:last-child { color: #b5c5ce; font-weight: 400; }
+.example-video video { display: block; width: 100%; height: auto; max-height: 36rem; margin-inline: auto; background: #f3fbfb; border-radius: .4rem; }
+.example-video .example-video-portrait { display: none; }
+.example-video figcaption { margin-top: .85rem; color: #b5c5ce; font-size: .875rem; line-height: 1.5; }
 @keyframes scene-enter { from { opacity: .55; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 @keyframes flow-step { 35% { background: var(--cyan); color: var(--night); border-color: var(--cyan); transform: translateY(-3px); } }
 @media (hover: hover) and (pointer: fine) {
@@ -628,6 +634,9 @@ span.media-project-icon { display: grid; place-items: center; background: var(--
   .example-tabs { flex-direction: column; gap: .6rem; }
   .example-tabs button { justify-content: start; padding: .8rem 1rem; font-size: .94rem; }
   .example-panel { padding: 1.4rem; }
+  .example-video-heading { flex-direction: column; gap: .15rem; }
+  .example-video .example-video-landscape { display: none; }
+  .example-video .example-video-portrait { display: block; max-width: 22rem; max-height: none; }
   .example-story h3 { font-size: 1.65rem; }
   .before-after { grid-template-columns: 1fr; gap: 1.3rem; }
   .before-after > div:last-child { padding-left: 1rem; }

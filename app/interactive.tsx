@@ -58,12 +58,27 @@ export function ProcessExamples() {
           <h3>{active.title}</h3>
           <div className="before-after"><div><span>Ahora, a mano</span><p>{active.before}</p></div><div><span>Con la solución</span><p>{active.after}</p></div></div>
         </div>
-        <ol className="process-flow" role="list">
+        {active.id === 'pedidos' ? <figure className="example-video">
+          <div className="example-video-heading"><span>Así podría funcionar</span><span>20 segundos · sin audio</span></div>
+          <video className="example-video-landscape" controls preload="none" playsInline
+            poster={withBasePath('/videos/pedido-horizontal-portada.jpg')}
+            aria-label="Ejemplo ilustrativo de automatización de un pedido">
+            <source src={withBasePath('/videos/pedido-horizontal.mp4')} type="video/mp4" />
+            Tu navegador no puede reproducir este vídeo.
+          </video>
+          <video className="example-video-portrait" controls preload="none" playsInline
+            poster={withBasePath('/videos/pedido-vertical-portada.jpg')}
+            aria-label="Ejemplo ilustrativo de automatización de un pedido">
+            <source src={withBasePath('/videos/pedido-vertical.mp4')} type="video/mp4" />
+            Tu navegador no puede reproducir este vídeo.
+          </video>
+          <figcaption>Un pedido llega por correo, se extraen los datos, tu equipo los revisa y la información queda registrada. Caso ilustrativo con datos ficticios.</figcaption>
+        </figure> : <ol className="process-flow" role="list">
           {active.steps.map((step, index) => <li key={step.title}>
             <div className="flow-icon"><Icon name={step.icon} /><span>{index + 1}</span></div>
             <h4>{step.title}</h4><p>{step.detail}</p>
           </li>)}
-        </ol>
+        </ol>}
         </div>
       </div>
       <div className="example-bottom">

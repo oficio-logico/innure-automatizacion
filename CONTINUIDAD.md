@@ -74,3 +74,15 @@ circulares. No copiar secretos, historiales completos ni documentación privada.
 **Comprobaciones:** prueba interna desde el formulario publicado `INNURE-RECEPCION-20260923-A1`, recibida en la bandeja de `info@innure.es` a las 21:08 (referencia `52274a49dc1437b067fe14eab4f0a824`). Sus encabezados muestran `To: info@innure.es` y `Cc: santi@innure.es`; esto acredita la ruta activa y la aceptación SMTP de ambos destinatarios, no la entrega final al buzón de Santiago. No hay acceso a `santi@innure.es` en el entorno disponible y no se ha verificado su bandeja, spam ni reglas. No se leyó directamente el archivo privado del hosting; los valores efectivos se deducen de la prueba y de cómo el receptor construye los encabezados tras aceptar `RCPT TO`.
 
 **Siguiente paso:** Santiago debe buscar la referencia `52274a49dc1437b067fe14eab4f0a824` o el marcador `INNURE-RECEPCION-20260923-A1` en Recibidos, spam y posibles reglas de `santi@innure.es`, y confirmar si recibió el mismo mensaje. Si no aparece, el titular de DonDominio debe revisar el buzón y el registro de entrega/rechazos para esa referencia y hora, sin compartir credenciales.
+
+## 2026-09-24 · Vídeo del ejemplo de pedidos
+
+**Objetivo:** mostrar en la portada un vídeo ilustrativo del proceso de pedidos, preparado para revisión local antes de decidir su publicación.
+
+**Decisión visual:** el vídeo se integra únicamente en «Así cambia el día a día» / «Copiar datos entre programas». No sustituye la cabecera general. Se muestran los archivos horizontal o vertical según el ancho de pantalla, con portada, controles nativos, sin audio, sin reproducción automática y sin precarga del MP4. El texto cercano resume la secuencia y aclara que los datos son ficticios.
+
+**Cambios:** `app/interactive.tsx`, `app/globals.css` y cuatro archivos en `public/videos/` (dos MP4 y dos portadas). Los otros dos ejemplos conservan sus pasos anteriores. No se alteraron el formulario, Google Ads ni la configuración de publicación.
+
+**Comprobaciones:** lint y tipos correctos; 50 pruebas Node correctas; compilación `INNURE_TARGET=home INNURE_MEASUREMENT_ENV=preview` correcta; los cuatro archivos devuelven HTTP 200 en la vista local. Se inspeccionó la composición renderizada en escritorio y móvil. No se ejecutaron las pruebas PHP porque `php` no está instalado en este entorno; no hay cambios en PHP. No se ha publicado en producción.
+
+**Siguiente paso:** revisión visual del usuario en `http://localhost:3000/#ejemplos`. Si la aprueba, integrar mediante PR a `main` para activar la publicación existente, sin tocar la campaña.
