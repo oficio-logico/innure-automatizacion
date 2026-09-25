@@ -1,5 +1,15 @@
 # Continuidad · IA empresas innure
 
+## 2026-09-25 · Publicación y comprobaciones de captación
+
+- Publicado el paquete de captación (PR #20) y corregida la exclusión FTP del receptor (PR #21). Versión pública verificada: `de7800b7f69232fa912af2d09c2d35c0c77ffbb9`; run `36112250777` correcto. El log acredita la subida de `automatizacion/contacto.php` y `receiverVersionChecked: true`. El estado pendiente descrito en la entrada anterior queda resuelto por esta verificación.
+- CI: lint, tipos, 74 pruebas Node y 57 comprobaciones PHP correctos, sin correo real en CI. La comprobación pública valida páginas, recursos, sitemap, metadatos, 404 y rechazo de peticiones no válidas.
+- Segunda prueba interna autorizada recibida tras la corrección en el buzón principal y en el respaldo de Sergio. Inversión, plazo y página de origen llegan correctamente. La copia de Santi figura en el envío, pero su buzón no se ha verificado. Los detalles e identificadores permanecen en el registro privado del encargo.
+- En navegador: envío con medición rechazada sin peticiones publicitarias; aceptación carga una etiqueta; revocación la retira tras recarga. No se generó una conversión ficticia. Cloudflare ya muestra la portada y páginas de soluciones en su panel. Solicitudes de indexación de automatización y consultoría IA aceptadas en Search Console; no equivalen a indexación terminada.
+- Ads se mantiene pausado por instrucción expresa del usuario. Configuración comercial, importes, facturación y trámites pendientes se documentan fuera del repositorio público. No programar ni ejecutar una activación automática.
+- Rendimiento: se repitió PageSpeed, pero persisten HTTP 510 intermitentes en imágenes, también presentes en accesos móviles normales del hosting. Una carga posterior acotada respondió 200 desde caché; no identifica la causa ni acredita resolución. No se modificaron protecciones. Se ha preparado una consulta técnica al proveedor; los registros y su estado se conservan en el informe privado.
+- Este cierre solo actualiza documentación; la web publicada no requiere otro despliegue por esta entrada. El checkout original y sus cambios preexistentes se conservan.
+
 ## 2026-09-25 · Receptor de formulario omitido en la publicación
 
 - Hallazgo: la PR #20 se fusionó en `main` (`1d9db3954583cf3d1b77bdad4ddafdde930fe057`) y el run público `36110821391` terminó correctamente, pero la consulta técnica recibida a las 10:11 aún mostró «Origen: /automatizacion/» fijo y no incluyó inversión ni plazo. El artefacto de ese run sí contenía `automatizacion/contacto.php` actualizado, con el mismo SHA-256 que `server/contacto.php`; el registro de FTP no muestra su subida. La exclusión `contacto.php` del workflow abarcaba también la ruta anidada. `release.json` acredita la versión del paquete, no la del receptor PHP.
