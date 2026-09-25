@@ -836,16 +836,16 @@ export const solutionCatalog = [
   {
     slug: 'aplicaciones-a-medida',
     group: 'Decisiones',
-    navTitle: 'Aplicación a medida o herramienta existente',
-    title: 'Aplicación a medida o herramienta existente',
+    navTitle: 'Aplicaciones a medida',
+    title: 'Desarrollo de aplicaciones a medida para empresas',
     description:
-      'Cómo decidir entre configurar el software actual, integrar varias herramientas o desarrollar una aplicación a medida, teniendo en cuenta el coste total.',
-    eyebrow: 'Decisiones',
-    headline: '¿Necesitas una aplicación nueva o aprovechar mejor tus herramientas?',
+      'Desarrollamos aplicaciones de gestión, herramientas internas y portales para empresas. Apoyo de IA, revisión técnica, pruebas y mantenimiento acordado.',
+    eyebrow: 'Desarrollo de aplicaciones para empresas',
+    headline: 'Aplicaciones a medida para la forma de trabajar de tu empresa',
     intro:
-      'Cuando una tarea se atasca, es tentador pedir una aplicación nueva. Antes conviene comparar tres caminos: configurar lo que ya existe, integrar varias herramientas o desarrollar. La decisión depende del proceso, no de la tecnología de moda.',
+      'Creamos aplicaciones de gestión, herramientas internas y portales adaptados a tu negocio. Desarrollo con apoyo de IA, revisión técnica y pruebas. Acordamos contigo el alcance, el presupuesto y el mantenimiento.',
     audience:
-      'Direcciones y responsables de operaciones que dudan entre adaptar sus herramientas actuales y encargar un desarrollo a medida, y necesitan comparar con criterios claros.',
+      'Empresas que necesitan gestionar pedidos, trabajos, documentación o clientes con una herramienta adaptada a su proceso.',
     problem: {
       title: 'Pedir una aplicación cuando basta con configurar',
       text: 'A veces una empresa pide una aplicación nueva porque una tarea se atasca, aunque la causa sea un software mal configurado o dos herramientas que no se hablan. Desarrollar sin comparar alternativas añade coste y mantenimiento.',
@@ -866,16 +866,16 @@ export const solutionCatalog = [
     ],
     workflow: [
       {
-        title: 'Priorizar requisitos con el equipo',
-        text: 'Se listan las necesidades y se ordenan: qué es imprescindible, qué es deseable y qué se resuelve con un proceso manual. Sin ese orden, la comparación se vuelve arbitraria.',
+        title: 'Una primera versión bien definida',
+        text: 'Priorizamos el proceso que queréis resolver y acordamos funcionalidades, presupuesto y criterios de aceptación. Lo que puede esperar queda para una fase posterior.',
       },
       {
-        title: 'Probar un proceso de punta a punta',
-        text: 'Se prueba la alternativa candidata sobre un solo proceso real: permisos, datos de entrada, resultado y salida. Una demostración vistosa no sustituye a una prueba acotada.',
+        title: 'Entregas que podéis revisar',
+        text: 'Utilizamos IA como apoyo al desarrollo, revisamos el código y compartimos avances por etapas. Vuestro equipo puede probar el recorrido y ajustar los detalles antes de la entrega.',
       },
       {
-        title: 'Comprobar salida y titularidad de los datos',
-        text: 'Antes de contratar se comprueba por contrato qué datos se pueden exportar y quién asume la titularidad y el mantenimiento. No se da por hecho que la solución sea siempre propiedad del cliente.',
+        title: 'Pruebas y puesta en marcha',
+        text: 'Comprobamos los casos acordados, permisos y errores con vuestro equipo. Dejamos definido cómo usar la aplicación, quién da soporte y qué incluye el mantenimiento.',
       },
     ],
     example: {
@@ -901,20 +901,30 @@ export const solutionCatalog = [
     firstStep:
       'Una conversación para entender la tarea que se atasca y qué se ha probado ya. De ahí sale una recomendación razonada: configurar, integrar o desarrollar, con el mantenimiento en cuenta.',
     questions: [
-      '¿Qué tarea concreta se atasca y qué se ha intentado ya para resolverla?',
-      '¿Qué herramientas se usan hoy y qué datos habría que mover entre ellas?',
-      '¿Quién mantendría la solución y cómo se podrían exportar los datos si se cambiara?',
+      '¿Qué aplicación necesitáis, quién la usaría y cómo resolvéis hoy esa tarea?',
+      '¿Qué herramientas o datos debería conectar?',
+      '¿Qué os gustaría tener resuelto en una primera versión?',
     ],
     faqs: [
       {
-        question: '¿Una aplicación a medida sale más barata que adaptar una herramienta?',
+        question: '¿Cuánto cuesta y cuánto tarda una aplicación a medida?',
         answer:
-          'No se puede responder sin comparar el caso. Configurar suele ser más rápido, integrar añade piezas y desarrollar da libertad a cambio de mantenimiento.',
+          'Depende de las funciones, los usuarios, las integraciones y las pruebas necesarias. La primera conversación es gratuita; después concretamos el alcance y os presentamos una propuesta con presupuesto y plazos antes de desarrollar.',
       },
       {
-        question: '¿Qué pasa si una herramienta existente no cubre todo?',
+        question: '¿Qué aporta la IA al desarrollo?',
         answer:
-          'A veces la combinación de dos herramientas con una integración razonable cubre más de lo que parece. Solo cuando quedan límites importantes sin cubrir y el coste de desarrollo y su mantenimiento son asumibles se justifica desarrollar.',
+          'La usamos como apoyo para preparar y revisar partes del desarrollo. El equipo conserva la responsabilidad sobre el código y las pruebas. Si vuestra aplicación necesita funciones de IA, valoramos su utilidad, el uso de datos, los costes y la revisión humana por separado.',
+      },
+      {
+        question: '¿Podéis mantener y ampliar la aplicación después?',
+        answer:
+          'Sí. Proponemos un mantenimiento mensual por separado, con las tareas, el soporte y sus condiciones por escrito. Las nuevas funciones se valoran según su alcance; las licencias y los servicios externos se identifican en la propuesta.',
+      },
+      {
+        question: '¿Cómo se acuerdan el código, los datos y los accesos?',
+        answer:
+          'Antes de empezar concretamos por escrito la entrega del código, las licencias, la titularidad, los accesos y la exportación de datos. También revisamos qué necesita conectarse con vuestras herramientas actuales.',
       },
     ],
     related: ['seguimiento-presupuestos', 'reservas-facturacion', 'fisioterapia'],
@@ -924,7 +934,7 @@ export const solutionCatalog = [
       text: 'Catálogo de trabajos del equipo con su estado real. Muestra lo que se ha construido, no resultados comerciales ni la idoneidad de una opción concreta.',
     },
     sources: [],
-    ctaLabel: 'Hablar de tu decisión técnica',
+    ctaLabel: 'Cuéntanos qué aplicación necesitas',
     alternatives: [
       {
         option: 'Configurar el software existente',

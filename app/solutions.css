@@ -130,7 +130,33 @@
 .automation-maintenance { border-left: 3px solid var(--accent); padding: .3rem 1.2rem; margin: .4rem 0 1.5rem; background: var(--paper); }
 .automation-maintenance p { color: var(--muted); margin-top: .35rem; }
 .solution-links-compact strong { font-size: 1.15rem; }
+.apps-hero h1 { font-size: clamp(2.6rem, 4.15vw, 4rem); max-width: 20ch; }
+.apps-examples { padding-block: 3.5rem; background: var(--paper); }
+.apps-examples h2 { max-width: 26ch; }
+.apps-example-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.5rem; margin-block: 2rem 1.5rem; }
+.apps-example-grid article { border-top: 2px solid var(--accent); padding-top: 1.2rem; }
+.apps-example-grid p { margin-top: .7rem; color: var(--muted); }
+.apps-product { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(2rem, 6vw, 6rem); align-items: center; padding-block: 4rem; }
+.apps-product figure { margin: 0; padding: 1.5rem; background: var(--paper); text-align: center; }
+.apps-product img { display: block; width: auto; max-width: 100%; height: auto; max-height: 25rem; margin-inline: auto; }
+.apps-product figcaption { margin-top: 1rem; font-size: .8rem; color: var(--muted); }
+.apps-product .solution-copy > p:not(.eyebrow) { margin-top: 1.2rem; }
+.apps-product .solution-copy > .apps-product-status { color: var(--accent-hover); font-size: .85rem; font-weight: 650; }
+.apps-product .text-link { margin-top: 1rem; }
+.apps-maintenance { display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(2rem, 6vw, 6rem); padding-block: 4rem; }
+.apps-maintenance p + p, .apps-maintenance .text-link { margin-top: 1rem; }
+.apps-contact-steps { padding-left: 1.2rem; margin-block: 1.5rem; color: #c7d1d7; }
+.apps-contact-steps li { padding-left: .4rem; margin-block: 1rem; }
+.apps-contact-steps strong { color: white; }
+.apps-comparison > p { max-width: 75ch; margin-block: 1.3rem; color: var(--muted); }
+.apps-comparison details { border-block: 1px solid var(--line); margin-bottom: 1.5rem; }
+.apps-comparison summary { padding-block: 1rem; cursor: pointer; font-weight: 600; }
+.apps-comparison details[open] { padding-bottom: 1rem; }
+.apps-page select:focus-visible { outline: 3px solid var(--accent); outline-offset: 5px; }
 @media (max-width: 760px) {
+  .apps-example-grid, .apps-product, .apps-maintenance { grid-template-columns: 1fr; gap: 1.8rem; }
+  .apps-examples, .apps-product, .apps-maintenance { padding-block: 2.7rem; }
+  .apps-product img { max-height: 20rem; }
   .home-solution-grid, .automation-hero-grid, .automation-scenario-grid, .automation-approach ol { grid-template-columns: 1fr; }
   .home-solution-card { min-height: 15rem; }
   .automation-scenario, .automation-approach { padding-block: 2.7rem; }
