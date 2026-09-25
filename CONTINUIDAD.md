@@ -1,5 +1,15 @@
 # Continuidad · IA empresas innure
 
+## 2026-09-25 · Caché de robots y preparación para publicidad
+
+- Objetivo: resolver el fallo de verificación pública de `robots.txt` y revisar la web como destino de Google Ads, sin reactivar campañas ni modificar gasto.
+- Causa comprobada: el origen ya servía el `robots.txt` correcto, con `/contacto.php` y `/automatizacion/contacto.php` excluidos; Cloudflare mantenía en caché durante siete días una versión anterior. Se purgó exclusivamente `https://www.innure.es/robots.txt` desde el panel de innure.es. La URL sin parámetros pasó a entregar la versión correcta (HTTP 200; posteriormente HIT correcto).
+- Verificación de producción: repetida la ejecución fallida `36102887316`, quedaron correctos los tres trabajos, incluida la comprobación de 27 rutas, 73 recursos, sitemap, metadatos, 404, redirecciones, rendimiento y rechazo del receptor a GET y origen ajeno. No se hizo un envío real del formulario.
+- Revisión para anuncios: las páginas de automatización y consultoría muestran el problema, la oferta y un CTA al formulario; la de automatización y el formulario se inspeccionaron en escritorio y móvil. El envío vacío enfoca el campo obligatorio, sin cursar solicitud. Se comprobaron 26 URL del sitemap y 29 destinos internos; la única URL con 404 en un rastreo sin JavaScript fue el enlace temporal de ofuscación de correo de Cloudflare, que el navegador convierte en `mailto:`. No se detectó otro destino interno roto.
+- Lighthouse móvil en producción (mediciones de laboratorio, no datos reales de usuarios): portada 98/100 en rendimiento; automatización 76 en una primera pasada y 99 en dos repeticiones; consultoría 99; proyectos 100. Las cuatro obtuvieron 100 en accesibilidad, buenas prácticas y SEO. La página separada de rendimiento obtuvo 80/97/100/92; tiene ajustes propios de imágenes y legibilidad de un enlace, no afecta a las dos páginas actuales de Ads.
+- Pendiente antes de gastar: Google Ads muestra la campaña «Innure Automatización ES · prueba 100 EUR» pausada y con fecha final 23-09-2026; aviso de posible suspensión por umbral de pago; conversión principal «Formulario de contacto - innure.es» marcada como «Etiqueta inactiva», última actividad 10-09-2026. Confirmar facturación y una prueba interna real de entrega y medición con consentimiento antes de decidir una nueva campaña o periodo. No se cambiaron campañas, presupuestos ni configuración de conversiones.
+- No se modificó código ni configuración persistente del repositorio en esta tarea: este registro documenta la purga puntual y la revisión. Si se cambia `robots.txt` en el futuro, purgar de nuevo esa URL tras publicar o ajustar específicamente su política de caché.
+
 ## 2026-09-24 · Logotipo negro en el pie
 
 - Objetivo: mostrar en negro el logotipo del pie de la portada, manteniendo el de la cabecera y los archivos originales sin cambios.
