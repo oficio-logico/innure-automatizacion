@@ -177,3 +177,19 @@ pedir la elección una vez porque aún usa su clave antigua.
 **Comprobaciones:** lint, TypeScript, 72 pruebas Node, `git diff --check` y compilación estática en modo preview correctos tras los cambios. `php` no está instalado en este entorno; no se han modificado archivos PHP. La vista local utiliza un borrador de correo como fallback; el receptor PHP de producción no se ha probado en esta tarea.
 
 **Límite y siguiente paso:** la rama se prepara para revisión. No integrar en `main` ni publicar hasta autorización específica; el push de la rama y una PR no despliegan. Si se usa como destino de Google Ads, confirmar primero la URL final en la campaña sin cambiar anuncios ni gasto por iniciativa propia.
+
+## 2026-09-25 · Landing de aplicaciones a medida
+
+**Encargo autorizado:** aplicar y publicar la propuesta aprobada para `/soluciones/aplicaciones-a-medida/`. Las campañas nuevas siguen en borrador; este trabajo no modifica Google Ads, presupuestos ni facturación.
+
+**Punto de partida y decisión:** la página publicada abría con una duda entre configurar y desarrollar y mostraba la comparación antes del trabajo del equipo. Ahora presenta la oferta de aplicaciones para empresas, una llamada directa al contacto y la captura de Gestor de Certificados. FORJA muestra un segundo desarrollo propio con IA. Ambos conservan el estado del catálogo; los ejemplos de uso no se atribuyen a clientes. La comparación queda al final en un desplegable. No se promete una mejora de conversión medida.
+
+**Contenido y diseño:** identidad existente, jerarquía de lectura más directa, imágenes existentes sin dependencias nuevas. Se explican primera versión, entregas por etapas, revisión técnica, pruebas y mantenimiento mensual separado. Primera conversación gratuita y respuesta como máximo el siguiente día laborable, según disponibilidad confirmada por el equipo. Inversión y plazo siguen opcionales. Se actualizan título, descripción y datos usados por Open Graph; se conserva URL, canónica y receptor del formulario.
+
+**Archivos:** `app/solution-catalog.mjs`, `app/solution-views.tsx`, `app/solutions.css` y esta ficha. Checkout separado desde `origin/main` para preservar los cambios de la carpeta de trabajo original.
+
+**Comprobado antes de publicación:** lint, TypeScript, 74/74 pruebas Node, compilación estática preview y `git diff --check`. Revisión renderizada a 1440 y 375 px: imágenes, lectura, formulario, CTA, desplegable, foco visible y ausencia de desbordamiento horizontal. Once enlaces internos resuelven en el paquete; metadatos, canónica y Open Graph correctos. Sin cambios en PHP ni en medición. PHP no está disponible localmente: la validación completa del receptor se ejecuta en CI. Turnstile no valida el dominio local; no se envía un formulario desde la preview.
+
+**Ejecución:** Codex principal, sin delegación por tratarse de un cambio acotado y estrechamente ligado a la revisión visual. No se ejecutó Claude ni se contrató consumo adicional; no hay medición de coste por tarea de la suscripción.
+
+**Pendiente de cierre:** pasar CI de la PR, integrar el alcance autorizado y comprobar la publicación por `release.json`, el workflow y la página pública. El historial anterior de esta ficha no sustituye esas comprobaciones.
