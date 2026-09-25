@@ -89,7 +89,8 @@ jobs:
             rendimiento/**
             assets/**
             gesticert-avisos/**
-            contacto.php
+          # El paquete validado solo incluye automatizacion/contacto.php.
+          # No excluir por basename: también omitiría ese receptor.
 
   verify:
     name: Verificar web pública
