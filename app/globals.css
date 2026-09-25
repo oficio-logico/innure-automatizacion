@@ -468,7 +468,7 @@ span.media-project-icon { display: grid; place-items: center; background: var(--
 .field { display: flex; flex-direction: column; margin-bottom: 1.2rem; min-width: 0; }
 .field label { margin-bottom: .4rem; font-size: .875rem; font-weight: 600; }
 .field label span { color: var(--muted); font-size: .875rem; font-weight: 400; }
-.field input, .field textarea { width: 100%; border: 1px solid #697780; border-radius: .25rem; padding: .75rem .8rem; color: var(--ink); background: #fff; font-size: 1rem; min-height: 3rem; }
+.field input, .field textarea, .field select { width: 100%; border: 1px solid #697780; border-radius: .25rem; padding: .75rem .8rem; color: var(--ink); background: #fff; font-size: 1rem; min-height: 3rem; }
 .field textarea { resize: vertical; }
 .field input::placeholder, .field textarea::placeholder { color: #697780; opacity: 1; }
 .field > small { margin-top: .4rem; font-size: .875rem; color: var(--muted); }

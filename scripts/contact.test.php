@@ -29,6 +29,10 @@ function scenario(array $serverChanges = [], array $postChanges = [], $verificat
 check('éxito JSON sólo tras transporte aceptado', $status === 200 && $result['success'] === true && $deliveries === 1 && preg_match('/^[a-f0-9]{32}$/',$result['submissionId']) === 1);
 check('sin PII en respuesta', array_keys($result) === ['success','submissionId']);
 check('reply-to válido y servicio en cuerpo', $reply === 'qa@example.invalid' && str_contains($body,'Línea de negocio: Automatización e IA'));
+check('envío antiguo sin campos nuevos', str_contains($body,'Origen: No indicado (formulario anterior)') && str_contains($body,'Inversión prevista: No indicada'));
+[$status,$result,$deliveries,$body] = scenario([], ['page_path'=>'/soluciones/automatizacion-procesos/','investment'=>'2.000–5.000 €','timeframe'=>'En 1–3 meses']);
+check('opciones y ruta exacta en el correo', $status === 200 && $deliveries === 1 && str_contains($body,'Inversión prevista: 2.000–5.000 €') && str_contains($body,'Plazo previsto: En 1–3 meses') && str_contains($body,'Origen: https://www.innure.es/soluciones/automatizacion-procesos/'));
+check('ruta sin parámetros ni procedencia publicitaria', !str_contains($body,'?') && !str_contains($body,'utm_'));
 foreach ([
     ['REQUEST_METHOD'=>'GET'], ['HTTP_ORIGIN'=>'https://evil.example'], ['HTTP_ORIGIN'=>''],
     ['HTTP_ORIGIN'=>'https://www.innure.es.evil.example'], ['CONTENT_LENGTH'=>'32769'], ['CONTENT_TYPE'=>'application/json']
@@ -41,7 +45,9 @@ foreach ([
     ['email'=>'no-es-email'],['email'=>"qa@example.invalid\nBcc: otro@example.invalid"],['phone'=>str_repeat('1',41)],
     ['process'=>'corto'],['process'=>str_repeat('á',3001)],['process'=>"texto con \0 byte inválido"],
     ['privacy'=>''],['service'=>'rendimiento'],['website'=>'https://spam.example'],['cf-turnstile-response'=>''],
-    ['cf-turnstile-response'=>str_repeat('a',2049)],['name'=>['malformado']],['process'=>"\xFF"]
+    ['cf-turnstile-response'=>str_repeat('a',2049)],['name'=>['malformado']],['process'=>"\xFF"],
+    ['investment'=>'5.000 €'],['investment'=>str_repeat('a',33)],['timeframe'=>'Ahora'],
+    ['page_path'=>'/soluciones/inventada/'],['page_path'=>'/?utm_source=ad'],['page_path'=>'https://evil.example/']
 ] as $change) {
     [$status,$result,$deliveries] = scenario([], $change);
     check('rechazo campos '.implode(',',array_keys($change)), $status >= 400 && !isset($result['submissionId']) && $deliveries === 0);

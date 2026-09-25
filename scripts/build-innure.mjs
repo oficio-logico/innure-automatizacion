@@ -27,6 +27,7 @@ const env = {
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: '0x4AAAAAAD646Hdkx1pPBB7A',
   NEXT_PUBLIC_PUBLISH: 'true',
   NEXT_PUBLIC_GOOGLE_ADS_CONVERSION: measurement.conversionDestination,
+  NEXT_PUBLIC_CF_WEB_ANALYTICS_TOKEN: home && measurement.enabled ? 'ea1ad38be76f430f82c06a72158f29d8' : '',
   NEXT_PUBLIC_MEASUREMENT_VERSION: createHash('sha256').update(await readFile(path.join(root,'public/lead-measurement.js'))).digest('hex').slice(0,12),
 };
 const build = spawn('npm', ['run', 'build:pages'], { cwd: root, env, stdio:'inherit' });
@@ -60,6 +61,13 @@ for (const file of publicFiles.filter((file) => file.endsWith('.html'))) {
   }
   if (measurement.enabled && (destinations.length !== 1 || destinations[0] !== measurement.conversionDestination)) {
     throw new Error(`La configuración de medición de ${file} no es la autorizada.`);
+  }
+  const cloudflareBeacons = [...page.matchAll(/<script\b[^>]*src="https:\/\/static\.cloudflareinsights\.com\/beacon\.min\.js"/g)];
+  if (cloudflareBeacons.length !== (home && measurement.enabled ? 1 : 0)) {
+    throw new Error(`El número de beacons de Cloudflare no es válido en ${file}.`);
+  }
+  if (home && measurement.enabled && !page.includes('ea1ad38be76f430f82c06a72158f29d8')) {
+    throw new Error(`El token público de Cloudflare no es el esperado en ${file}.`);
   }
 }
 await writeFile(path.join(root,'dist/client/release.json'),JSON.stringify({

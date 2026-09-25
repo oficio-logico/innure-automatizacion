@@ -43,6 +43,7 @@ export default function RootLayout({
     <html lang="es">
       <body>{children}
         {siteContent.advertising.conversionDestination ? <script src={withBasePath('/lead-measurement.js') + '?v=' + (process.env.NEXT_PUBLIC_MEASUREMENT_VERSION || '2')} data-conversion={siteContent.advertising.conversionDestination} defer /> : null}
+        {process.env.NEXT_PUBLIC_CF_WEB_ANALYTICS_TOKEN ? <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: process.env.NEXT_PUBLIC_CF_WEB_ANALYTICS_TOKEN })} /> : null}
       </body>
     </html>
   );

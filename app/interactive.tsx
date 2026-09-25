@@ -165,6 +165,7 @@ export function ContactForm({ source }: { source?: ContactSource } = {}) {
     }
     // The optional context travels only with the consultation, never with analytics.
     data.set('process', prepareContactProcess(detail, selectedNeed, source));
+    data.set('page_path', source?.path || '/');
 
     if (!siteContent.contact.formEndpoint) {
       // Sin servicio de recepción todavía. Si hay un correo publicado, no
@@ -179,6 +180,9 @@ export function ContactForm({ source }: { source?: ContactSource } = {}) {
           `Empresa: ${value('company')}`,
           `Correo: ${value('email')}`,
           `Teléfono: ${value('phone') || '—'}`,
+          `Inversión prevista: ${value('investment') || 'No indicada'}`,
+          `Plazo previsto: ${value('timeframe') || 'No indicado'}`,
+          `Página de consulta: ${value('page_path')}`,
           '',
           'Qué queremos resolver:',
           value('process'),
@@ -294,6 +298,29 @@ export function ContactForm({ source }: { source?: ContactSource } = {}) {
             Teléfono <span>opcional</span>
           </label>
           <input id="phone" name="phone" type="tel" autoComplete="tel" maxLength={40} />
+        </div>
+      </div>
+
+      <div className="form-row">
+        <div className="field">
+          <label htmlFor="investment">Inversión prevista <span>opcional</span></label>
+          <select id="investment" name="investment" defaultValue="">
+            <option value="">Selecciona si lo sabes</option>
+            <option>Por definir</option>
+            <option>Menos de 2.000 €</option>
+            <option>2.000–5.000 €</option>
+            <option>Más de 5.000 €</option>
+          </select>
+        </div>
+        <div className="field">
+          <label htmlFor="timeframe">Cuándo os gustaría empezar <span>opcional</span></label>
+          <select id="timeframe" name="timeframe" defaultValue="">
+            <option value="">Selecciona si lo sabes</option>
+            <option>Por definir</option>
+            <option>Este mes</option>
+            <option>En 1–3 meses</option>
+            <option>Más adelante</option>
+          </select>
         </div>
       </div>
 

@@ -85,7 +85,7 @@ function setup({ receiver = false, accepted = true, hydrated = true, source } = 
   const fields = {
     service: siteContent.contact.serviceId,
     name: 'Prueba local', company: 'Empresa de prueba', email: 'prueba@example.invalid',
-    phone: '', privacy: 'accepted', website: '', process: 'Copiamos los datos de cada pedido entre dos programas.',
+    phone: '', investment: 'Por definir', timeframe: 'En 1–3 meses', privacy: 'accepted', website: '', process: 'Copiamos los datos de cada pedido entre dos programas.',
   };
   const form = {
     fields,
@@ -96,7 +96,7 @@ function setup({ receiver = false, accepted = true, hydrated = true, source } = 
     constructor(formElement) { super(Object.entries(formElement.fields)); }
   }
   const window = {
-    location: { href: '', assign(url) { this.href = url; } },
+    location: { href: '', pathname: '/', assign(url) { this.href = url; } },
     dispatchEvent(event) { state.events.push(event); },
   };
   const components = load(componentCode, {
@@ -178,6 +178,19 @@ test('tras hidratar se habilitan los campos; la preview sigue sin receptor', () 
   assert.equal(one(tree, (node) => node.type === 'button' && node.props.type === 'submit').props.disabled, false);
 });
 
+test('inversión y plazo son elecciones opcionales del formulario compartido', () => {
+  const { render } = setup();
+  const tree = render('ContactForm');
+  const investment = one(tree, node => node.type === 'select' && node.props.name === 'investment');
+  const timeframe = one(tree, node => node.type === 'select' && node.props.name === 'timeframe');
+  assert.equal(investment.props.required, undefined);
+  assert.equal(timeframe.props.required, undefined);
+  assert.deepEqual(nodes(investment, node => node.type === 'option').map(node => node.props.children),
+    ['Selecciona si lo sabes', 'Por definir', 'Menos de 2.000 €', '2.000–5.000 €', 'Más de 5.000 €']);
+  assert.deepEqual(nodes(timeframe, node => node.type === 'option').map(node => node.props.children),
+    ['Selecciona si lo sabes', 'Por definir', 'Este mes', 'En 1–3 meses', 'Más adelante']);
+});
+
 test('solo se resuelven los tres ejemplos conocidos y las preguntas de contexto están presentes', () => {
   assert.equal(examples.length, 3);
   assert.equal(new Set(examples.map((example) => example.id)).size, 3);
@@ -244,6 +257,7 @@ test('la revisión local prepara un correo con contexto y conserva los campos', 
   assert.equal(url.protocol, 'mailto:');
   assert.ok(url.searchParams.get('body').includes(examples[1].label));
   assert.ok(url.searchParams.get('body').includes(app.form.fields.process));
+  assert.ok(url.searchParams.get('body').includes('Inversión prevista: Por definir'));
   assert.equal(app.state.fetches.length, 0);
   assert.equal(app.state.events.length, 0);
   assert.equal(app.state.resetCount, 0);
@@ -259,6 +273,9 @@ test('el envío conserva el contrato y la conversión nunca recibe el interés n
   assert.equal(url, '/automatizacion/contacto.php');
   assert.equal(options.body.get('service'), 'automatizacion-ia');
   assert.equal(options.body.get('process'), prepareContactProcess(original, examples[2]));
+  assert.equal(options.body.get('page_path'), '/');
+  assert.equal(options.body.get('investment'), 'Por definir');
+  assert.equal(options.body.get('timeframe'), 'En 1–3 meses');
   assert.equal(options.body.get('cf-turnstile-response'), 'test-token');
   assert.equal(app.state.resetCount, 1);
   assert.equal(one(tree, (node) => node.props?.className === 'form-interest').props.hidden, true);
@@ -312,6 +329,9 @@ test('la página de consulta acompaña al mensaje sin atribuir una fuente de tr�
   assert.equal(textarea.props.maxLength, contactDetailLimit(null, source));
   await app.submit();
   assert.equal(app.state.fetches[0].options.body.get('process'), prepareContactProcess(detail, null, source));
+  assert.equal(app.state.fetches[0].options.body.get('page_path'), source.path);
+  assert.equal(app.state.fetches[0].options.body.get('investment'), 'Por definir');
+  assert.equal(app.state.fetches[0].options.body.get('timeframe'), 'En 1–3 meses');
   assert.equal(Object.keys(app.state.events[0].detail).sort().join(','), 'service,submissionId');
 });
 
