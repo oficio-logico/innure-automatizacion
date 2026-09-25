@@ -1,5 +1,12 @@
 # Continuidad · IA empresas innure
 
+## 2026-09-25 · Receptor de formulario omitido en la publicación
+
+- Hallazgo: la PR #20 se fusionó en `main` (`1d9db3954583cf3d1b77bdad4ddafdde930fe057`) y el run público `36110821391` terminó correctamente, pero la consulta técnica recibida a las 10:11 aún mostró «Origen: /automatizacion/» fijo y no incluyó inversión ni plazo. El artefacto de ese run sí contenía `automatizacion/contacto.php` actualizado, con el mismo SHA-256 que `server/contacto.php`; el registro de FTP no muestra su subida. La exclusión `contacto.php` del workflow abarcaba también la ruta anidada. `release.json` acredita la versión del paquete, no la del receptor PHP.
+- Corrección local en `codex/correccion-publicacion-formulario`: retirar esa exclusión por nombre. `checkHomePackage` exige el receptor anidado y rechaza `contacto.php` en raíz, además de las rutas y configuraciones privadas. El verificador público añade un POST inválido con una opción fuera de lista; la respuesta esperada ocurre antes de Turnstile, límite de frecuencia y SMTP, y distingue el receptor nuevo del anterior sin crear un correo.
+- Estado: pendiente de integrar y desplegar la rama; no se ha enviado ningún POST adicional ni editado el servidor. Tras el despliegue, revisar en el log FTP la subida explícita de `automatizacion/contacto.php` y la nueva comprobación pública. No dar el receptor por publicado por el resultado del build.
+- Comprobaciones locales: lint, TypeScript, 74 pruebas Node, sintaxis del verificador, lectura YAML de las exclusiones y `git diff --check` correctos. El run anterior pasó `php -l` y 56 comprobaciones aisladas del receptor que ya estaba en el artefacto; PHP no está instalado localmente y la prueba PHP ampliada se ejecutará en CI al abrir la PR. No se ha ejecutado el verificador público modificado ni ningún POST en esta corrección.
+
 ## 2026-09-25 · Preparación del paquete web de captación
 
 - Objetivo: aclarar el primer contacto, mostrar cómo se presupuestaría el mantenimiento y preparar la medición agregada de la web general.

@@ -88,4 +88,20 @@ assert.equal((await method.json()).success,false);
 const denied = await get(receiver,{method:'POST',headers:{Origin:'https://example.invalid','Content-Type':'application/x-www-form-urlencoded'},body:'service=automatizacion-ia'});
 assert.equal(denied.status,403);
 assert.equal((await denied.json()).success,false);
-console.log(JSON.stringify({version:release,routes:publicRoutes.length,assets:assets.size,sitemap:true,branded404:true,metadata:true,legacyRedirects:true,performance:true,methodRejected:true,foreignOriginRejected:true,realEmailTest:'not_sent'},null,2));
+// El receptor anterior también rechazaba GET y orígenes externos. Una opción
+// inválida con origen propio distingue la versión nueva antes de Turnstile,
+// limitación de frecuencia o SMTP: no puede crear una consulta ni un correo.
+const probe = new URLSearchParams({
+  name:'Prueba técnica', company:'innure', email:'qa@example.invalid',
+  process:'Comprobación de validación sin envío de correo.',
+  privacy:'accepted', service:'automatizacion-ia', website:'',
+  investment:'valor-no-permitido',
+});
+const receiverVersion = await get(receiver,{
+  method:'POST',
+  headers:{Origin:base.replace(/\/$/,''),'Content-Type':'application/x-www-form-urlencoded'},
+  body:probe,
+});
+assert.equal(receiverVersion.status,400,'El receptor publicado no valida las opciones nuevas.');
+assert.deepEqual(await receiverVersion.json(),{success:false,message:'Revisa las opciones de inversión y plazo.'},'El receptor publicado sigue siendo la versión anterior.');
+console.log(JSON.stringify({version:release,routes:publicRoutes.length,assets:assets.size,sitemap:true,branded404:true,metadata:true,legacyRedirects:true,performance:true,methodRejected:true,foreignOriginRejected:true,receiverVersionChecked:true,realEmailTest:'not_sent'},null,2));

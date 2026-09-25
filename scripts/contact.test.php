@@ -33,6 +33,13 @@ check('envío antiguo sin campos nuevos', str_contains($body,'Origen: No indicad
 [$status,$result,$deliveries,$body] = scenario([], ['page_path'=>'/soluciones/automatizacion-procesos/','investment'=>'2.000–5.000 €','timeframe'=>'En 1–3 meses']);
 check('opciones y ruta exacta en el correo', $status === 200 && $deliveries === 1 && str_contains($body,'Inversión prevista: 2.000–5.000 €') && str_contains($body,'Plazo previsto: En 1–3 meses') && str_contains($body,'Origen: https://www.innure.es/soluciones/automatizacion-procesos/'));
 check('ruta sin parámetros ni procedencia publicitaria', !str_contains($body,'?') && !str_contains($body,'utm_'));
+$verificationCalls = 0;
+$sendCalls = 0;
+[$status, $result] = innure_contact($server, array_replace($post, ['investment'=>'valor-no-permitido']), $config,
+    static function () use (&$verificationCalls) { $verificationCalls++; return null; },
+    static function () use (&$sendCalls) { $sendCalls++; return false; },
+    static fn() => true);
+check('opción inválida se rechaza antes de Turnstile y SMTP', $status === 400 && $verificationCalls === 0 && $sendCalls === 0 && ($result['message'] ?? '') === 'Revisa las opciones de inversión y plazo.');
 foreach ([
     ['REQUEST_METHOD'=>'GET'], ['HTTP_ORIGIN'=>'https://evil.example'], ['HTTP_ORIGIN'=>''],
     ['HTTP_ORIGIN'=>'https://www.innure.es.evil.example'], ['CONTENT_LENGTH'=>'32769'], ['CONTENT_TYPE'=>'application/json']
