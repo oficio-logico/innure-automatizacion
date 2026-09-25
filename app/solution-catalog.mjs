@@ -223,7 +223,7 @@ export const solutionCatalog = [
     navTitle: 'Automatización de procesos',
     title: 'Automatización de procesos administrativos',
     description:
-      'Cómo ordenar y automatizar un proceso administrativo con las herramientas existentes, integraciones revisadas y control humano sobre las excepciones.',
+      'Reduce trabajo repetitivo entre correos, hojas y programas. Revisamos una tarea administrativa, comprobamos tus herramientas y probamos una mejora con control humano.',
     eyebrow: 'IA y automatización',
     headline: 'Automatización de procesos para quitar trabajo repetitivo',
     intro:
@@ -303,9 +303,9 @@ export const solutionCatalog = [
     ],
     related: ['consultoria-ia-empresas', 'reservas-facturacion', 'aplicaciones-a-medida'],
     evidence: {
-      href: '/proyectos/automatizacion-musical/',
-      label: 'Ver automatización musical',
-      text: 'Muestra herramientas propias que preparan archivos por lotes, revisan resultados y conservan los originales. Es un flujo musical distinto y no demuestra integración ni resultados en procesos administrativos de clientes.',
+      href: '/proyectos/gestor-certificados/',
+      label: 'Ver Gestor de Certificados',
+      text: 'Aplicación propia para reunir fichas, certificados, caducidades y accesos a trámites. Muestra desarrollo de software administrativo, no resultados de automatización para terceros.',
     },
     sources: [],
     ctaLabel: 'Revisar un proceso administrativo',
