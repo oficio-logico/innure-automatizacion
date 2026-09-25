@@ -148,3 +148,17 @@ publicar; `verify-innure-live.mjs` exige las redirecciones y avisa si falta nosn
 **Publicación:** integrar junto con la rama de rendimiento
 `codex/rendimiento-revision-20260923`; si solo se publica esta, /rendimiento/ volvería a
 pedir la elección una vez porque aún usa su clave antigua.
+
+## 2026-09-25 · Página de anuncios y selección de soluciones
+
+**Objetivo:** hacer más directa la página de automatización de procesos administrativos y sustituir el listado de diez enlaces de la portada por entradas que partan de problemas reconocibles. No se ha modificado Google Ads ni el formulario.
+
+**Decisión de contenido:** la página de automatización presenta la tarea repetitiva y el contacto desde el inicio; junto al titular se muestra una captura real del Gestor de Certificados, identificada como producto propio en validación privada. El flujo de solicitudes por correo se rotula como ejemplo ilustrativo, no como proyecto implantado. La automatización musical continúa en el portfolio, pero ya no sirve como prueba principal de esta página. Se conservan las cautelas esenciales sobre permisos, datos, revisión humana y ausencia de ahorro garantizado.
+
+**Decisión visual:** mantener la tipografía, blanco, azul petróleo y cian de innure. La portada ofrece tres tarjetas por necesidad (administración, reservas y herramienta a medida) con miniflows legibles; el índice de diez páginas sigue accesible desde «Explorar todas las soluciones». La página específica combina una captura propia visible en la cabecera, un ejemplo en fondo oscuro y un proceso de tres pasos.
+
+**Cambios:** `app/page.tsx`, `app/solution-views.tsx`, `app/solution-catalog.mjs` y `app/solutions.css`. Comprobados enlaces, encabezados y contenido renderizado en vista local de escritorio y móvil. No se ha enviado ningún formulario real.
+
+**Comprobaciones:** lint, TypeScript, 72 pruebas Node, `git diff --check` y compilación estática en modo preview correctos tras los cambios. `php` no está instalado en este entorno; no se han modificado archivos PHP. La vista local utiliza un borrador de correo como fallback; el receptor PHP de producción no se ha probado en esta tarea.
+
+**Límite y siguiente paso:** la rama se prepara para revisión. No integrar en `main` ni publicar hasta autorización específica; el push de la rama y una PR no despliegan. Si se usa como destino de Google Ads, confirmar primero la URL final en la campaña sin cambiar anuncios ni gasto por iniciativa propia.

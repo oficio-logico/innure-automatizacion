@@ -5,7 +5,7 @@ import { Portfolio } from './portfolio';
 import { PageExperience } from './page-experience';
 import { ExperienceMarquee } from './experience-marquee';
 import { siteContent, withBasePath } from './site-content';
-import { SolutionLinks } from './solution-views';
+import './solutions.css';
 
 export const dynamic = 'force-static';
 
@@ -119,9 +119,28 @@ export default function Home() {
         </section>
 
         <section className="home-solutions" id="soluciones" aria-labelledby="solutions-title"><div className="shell">
-          <div className="section-heading"><div><p className="eyebrow">Por dónde empezar</p><h2 id="solutions-title">Soluciones para<br />problemas concretos.</h2></div><p>Explora qué podemos revisar en tu negocio, qué permiten las herramientas y qué habría que comprobar antes de empezar.</p></div>
-          <SolutionLinks compact />
-          <a className="text-link" href={withBasePath('/soluciones/')}>Ver todas las soluciones <Icon name="arrow" /></a>
+          <div className="section-heading"><div><p className="eyebrow">Por dónde empezar</p><h2 id="solutions-title">¿Dónde se os va<br />el tiempo?</h2></div><p>Elige el problema que más se parece al vuestro. Empezamos por una tarea concreta, no por venderte una tecnología.</p></div>
+          <div className="home-solution-grid">
+            <a className="home-solution-card" href={withBasePath('/soluciones/automatizacion-procesos/')}>
+              <span className="home-solution-kicker">01 / Trabajo administrativo</span>
+              <span className="home-solution-flow" aria-hidden="true"><span>Correo</span><span>Hoja</span><span>Programa</span></span>
+              <strong>Copiáis los mismos datos en varios sitios.</strong>
+              <span className="home-solution-action">Ver cómo simplificarlo <Icon name="arrow" /></span>
+            </a>
+            <a className="home-solution-card" href={withBasePath('/soluciones/reservas-whatsapp/')}>
+              <span className="home-solution-kicker">02 / Atención y reservas</span>
+              <span className="home-solution-flow" aria-hidden="true"><span>Consulta</span><span>Agenda</span><span>Aviso</span></span>
+              <strong>Las citas y los mensajes se cruzan.</strong>
+              <span className="home-solution-action">Ordenar este proceso <Icon name="arrow" /></span>
+            </a>
+            <a className="home-solution-card" href={withBasePath('/soluciones/aplicaciones-a-medida/')}>
+              <span className="home-solution-kicker">03 / Herramientas a medida</span>
+              <span className="home-solution-flow" aria-hidden="true"><span>Necesidad</span><span>Herramienta</span></span>
+              <strong>Vuestro programa no resuelve lo que necesitáis.</strong>
+              <span className="home-solution-action">Comparar alternativas <Icon name="arrow" /></span>
+            </a>
+          </div>
+          <a className="text-link" href={withBasePath('/soluciones/')}>Explorar todas las soluciones <Icon name="arrow" /></a>
         </div></section>
 
         <Portfolio />

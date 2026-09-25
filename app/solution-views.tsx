@@ -49,7 +49,33 @@ export function SolutionsIndex() {
   </main><ProjectFooter /></>;
 }
 
+function AutomationDetail() {
+  const solution = getSolution('automatizacion-procesos');
+  if (!solution) notFound();
+  return <><SolutionHeader /><main id="contenido" className="solutions-page automation-page">
+    <section className="shell solution-hero automation-hero">
+      <nav className="solution-breadcrumbs" aria-label="Ruta de navegación"><a href={withBasePath('/')}>Inicio</a><span aria-hidden="true">/</span><a href={withBasePath('/soluciones/')}>Soluciones</a><span aria-hidden="true">/</span><span aria-current="page">Automatización de procesos</span></nav>
+      <div className="automation-hero-grid"><div>
+        <p className="eyebrow">Automatización de tareas administrativas</p>
+        <h1>Menos copiar datos.<br />Más tiempo para el negocio.</h1>
+        <p className="solution-lede">Si vuestro equipo pasa información de correos a hojas y programas, podemos simplificar una tarea concreta. Conectamos herramientas cuando es viable y dejamos a las personas las decisiones que necesitan revisión.</p>
+        <a className="button" href="#contacto">Cuéntanos qué tarea os quita tiempo <Icon name="arrow" /></a>
+        <p className="automation-hero-note">Primera conversación gratuita. Sin promesas de ahorro antes de medir el proceso.</p>
+      </div><figure className="automation-hero-proof"><img src={withBasePath('/images/proyectos/gesticert-v34-claro.webp')} alt="Gestor de Certificados: selección de trámite y certificado con datos ficticios" width="1180" height="760" /><figcaption><strong>Una herramienta propia que puedes ver.</strong> Gestor de Certificados reúne fichas, caducidades y accesos a trámites. <a href={withBasePath('/proyectos/gestor-certificados/')}>Ver proyecto y estado <span aria-hidden="true">↗</span></a><small>Producto en validación privada; no acredita resultados para clientes.</small></figcaption></figure></div>
+    </section>
+    <section className="automation-scenario" aria-labelledby="automation-scenario-title"><div className="shell automation-scenario-grid">
+      <div><p className="eyebrow">Un ejemplo posible</p><h2 id="automation-scenario-title">Del correo a la herramienta, sin volver a teclearlo todo.</h2><p>Un pedido o solicitud llega por correo. Hoy alguien abre el adjunto, copia datos y avisa al equipo. Un primer proyecto podría preparar el registro y señalar lo incompleto para que una persona lo revise antes de continuar.</p><p className="automation-caption">Ejemplo ilustrativo: no es una implantación realizada para un cliente. La viabilidad depende de vuestros programas y permisos.</p></div>
+      <ol className="automation-flow"><li><span>01</span><strong>Entra la solicitud</strong><small>Correo y documento</small></li><li><span>02</span><strong>Se prepara el registro</strong><small>Datos disponibles, sin duplicar tareas</small></li><li><span>03</span><strong>El equipo confirma</strong><small>Excepciones y decisiones visibles</small></li></ol>
+    </div></section>
+    <section className="shell automation-approach" aria-labelledby="automation-approach-title"><p className="eyebrow">Cómo empezaríamos</p><h2 id="automation-approach-title">Una tarea, un primer alcance claro.</h2><ol><li><span>01</span><strong>Entender el recorrido</strong><p>Qué entra, quién lo revisa y dónde se pierde tiempo.</p></li><li><span>02</span><strong>Elegir la mejora</strong><p>Primero comprobamos si vuestro software ya la permite; si no, valoramos una integración o desarrollo.</p></li><li><span>03</span><strong>Probar con el equipo</strong><p>Validamos los casos normales y las excepciones antes de ampliar el proceso.</p></li></ol><p className="automation-caption">Accesos, costes, tratamiento de datos y mantenimiento se concretan en la propuesta. No automatizamos decisiones fiscales, comerciales o contractuales sin revisión humana.</p></section>
+    <section className="faq-section solution-faq" aria-labelledby="solution-faq-title"><div className="shell faq-layout"><div><p className="eyebrow">Antes de hablar</p><h2 id="solution-faq-title">Dudas habituales</h2></div><div className="faq-list">{solution.faqs.map(faq => <details key={faq.question}><summary>{faq.question}<span aria-hidden="true">+</span></summary><p>{faq.answer}</p></details>)}</div></div></section>
+    <section className="contact-section solution-contact" id="contacto" aria-labelledby="contact-title"><div className="shell contact-layout"><div className="contact-copy"><p className="eyebrow">El siguiente paso</p><h2 id="contact-title">Cuéntanos la tarea que se repite.</h2><p>¿Qué datos copiáis hoy, entre qué herramientas y quién los revisa? Con unas líneas basta para preparar la primera conversación.</p><p className="solution-contact-note">No envíes datos de clientes, contraseñas ni documentos confidenciales.</p></div><ContactForm source={{ path: '/soluciones/automatizacion-procesos/', label: solution.navTitle, prompt: solution.questions[0] }} /></div></section>
+    <section className="shell solution-related" aria-labelledby="related-title"><h2 id="related-title">¿El problema está en otro paso?</h2><div><a className="text-link" href={withBasePath('/soluciones/')}>Explorar todas las soluciones <Icon name="arrow" /></a></div></section>
+  </main><ProjectFooter /></>;
+}
+
 export function SolutionDetail({ slug }: { slug: string }) {
+  if (slug === 'automatizacion-procesos') return <AutomationDetail />;
   const solution = getSolution(slug);
   if (!solution) notFound();
   return <><SolutionHeader /><main id="contenido" className="solutions-page">
