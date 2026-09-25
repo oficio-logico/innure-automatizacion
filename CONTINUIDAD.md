@@ -193,3 +193,9 @@ pedir la elección una vez porque aún usa su clave antigua.
 **Ejecución:** Codex principal, sin delegación por tratarse de un cambio acotado y estrechamente ligado a la revisión visual. No se ejecutó Claude ni se contrató consumo adicional; no hay medición de coste por tarea de la suscripción.
 
 **Pendiente de cierre:** pasar CI de la PR, integrar el alcance autorizado y comprobar la publicación por `release.json`, el workflow y la página pública. El historial anterior de esta ficha no sustituye esas comprobaciones.
+
+**Cierre comprobado:** PR #22 integrada en `main` como `fd0dce3923f4ea2c4bab266ac08ed91970ad4b65`. La revisión de PR pasó con 74 pruebas Node y 57 comprobaciones PHP. Se utilizó la excepción ya configurada para publicaciones del propio Sergio, documentada en CODEOWNERS y en la protección de rama, después de pasar CI; no se modificaron protecciones. Los workflows de validación, vista de revisión y producción concluyeron correctamente. Producción: run `36129010782`, con preparación, subida y verificación pública SUCCESS.
+
+`release.json` confirma el commit anterior. La landing, los dos proyectos enlazados, ambas capturas y la imagen social devuelven HTTP 200. Se ha revisado la nueva página pública a 1440 y 375 px: titular, contenido, imágenes, CTA y formulario; sin desbordamiento horizontal a 375 px. Canónica y receptor conservados. No se ha enviado un correo real en este cambio ni se han generado conversiones de prueba. Las verificaciones no demuestran todavía una mejora de captación: se valorará con visitas y contactos reales.
+
+La anotación de cierre se guarda en `codex/landing-apps-cierre-20260925`, solo documentación y sin una segunda publicación. La rama original del usuario conserva sus cambios ajenos al encargo. Siguiente paso comercial: valorar contactos cualificados cuando exista tráfico, manteniendo aparte cualquier decisión de activar los borradores de Ads.
