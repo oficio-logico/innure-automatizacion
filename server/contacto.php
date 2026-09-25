@@ -8,6 +8,18 @@ function innure_response(int $status, string $message, ?string $id = null): arra
         : ['success' => true, 'submissionId' => $id]];
 }
 
+function innure_page_path(string $path): ?string {
+    $pages = [
+        '/', '/automatizacion/', '/guias/seguimiento-presupuestos/',
+        '/soluciones/aplicaciones-a-medida/', '/soluciones/automatizacion-procesos/',
+        '/soluciones/centros-estetica/', '/soluciones/consultoria-ia-empresas/',
+        '/soluciones/fisioterapia/', '/soluciones/gestorias/',
+        '/soluciones/instalaciones-mantenimiento/', '/soluciones/reservas-facturacion/',
+        '/soluciones/reservas-whatsapp/', '/soluciones/seguimiento-presupuestos/',
+    ];
+    return in_array($path, $pages, true) ? $path : null;
+}
+
 function innure_contact(array $server, array $post, array $config, callable $verify, callable $send, callable $rate): array {
     if (($server['REQUEST_METHOD'] ?? '') !== 'POST') return innure_response(405, 'Método no permitido.');
     if (($server['HTTP_ORIGIN'] ?? '') !== 'https://www.innure.es') return innure_response(403, 'Envía la consulta desde la web de innure.');
@@ -32,6 +44,16 @@ function innure_contact(array $server, array $post, array $config, callable $ver
         || ($post['service'] ?? '') !== 'automatizacion-ia' || trim($post['website'] ?? '') !== '') {
         return innure_response(400, 'Revisa el formulario y la aceptación de privacidad.');
     }
+    $investment = $post['investment'] ?? '';
+    $timeframe = $post['timeframe'] ?? '';
+    if (strlen($investment) > 32 || strlen($timeframe) > 32
+        || !in_array($investment, ['', 'Por definir', 'Menos de 2.000 €', '2.000–5.000 €', 'Más de 5.000 €'], true)
+        || !in_array($timeframe, ['', 'Por definir', 'Este mes', 'En 1–3 meses', 'Más adelante'], true)) {
+        return innure_response(400, 'Revisa las opciones de inversión y plazo.');
+    }
+    // Los envíos de versiones anteriores no incluían página; no inventar su origen.
+    $pagePath = $post['page_path'] ?? '';
+    if ($pagePath !== '' && innure_page_path($pagePath) === null) return innure_response(400, 'Revisa la página de consulta.');
     $token = $post['cf-turnstile-response'] ?? '';
     if ($token === '' || strlen($token) > 2048) return innure_response(400, 'Completa la comprobación de seguridad.');
     if (empty($config['TURNSTILE_SECRET'])) return innure_response(503, 'El formulario no está disponible. Escríbenos a info@innure.es.');
@@ -46,8 +68,10 @@ function innure_contact(array $server, array $post, array $config, callable $ver
     $id = bin2hex(random_bytes(16));
     $body = "Línea de negocio: Automatización e IA\nReferencia: {$id}\n\n"
         . "Nombre: {$values['name']}\nEmpresa: {$values['company']}\nCorreo: {$values['email']}\n"
-        . "Teléfono: " . ($values['phone'] ?: 'No facilitado') . "\n\nQué quiere resolver:\n{$values['process']}\n\n"
-        . "Privacidad: aceptada\nOrigen: https://www.innure.es/automatizacion/\n";
+        . "Teléfono: " . ($values['phone'] ?: 'No facilitado') . "\n"
+        . "Inversión prevista: " . ($investment ?: 'No indicada') . "\n"
+        . "Plazo previsto: " . ($timeframe ?: 'No indicado') . "\n\nQué quiere resolver:\n{$values['process']}\n\n"
+        . "Privacidad: aceptada\nOrigen: " . ($pagePath ? 'https://www.innure.es' . $pagePath : 'No indicado (formulario anterior)') . "\n";
     if (($post['measurement_consent'] ?? '') === 'accepted') {
         foreach (['utm_source','utm_medium','utm_campaign','utm_content','utm_term','gclid','gbraid','wbraid'] as $key) {
             $value = $post[$key] ?? '';

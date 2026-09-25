@@ -1,5 +1,13 @@
 # Continuidad · IA empresas innure
 
+## 2026-09-25 · Preparación del paquete web de captación
+
+- Objetivo: aclarar el primer contacto, mostrar cómo se presupuestaría el mantenimiento y preparar la medición agregada de la web general.
+- Cambios en rama de revisión: beacon público de Cloudflare Web Analytics solo en compilación de producción; texto de automatización y de portada; inversión y plazo opcionales en el formulario compartido; correo con página de consulta validada y sin parámetros. La conversión de Google Ads sigue ligada al consentimiento y al identificador de aceptación SMTP; los campos nuevos no entran en su evento.
+- El receptor conserva envíos de versiones anteriores sin campos nuevos. No guarda contenidos del formulario en archivos ni añade registros. Los valores se validan antes de preparar el correo.
+- Comprobaciones: `npm ci`, lint, TypeScript, 73 pruebas Node, `git diff --check` y compilaciones de preview y producción correctos. El HTML exportado de preview no incluye beacon ni conversión; el de producción incluye un único beacon y la conversión autorizada por página. Revisión visual local de portada y página de automatización en escritorio. PHP no está disponible en este equipo; quedan pendientes `php -l server/contacto.php` y `php scripts/contact.test.php`, además de la revisión móvil y la recepción real. No se han enviado formularios reales, integrado la rama ni publicado el sitio.
+- Siguiente paso: revisión del diff, de las compilaciones y de la vista local; el principal coordinará cualquier integración y publicación autorizada.
+
 ## 2026-09-24 · Logotipo negro en el pie
 
 - Objetivo: mostrar en negro el logotipo del pie de la portada, manteniendo el de la cabecera y los archivos originales sin cambios.

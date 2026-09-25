@@ -65,6 +65,8 @@ POST multipart/form-data a `/automatizacion/contacto.php` desde la misma web:
 El HTML estático mantiene los campos y el botón desactivados hasta que React instala el manejador; el método nativo se declara POST para evitar que los datos acaben en la URL. Sin JavaScript se muestra el correo alternativo. Las pruebas simulan este estado sin solicitudes externas.
 
 - `name`, `company`, `email`, `phone` opcional, `process`, `privacy=accepted`.
+- `investment` y `timeframe` son opciones voluntarias cerradas, sin cambiar la obligatoriedad del resto. Se incluyen solo en el correo de consulta. El receptor acepta también envíos anteriores sin ellas.
+- `page_path` identifica la ruta validada de la página del formulario, sin query ni fragmento. Sustituye al origen fijo `/automatizacion/`; los UTM son atribución distinta y se adjuntan únicamente con consentimiento. Si un formulario anterior no manda la ruta, el correo indica que no se conoce.
 - `service=automatizacion-ia`, honeypot `website` vacío, `cf-turnstile-response`.
 - Límites de servidor, origen exacto, Turnstile con hostname/action y fallo cerrado, cuotas de diez minutos después de superar Turnstile.
 - Éxito JSON `{ success: true, submissionId: "32 caracteres hexadecimales" }` exclusivamente después de aceptación SMTP. Esto no demuestra por sí solo la entrega final en el buzón.
@@ -74,7 +76,7 @@ El HTML estático mantiene los campos y el botón desactivados hasta que React i
 
 ## Medición y primera prueba comercial
 
-La medición de «Contacto · Automatización» se incorpora únicamente al artefacto de producción mediante `INNURE_MEASUREMENT_ENV=production` y el destino público autorizado `AW-18410180479/mBarCPixx_EcEP-e1MpE`. Las previews y cualquier compilación sin esa señal quedan sin etiqueta. Nunca se utiliza la conversión de rendimiento. Publicar no activa campañas ni cambia sus presupuestos u objetivos.
+La medición de «Contacto · Automatización» se incorpora únicamente al artefacto de producción mediante `INNURE_MEASUREMENT_ENV=production` y el destino público autorizado `AW-18410180479/mBarCPixx_EcEP-e1MpE`. Las previews y cualquier compilación sin esa señal quedan sin etiqueta. Nunca se utiliza la conversión de rendimiento. Publicar no activa campañas ni cambia sus presupuestos u objetivos. El mismo paquete de producción incluye un único beacon de Cloudflare Web Analytics al final del `body`, con el token público ya presente en `/rendimiento/`. No se añade a previews ni al paquete antiguo de automatización. Cloudflare Web Analytics no usa cookies de seguimiento ni registra parámetros de consulta; la elección de Google Ads permanece independiente.
 
 `public/lead-measurement.js`:
 

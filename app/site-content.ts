@@ -264,7 +264,7 @@ export const siteContent = {
     review: {
       eyebrow: 'Primera conversación gratuita · Sin compromiso',
       title: 'Empecemos por entender tu negocio.',
-      description: 'Cuéntanos cómo trabajáis y qué os gustaría mejorar. Revisamos el contexto con vosotros, sin que tengas que saber de tecnología ni traer la solución pensada. Esta conversación sirve para situar el caso; el diagnóstico detallado se acuerda aparte.',
+      description: 'Cuéntanos qué tarea os quita tiempo y qué herramientas utilizáis. Revisaremos si encaja con una automatización, integración o desarrollo a medida. Te responderemos, como tarde, el siguiente día laborable.',
       outcomes: [
         'Qué necesidad conviene aclarar primero.',
         'Qué herramientas, datos y procesos habría que revisar después.',
